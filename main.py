@@ -19,41 +19,46 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 # URI di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
+# Variabile per la gestione dell'autorizzazione
+authorized = False
+
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
     
-    # Ottieni l'URL di autorizzazione
-    authorize_url = flow.step1_get_authorize_url(REDIRECT_URI)
-    
-    # Fornisci un link per autorizzare l'app
-    st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
-    
-    # Chiedi all'utente di inserire l'Authorization Code
+    # Verifica se l'app è già autorizzata
+    if st.button('Autorizza l\'app'):
+        authorize_url = flow.step1_get_authorize_url(REDIRECT_URI)
+        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
     auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
     
     # Se l'Authorization Code è stato inserito
     if auth_code:
-        # Scambia l'Authorization Code per le credenziali
-        credentials = flow.step2_exchange(auth_code)
-        http = httplib2.Http()
-        creds = credentials.authorize(http)
-        webmasters_service = build('searchconsole', 'v1', http=creds)
-        
+        try:
+            # Scambia l'Authorization Code per le credenziali
+            credentials = flow.step2_exchange(auth_code)
+            http = httplib2.Http()
+            creds = credentials.authorize(http)
+            webmasters_service = build('searchconsole', 'v1', http=creds)
+            authorized = True
+        except Exception as e:
+            st.write(f"Errore durante l'autorizzazione: {e}")
+
+    if authorized:
         # Ottieni la lista dei siti nell'account Google Search Console
         site_list = webmasters_service.sites().list().execute()
-        
+
         # Seleziona un sito dalla lista
         selected_site = st.selectbox('Seleziona un sito web:', [site['siteUrl'] for site in site_list['siteEntry']])
-        
+
         # Se un sito è stato selezionato
         if selected_site:
             st.write(f'Hai selezionato il sito web: {selected_site}')
-            
+
             # Inserisci l'URL da ispezionare
             url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
-            
+
             # Esegui l'ispezione
             if st.button('Ispeziona URL'):
                 request_body = {
@@ -62,12 +67,12 @@ if CLIENT_ID and CLIENT_SECRET:
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
-                
+
                 # Ottieni dati dalla Search Console
                 start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
                 end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
                 row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
-                
+
                 if st.button('Ottieni dati'):
                     request_body = {
                         "startDate": start_date.strftime('%Y-%m-%d'),
@@ -76,9 +81,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         "rowLimit": row_limit,
                         "dataState": "final"
                     }
-                    
+
                     response_data = webmasters_service.searchanalytics().query(siteUrl=selected_site, body=request_body).execute()
-                    
+
                     data_list = []
                     for row in response_data['rows']:
                         data_list.append({
@@ -89,9 +94,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             'ctr': row['ctr'],
                             'position': row['position']
                         })
-                    
+
                     df = pd.DataFrame(data_list)
-                    
+
                     # Filtra e suggerisci pagine interne
                     filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
                     st.subheader('Suggerimenti di pagine interne:')
