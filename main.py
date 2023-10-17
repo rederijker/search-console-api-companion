@@ -27,6 +27,9 @@ if CLIENT_ID and CLIENT_SECRET:
     # Ottieni l'URL di autorizzazione
     authorize_url = flow.step1_get_authorize_url(REDIRECT_URI)
     
+    # Fornisci un link per autorizzare l'app
+    st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
+    
     # Chiedi all'utente di inserire l'Authorization Code
     auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
     
