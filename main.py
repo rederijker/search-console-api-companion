@@ -22,28 +22,32 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 # Variabile per la gestione dell'autorizzazione
 authorized = False
 
+# Variabili per gestire le credenziali
+credentials = None
+webmasters_service = None
+
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
     
     # Verifica se l'app è già autorizzata
-    if st.button('Autorizza l\'app'):
+    if not authorized:
         authorize_url = flow.step1_get_authorize_url(REDIRECT_URI)
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
-    auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
+        auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
     
-    # Se l'Authorization Code è stato inserito
-    if auth_code:
-        try:
-            # Scambia l'Authorization Code per le credenziali
-            credentials = flow.step2_exchange(auth_code)
-            http = httplib2.Http()
-            creds = credentials.authorize(http)
-            webmasters_service = build('searchconsole', 'v1', http=creds)
-            authorized = True
-        except Exception as e:
-            st.write(f"Errore durante l'autorizzazione: {e}")
+        # Se l'Authorization Code è stato inserito
+        if auth_code:
+            try:
+                # Scambia l'Authorization Code per le credenziali
+                credentials = flow.step2_exchange(auth_code)
+                http = httplib2.Http()
+                creds = credentials.authorize(http)
+                webmasters_service = build('searchconsole', 'v1', http=creds)
+                authorized = True
+            except Exception as e:
+                st.write(f"Errore durante l'autorizzazione: {e}")
 
     if authorized:
         # Ottieni la lista dei siti nell'account Google Search Console
