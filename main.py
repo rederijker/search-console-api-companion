@@ -72,7 +72,7 @@ if CLIENT_ID and CLIENT_SECRET:
         
         # Esegui l'ispezione
         if st.button('Ispeziona URL'):
-            if selected_site is not None:
+            if website is not None:
                 request_body = {
                     'inspectionUrl': url_to_inspect,
                     'siteUrl': website
