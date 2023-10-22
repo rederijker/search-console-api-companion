@@ -48,7 +48,7 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 # Funzione per selezionare un sito web
 @st.cache(allow_output_mutation=True)
-def select_site():
+def select_site(available_sites):
     return None
 
 # Seleziona un sito dalla lista
@@ -67,11 +67,10 @@ if CLIENT_ID and CLIENT_SECRET:
         available_sites = [site['siteUrl'] for site in webmasters_service.sites().list().execute().get('siteEntry', [])]
         
         # Seleziona un sito dalla lista
-        if available_sites:
-            selected_site = select_site()
-            if selected_site is None:
-                selected_site = st.selectbox('Seleziona un sito web:', available_sites)
-                select_site() = selected_site
+        selected_site = select_site(available_sites)
+        if selected_site is None:
+            selected_site = st.selectbox('Seleziona un sito web:', available_sites)
+            select_site(available_sites)  # Assegna il valore selezionato a select_site
             
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
