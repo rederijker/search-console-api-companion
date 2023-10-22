@@ -40,6 +40,13 @@ st.subheader('Inserisci le tue credenziali Google Cloud Project:')
 CLIENT_ID = st.text_input('Client ID')
 CLIENT_SECRET = st.text_input('Client Secret')
 
+# Utilizza la session state per mantenere i dati
+if 'selected_site' not in st.session_state:
+    st.session_state.selected_site = None
+
+if 'available_sites' not in st.session_state:
+    st.session_state.available_sites = []
+
 # Definizione dello scope OAuth
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 
@@ -58,23 +65,23 @@ if CLIENT_ID and CLIENT_SECRET:
         # Crea il servizio Google Search Console
         webmasters_service = build('searchconsole', 'v1', http=http)
         
-        # Ottieni la lista dei siti disponibili
-        site_list = webmasters_service.sites().list().execute()
-        available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
+        # Ottieni la lista dei siti disponibili solo se non è già stata memorizzata nella sessione
+        if not st.session_state.available_sites:
+            site_list = webmasters_service.sites().list().execute()
+            st.session_state.available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
         
-        # Seleziona un sito dalla lista        
-        st.write(available_sites)
-        website = st.text_input('Inserisci sito')
-        
+        # Seleziona un sito dalla lista
+        st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
+
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
         
         # Esegui l'ispezione
         if st.button('Ispeziona URL'):
-            if website is not None:
+            if st.session_state.selected_site is not None:
                 request_body = {
                     'inspectionUrl': url_to_inspect,
-                    'siteUrl': website
+                    'siteUrl': st.session_state.selected_site
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
@@ -85,7 +92,7 @@ if CLIENT_ID and CLIENT_SECRET:
         row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
 
         if st.button('Ottieni dati'):
-            if selected_site is not None:
+            if st.session_state.selected_site is not None:
                 request_body = {
                     "startDate": start_date.strftime('%Y-%m-%d'),
                     "endDate": end_date.strftime('%Y-%m-%d'),
@@ -94,7 +101,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     "dataState": "final"
                 }
 
-                response_data = webmasters_service.searchanalytics().query(siteUrl=selected_site, body=request_body).execute()
+                response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
 
                 data_list = []
                 for row in response_data['rows']:
