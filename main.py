@@ -6,6 +6,7 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 # Funzione per autorizzare l'app e ottenere le credenziali
+@st.cache(allow_output_mutation=True)
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
@@ -46,6 +47,9 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 # URI di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
+# Inizializza il valore di selected_site come None all'inizio della sessione
+selected_site = None
+
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Autorizza l'app e ottieni le credenziali
@@ -64,51 +68,52 @@ if CLIENT_ID and CLIENT_SECRET:
         
         # Seleziona un sito dalla lista
         selected_site = st.selectbox('Seleziona un sito web:', available_sites)
-        
-        # Inserisci l'URL da ispezionare
-        url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
-        
-        # Esegui l'ispezione
-        if st.button('Ispeziona URL'):
-            if selected_site is not None:
-                request_body = {
-                    'inspectionUrl': url_to_inspect,
-                    'siteUrl': selected_site
-                }
-                response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-                st.write(f'Risultato dell\'ispezione: {response}')
 
-        # Ottieni dati dalla Search Console
-        start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
-        end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
-        row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
+# Verifica se selected_site è stato selezionato
+if selected_site:
+    # Inserisci l'URL da ispezionare
+    url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
+    
+    # Esegui l'ispezione solo se selected_site è ancora lo stesso
+    if st.button('Ispeziona URL'):
+        request_body = {
+            'inspectionUrl': url_to_inspect,
+            'siteUrl': selected_site
+        }
+        response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+        st.write(f'Risultato dell\'ispezione: {response}')
 
-        if st.button('Ottieni dati'):
-            if selected_site is not None:
-                request_body = {
-                    "startDate": start_date.strftime('%Y-%m-%d'),
-                    "endDate": end_date.strftime('%Y-%m-%d'),
-                    "dimensions": ['QUERY', 'PAGE'],
-                    "rowLimit": row_limit,
-                    "dataState": "final"
-                }
+# Ottieni dati dalla Search Console
+start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
+end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
+row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
 
-                response_data = webmasters_service.searchanalytics().query(siteUrl=selected_site, body=request_body).execute()
+if st.button('Ottieni dati'):
+    if selected_site is not None:
+        request_body = {
+            "startDate": start_date.strftime('%Y-%m-%d'),
+            "endDate": end_date.strftime('%Y-%m-%d'),
+            "dimensions": ['QUERY', 'PAGE'],
+            "rowLimit": row_limit,
+            "dataState": "final"
+        }
 
-                data_list = []
-                for row in response_data['rows']:
-                    data_list.append({
-                        'query': row['keys'][0],
-                        'page': row['keys'][1],
-                        'clicks': row['clicks'],
-                        'impressions': row['impressions'],
-                        'ctr': row['ctr'],
-                        'position': row['position']
-                    })
+        response_data = webmasters_service.searchanalytics().query(siteUrl=selected_site, body=request_body).execute()
 
-                df = pd.DataFrame(data_list)
+        data_list = []
+        for row in response_data['rows']:
+            data_list.append({
+                'query': row['keys'][0],
+                'page': row['keys'][1],
+                'clicks': row['clicks'],
+                'impressions': row['impressions'],
+                'ctr': row['ctr'],
+                'position': row['position']
+            })
 
-                # Filtra e suggerisci pagine interne
-                filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
-                st.subheader('Suggerimenti di pagine interne:')
-                st.dataframe(filtered_data)
+        df = pd.DataFrame(data_list)
+
+        # Filtra e suggerisci pagine interne
+        filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
+        st.subheader('Suggerimenti di pagine interne:')
+        st.dataframe(filtered_data)
