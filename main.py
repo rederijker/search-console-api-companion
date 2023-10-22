@@ -38,6 +38,11 @@ class SessionState:
         self.selected_site = None
         self.available_sites = []
 
+# Funzione per ottenere la lista dei siti una sola volta
+def get_available_sites(webmasters_service):
+    site_list = webmasters_service.sites().list().execute()
+    return [site['siteUrl'] for site in site_list.get('siteEntry', [])]
+
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
 
@@ -55,38 +60,36 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 # Crea un oggetto per gestire lo stato della sessione
 session_state = SessionState()
 
-# Inizializza la lista dei siti solo una volta
-if not session_state.available_sites:
-    if CLIENT_ID and CLIENT_SECRET:
-        # Autorizza l'app e ottieni le credenziali
-        credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
+if CLIENT_ID and CLIENT_SECRET:
+    # Autorizza l'app e ottieni le credenziali
+    credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
+    
+    if credentials:
+        # Crea un oggetto http autorizzato
+        http = credentials.authorize(httplib2.Http())
         
-        if credentials:
-            # Crea un oggetto http autorizzato
-            http = credentials.authorize(httplib2.Http())
-            
-            # Crea il servizio Google Search Console
-            webmasters_service = build('searchconsole', 'v1', http=http)
-            
-            # Ottieni la lista dei siti disponibili
-            site_list = webmasters_service.sites().list().execute()
-            session_state.available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
+        # Crea il servizio Google Search Console
+        webmasters_service = build('searchconsole', 'v1', http=http)
+        
+        # Inizializza la lista dei siti solo una volta
+        if not session_state.available_sites:
+            session_state.available_sites = get_available_sites(webmasters_service)
 
-# Seleziona un sito dalla lista e salvalo nello stato della sessione
-session_state.selected_site = st.selectbox('Seleziona un sito web:', session_state.available_sites)
+        # Seleziona un sito dalla lista e salvalo nello stato della sessione
+        session_state.selected_site = st.selectbox('Seleziona un sito web:', session_state.available_sites)
 
-# Inserisci l'URL da ispezionare
-url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
+        # Inserisci l'URL da ispezionare
+        url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
 
-# Esegui l'ispezione
-if st.button('Ispeziona URL'):
-    if session_state.selected_site is not None:
-        request_body = {
-            'inspectionUrl': url_to_inspect,
-            'siteUrl': session_state.selected_site
-        }
-        response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-        st.write(f'Risultato dell\'ispezione: {response}')
+        # Esegui l'ispezione
+        if st.button('Ispeziona URL'):
+            if session_state.selected_site is not None:
+                request_body = {
+                    'inspectionUrl': url_to_inspect,
+                    'siteUrl': session_state.selected_site
+                }
+                response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+                st.write(f'Risultato dell\'ispezione: {response}')
 
         # Ottieni dati dalla Search Console
         start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
