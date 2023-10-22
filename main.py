@@ -6,6 +6,7 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 # Funzione per autorizzare l'app e ottenere le credenziali
+@st.cache(allow_output_mutation=True)
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
