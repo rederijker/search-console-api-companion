@@ -46,8 +46,10 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 # URI di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
-# Variabile di stato per il sito selezionato
-selected_site = st.empty()
+# Funzione per selezionare un sito web
+@st.cache(allow_output_mutation=True)
+def select_site():
+    return None
 
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
@@ -66,7 +68,10 @@ if CLIENT_ID and CLIENT_SECRET:
         
         # Seleziona un sito dalla lista
         if available_sites:
-            selected_site = st.selectbox('Seleziona un sito web:', available_sites)
+            selected_site = select_site()
+            if selected_site is None:
+                selected_site = st.selectbox('Seleziona un sito web:', available_sites)
+                select_site() = selected_site
             
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
