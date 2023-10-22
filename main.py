@@ -62,8 +62,7 @@ if CLIENT_ID and CLIENT_SECRET:
         site_list = webmasters_service.sites().list().execute()
         available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
         
-        # Seleziona un sito dalla lista
-        
+        # Seleziona un sito dalla lista        
         st.write(available_sites)
         website = st.text_input('Inserisci sito')
         
