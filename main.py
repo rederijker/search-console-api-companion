@@ -64,7 +64,7 @@ if CLIENT_ID and CLIENT_SECRET:
         
         # Seleziona un sito dalla lista
         
-        selected_site = st.session_state.selectbox('Seleziona un sito web:', available_sites)
+        selected_site = st.checkbox('Seleziona un sito web:', available_sites)
         
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
