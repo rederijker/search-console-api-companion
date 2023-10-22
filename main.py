@@ -73,7 +73,9 @@ if CLIENT_ID and CLIENT_SECRET:
                 'inspectionUrl': url_to_inspect,
                 'siteUrl': selected_site
             }
+            
             response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+            st.write(f'Risultato dell\'ispezione: {request_body}')
             st.write(f'Risultato dell\'ispezione: {response}')
 
         # Ottieni dati dalla Search Console
