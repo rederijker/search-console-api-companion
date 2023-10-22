@@ -2,8 +2,8 @@
 import streamlit as st
 import httplib2
 import pandas as pd
-from apiclient.discovery import build
-from oauth2client.client import OAuth2WebServerFlow
+from google_auth_oauthlib.flow import InstalledAppFlow
+from googleapiclient.discovery import build
 
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
@@ -14,10 +14,7 @@ CLIENT_ID = st.text_input('Client ID')
 CLIENT_SECRET = st.text_input('Client Secret')
 
 # Definizione dello scope OAuth
-OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
-
-# URI di reindirizzamento
-REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+OAUTH_SCOPE = ['https://www.googleapis.com/auth/webmasters.readonly']
 
 # Variabile per la gestione dell'autorizzazione
 authorized = False
@@ -25,28 +22,18 @@ authorized = False
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
+    flow = InstalledAppFlow.from_client_secrets_file(
+        "client_secrets.json", scopes=OAUTH_SCOPE
+    )
     
     # Verifica se l'app è già autorizzata
     if st.button('Autorizza l\'app'):
-        authorize_url = flow.step1_get_authorize_url(REDIRECT_URI)
-        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
-    auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
-    
-    # Se l'Authorization Code è stato inserito
-    if auth_code:
-        try:
-            # Scambia l'Authorization Code per le credenziali
-            credentials = flow.step2_exchange(auth_code)
-            http = httplib2.Http()
-            creds = credentials.authorize(http)
-            webmasters_service = build('searchconsole', 'v1', http=creds)
-            authorized = True
-        except Exception as e:
-            st.write(f"Errore durante l'autorizzazione: {e}")
+        creds = flow.run_local_server(port=0)
+        authorized = True
 
     if authorized:
         # Ottieni la lista dei siti nell'account Google Search Console
+        webmasters_service = build('webmasters', 'v3', credentials=creds)
         site_list = webmasters_service.sites().list().execute()
 
         # Seleziona un sito dalla lista
@@ -65,7 +52,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     'inspectionUrl': url_to_inspect,
                     'siteUrl': selected_site
                 }
-                response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+                response = webmasters_service.urlTestingTools().mobileFriendlyTest().run(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
 
                 # Ottieni dati dalla Search Console
