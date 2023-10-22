@@ -47,7 +47,7 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 # Variabile di stato per il sito selezionato
-selected_site = None
+selected_site = st.empty()
 
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
