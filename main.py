@@ -68,6 +68,7 @@ if CLIENT_ID and CLIENT_SECRET:
         
         # Seleziona un sito dalla lista
         site_selection = st.selectbox('Seleziona un sito web:', available_sites, index=available_sites.index(selected_site) if selected_site else 0)
+        st.write(site_selection)
         
         if site_selection != selected_site:
             selected_site = site_selection
