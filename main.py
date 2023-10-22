@@ -6,7 +6,6 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 # Funzione per autorizzare l'app e ottenere le credenziali
-@st.cache(allow_output_mutation=True)
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
@@ -47,10 +46,6 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 # URI di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
-# Inizializza la variabile di sessione per il sito selezionato
-if 'selected_site' not in st.session_state:
-    st.session_state.selected_site = None
-
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Autorizza l'app e ottieni le credenziali
@@ -68,20 +63,17 @@ if CLIENT_ID and CLIENT_SECRET:
         available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
         
         # Seleziona un sito dalla lista
-        site_selection = st.selectbox('Seleziona un sito web:', available_sites, index=available_sites.index(st.session_state.selected_site) if st.session_state.selected_site else 0)
+        selected_site = st.selectbox('Seleziona un sito web:', available_sites)
         
-        if site_selection != st.session_state.selected_site:
-            st.session_state.selected_site = site_selection
-
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
         
         # Esegui l'ispezione
         if st.button('Ispeziona URL'):
-            if st.session_state.selected_site is not None:
+            if selected_site is not None:
                 request_body = {
                     'inspectionUrl': url_to_inspect,
-                    'siteUrl': st.session_state.selected_site
+                    'siteUrl': selected_site
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
