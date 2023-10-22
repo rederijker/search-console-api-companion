@@ -97,7 +97,6 @@ if CLIENT_ID and CLIENT_SECRET:
                     "startDate": start_date.strftime('%Y-%m-%d'),
                     "endDate": end_date.strftime('%Y-%m-%d'),
                     "dimensions": ['QUERY', 'PAGE'],
-                    "rowLimit": row_limit,
                     "dataState": "final"
                 }
 
