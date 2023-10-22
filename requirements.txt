@@ -2,4 +2,3 @@ httplib2
 pandas
 oauth2client
 google-api-python-client
-google_auth_oauthlib
