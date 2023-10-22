@@ -32,6 +32,12 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     
     return credentials
 
+# Creazione di una classe per gestire lo stato della sessione
+class SessionState:
+    def __init__(self):
+        self.selected_site = None
+        self.available_sites = []
+
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
 
@@ -46,37 +52,41 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 # URI di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
-# Seleziona un sito dalla lista
-if CLIENT_ID and CLIENT_SECRET:
-    # Autorizza l'app e ottieni le credenziali
-    credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
-    
-    if credentials:
-        # Crea un oggetto http autorizzato
-        http = credentials.authorize(httplib2.Http())
+# Crea un oggetto per gestire lo stato della sessione
+session_state = SessionState()
+
+# Inizializza la lista dei siti solo una volta
+if not session_state.available_sites:
+    if CLIENT_ID and CLIENT_SECRET:
+        # Autorizza l'app e ottieni le credenziali
+        credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
         
-        # Crea il servizio Google Search Console
-        webmasters_service = build('searchconsole', 'v1', http=http)
-        
-        # Ottieni la lista dei siti disponibili
-        site_list = webmasters_service.sites().list().execute()
-        available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
-        
-        # Seleziona un sito dalla lista
-        selected_site = st.selectbox('Seleziona un sito web:', available_sites)
-        
-        # Inserisci l'URL da ispezionare
-        url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
-        
-        # Esegui l'ispezione
-        if st.button('Ispeziona URL'):
-            if selected_site is not None:
-                request_body = {
-                    'inspectionUrl': url_to_inspect,
-                    'siteUrl': selected_site
-                }
-                response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-                st.write(f'Risultato dell\'ispezione: {response}')
+        if credentials:
+            # Crea un oggetto http autorizzato
+            http = credentials.authorize(httplib2.Http())
+            
+            # Crea il servizio Google Search Console
+            webmasters_service = build('searchconsole', 'v1', http=http)
+            
+            # Ottieni la lista dei siti disponibili
+            site_list = webmasters_service.sites().list().execute()
+            session_state.available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
+
+# Seleziona un sito dalla lista e salvalo nello stato della sessione
+session_state.selected_site = st.selectbox('Seleziona un sito web:', session_state.available_sites)
+
+# Inserisci l'URL da ispezionare
+url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
+
+# Esegui l'ispezione
+if st.button('Ispeziona URL'):
+    if session_state.selected_site is not None:
+        request_body = {
+            'inspectionUrl': url_to_inspect,
+            'siteUrl': session_state.selected_site
+        }
+        response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+        st.write(f'Risultato dell\'ispezione: {response}')
 
         # Ottieni dati dalla Search Console
         start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
