@@ -48,7 +48,8 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 # Inizializza la variabile di sessione per il sito selezionato
-selected_site = st.session_state.get('selected_site', None)
+if 'selected_site' not in st.session_state:
+    st.session_state.selected_site = None
 
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
@@ -67,22 +68,20 @@ if CLIENT_ID and CLIENT_SECRET:
         available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
         
         # Seleziona un sito dalla lista
-        site_selection = st.selectbox('Seleziona un sito web:', available_sites, index=available_sites.index(selected_site) if selected_site else 0)
-        st.write(site_selection)
+        site_selection = st.selectbox('Seleziona un sito web:', available_sites, index=available_sites.index(st.session_state.selected_site) if st.session_state.selected_site else 0)
         
-        if site_selection != selected_site:
-            selected_site = site_selection
-            st.session_state.selected_site = selected_site
+        if site_selection != st.session_state.selected_site:
+            st.session_state.selected_site = site_selection
 
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
         
         # Esegui l'ispezione
         if st.button('Ispeziona URL'):
-            if selected_site is not None:
+            if st.session_state.selected_site is not None:
                 request_body = {
                     'inspectionUrl': url_to_inspect,
-                    'siteUrl': selected_site
+                    'siteUrl': st.session_state.selected_site
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
