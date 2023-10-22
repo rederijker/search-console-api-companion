@@ -33,12 +33,12 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     return credentials
 
 # Pagina iniziale
-st.title('Google Search Console Companion')
+st.title('Google Search Console Link Suggestions')
 
 # Inserimento delle credenziali
-st.sidebar.subheader('Inserisci le tue credenziali Google Cloud Project:')
-CLIENT_ID = st.sidebar.text_input('Client ID')
-CLIENT_SECRET = st.sidebar.text_input('Client Secret')
+st.subheader('Inserisci le tue credenziali Google Cloud Project:')
+CLIENT_ID = st.text_input('Client ID')
+CLIENT_SECRET = st.text_input('Client Secret')
 
 # Utilizza la session state per mantenere i dati
 if 'selected_site' not in st.session_state:
@@ -89,7 +89,7 @@ if CLIENT_ID and CLIENT_SECRET:
         # Ottieni dati dalla Search Console
         start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
         end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
-        
+        row_limit = st.number_input('Limite di righe', min_value=1, max_value=250000, value=250000)
 
         if st.button('Ottieni dati'):
             if st.session_state.selected_site is not None:
@@ -97,6 +97,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     "startDate": start_date.strftime('%Y-%m-%d'),
                     "endDate": end_date.strftime('%Y-%m-%d'),
                     "dimensions": ['QUERY', 'PAGE'],
+                    "rowLimit": row_limit,
                     "dataState": "final"
                 }
 
