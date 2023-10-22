@@ -89,7 +89,7 @@ if CLIENT_ID and CLIENT_SECRET:
         # Ottieni dati dalla Search Console
         start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
         end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
-        row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
+        
 
         if st.button('Ottieni dati'):
             if st.session_state.selected_site is not None:
