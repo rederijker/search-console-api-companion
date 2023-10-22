@@ -46,6 +46,9 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 # URI di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
+# Inizializza la variabile di sessione per il sito selezionato
+selected_site = st.session_state.get('selected_site', None)
+
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Autorizza l'app e ottieni le credenziali
@@ -63,8 +66,11 @@ if CLIENT_ID and CLIENT_SECRET:
         available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
         
         # Seleziona un sito dalla lista
-        selected_site = st.selectbox('Seleziona un sito web:', available_sites)
+        selected_site = st.selectbox('Seleziona un sito web:', available_sites, index=available_sites.index(selected_site) if selected_site else 0)
         
+        # Salva il sito selezionato nella variabile di sessione
+        st.session_state.selected_site = selected_site
+
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
         
