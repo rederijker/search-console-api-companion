@@ -64,7 +64,8 @@ if CLIENT_ID and CLIENT_SECRET:
         
         # Seleziona un sito dalla lista
         
-        selected_site = st.checkbox('Seleziona un sito web:', available_sites)
+        st.write(available_sites)
+        website = st.text_input('Inserisci sito')
         
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
@@ -74,7 +75,7 @@ if CLIENT_ID and CLIENT_SECRET:
             if selected_site is not None:
                 request_body = {
                     'inspectionUrl': url_to_inspect,
-                    'siteUrl': selected_site
+                    'siteUrl': website
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
