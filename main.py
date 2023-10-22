@@ -33,12 +33,12 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     return credentials
 
 # Pagina iniziale
-st.title('Google Search Console Link Suggestions')
+st.title('Google Search Console Companion')
 
 # Inserimento delle credenziali
-st.subheader('Inserisci le tue credenziali Google Cloud Project:')
-CLIENT_ID = st.text_input('Client ID')
-CLIENT_SECRET = st.text_input('Client Secret')
+st.sidebar.subheader('Inserisci le tue credenziali Google Cloud Project:')
+CLIENT_ID = st.sidebar.text_input('Client ID')
+CLIENT_SECRET = st.sidebar.text_input('Client Secret')
 
 # Utilizza la session state per mantenere i dati
 if 'selected_site' not in st.session_state:
