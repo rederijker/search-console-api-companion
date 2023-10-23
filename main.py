@@ -137,7 +137,8 @@ if "messages" not in st.session_state or st.sidebar.button("Clear conversation h
     st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}
 
 # Chat Input
-if prompt := st.chat_input(placeholder="What is this data about?"):
+prompt = st.chat_input(placeholder="What is this data about?")
+if prompt:
     st.session_state.messages.append({"role": "user", "content": prompt})
 
     if not openai_api_key:
