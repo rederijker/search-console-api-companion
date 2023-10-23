@@ -4,19 +4,27 @@ import pandas as pd
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+import json
+
+# Definisci client_id e client_secret come stringhe vuote all'inizio
+client_id = ""
+client_secret = ""
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
+    flow = OAuth2WebServerFlow(
+        client_id=client_id,
+        client_secret=client_secret,
+        scope=oauth_scope,
+        redirect_uri=redirect_uri
+    )
     
     # Verifica se le credenziali sono già memorizzate nella cache
-    storage = Storage("cached_credentials.json")
-    credentials = storage.get()
-    
+    credentials = st.session_state.credentials
     if credentials is None:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
-        authorize_url = flow.step1_get_authorize_url(redirect_uri)
+        authorize_url = flow.step1_get_authorize_url()
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
@@ -25,8 +33,8 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
                 # Scambia l'Authorization Code per le credenziali
                 credentials = flow.step2_exchange(auth_code)
                 
-                # Salva le credenziali nella cache
-                storage.put(credentials)
+                # Salva le credenziali nella sessione
+                st.session_state.credentials = credentials
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
     
@@ -35,10 +43,19 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
 
-# Inserimento delle credenziali
-st.subheader('Inserisci le tue credenziali Google Cloud Project:')
-CLIENT_ID = st.text_input('Client ID')
-CLIENT_SECRET = st.text_input('Client Secret')
+# Carica il file JSON con le credenziali
+st.subheader('Carica il file JSON con le credenziali:')
+uploaded_file = st.file_uploader("Carica il file JSON", type=["json"])
+
+if uploaded_file:
+    try:
+        credentials_json = json.load(uploaded_file)
+        client_id = credentials_json.get("installed", {}).get("client_id")
+        client_secret = credentials_json.get("installed", {}).get("client_secret")
+    except Exception as e:
+        st.write(f"Errore nel caricamento del file JSON: {e}")
+        client_id = ""
+        client_secret = ""
 
 # Utilizza la session state per mantenere i dati
 if 'selected_site' not in st.session_state:
@@ -53,18 +70,17 @@ OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 # URI di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
-# Seleziona un sito dalla lista
-if CLIENT_ID and CLIENT_SECRET:
+# Continua solo se sono stati ottenuti client_id e client_secret
+if client_id and client_secret:
     # Autorizza l'app e ottieni le credenziali
-    credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
-    
+    credentials = authorize_app(client_id, client_secret, OAUTH_SCOPE, REDIRECT_URI)
+
     if credentials:
         # Crea un oggetto http autorizzato
         http = credentials.authorize(httplib2.Http())
-        
+
         # Crea il servizio Google Search Console
         webmasters_service = build('searchconsole', 'v1', http=http)
-        
         # Ottieni la lista dei siti disponibili solo se non è già stata memorizzata nella sessione
         if not st.session_state.available_sites:
             site_list = webmasters_service.sites().list().execute()
