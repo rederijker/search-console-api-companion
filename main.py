@@ -1,30 +1,27 @@
 import streamlit as st
 from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.client import Storage
+from oauth2client.file import Storage
 import httplib2
 from googleapiclient.discovery import build
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
-    # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
-
-    # Verifica se le credenziali sono già memorizzate nella sessione
-    if 'credentials' not in st.session_state:
-        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
-        authorize_url, _ = flow.authorization_url(redirect_uri)
-        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
+    
+    storage = st.session_state  # Utilizza la variabile di stato della sessione per memorizzare le credenziali
+    
+    if not hasattr(storage, 'credentials') or storage.credentials is None:
+        authorize_url = flow.step1_get_authorize_url(redirect_uri)
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
-
+        
         if auth_code:
             try:
-                # Scambia l'Authorization Code per le credenziali
                 credentials = flow.step2_exchange(auth_code)
-                st.session_state.credentials = credentials
+                storage.credentials = credentials  # Memorizza le credenziali nella sessione
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
-
-    return st.session_state.credentials
+    
+    return storage.credentials
 
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
@@ -51,25 +48,25 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 if CLIENT_ID and CLIENT_SECRET:
     # Autorizza l'app e ottieni le credenziali
     credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
-
+    
     if credentials:
         # Crea un oggetto http autorizzato
         http = credentials.authorize(httplib2.Http())
-
+        
         # Crea il servizio Google Search Console
         webmasters_service = build('searchconsole', 'v1', http=http)
-
+        
         # Ottieni la lista dei siti disponibili solo se non è già stata memorizzata nella sessione
         if not st.session_state.available_sites:
             site_list = webmasters_service.sites().list().execute()
             st.session_state.available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
-
+        
         # Seleziona un sito dalla lista
         st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
 
         # Inserisci l'URL da ispezionare
         url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
-
+        
         # Esegui l'ispezione
         if st.button('Ispeziona URL'):
             if st.session_state.selected_site is not None:
@@ -79,6 +76,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
+
 
 
         # Ottieni dati dalla Search Console
