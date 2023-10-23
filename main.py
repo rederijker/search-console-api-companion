@@ -11,6 +11,10 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
 
     # Verifica se le credenziali sono già memorizzate come variabili
     if 'credentials' not in st.session_state:
+        # Inizializza credentials come None
+        st.session_state.credentials = None
+
+    if st.session_state.credentials is None:
         # Se le credenziali non sono state memorizzate come variabili, richiedi l'autorizzazione
         authorize_url = flow.step1_get_authorize_url(redirect_uri)
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
