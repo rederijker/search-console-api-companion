@@ -80,7 +80,7 @@ if CLIENT_ID and CLIENT_SECRET:
         
         with tab1:
             # Inserisci l'URL da ispezionare
-            url_to inspect = st.text_input("Inserisci l'URL da ispezionare:")
+            url_to_inspect = st.text_input("Inserisci l'URL da ispezionare:")
             
             # Esegui l'ispezione
             if st.button('Ispeziona URL'):
