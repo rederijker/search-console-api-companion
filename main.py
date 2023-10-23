@@ -49,10 +49,11 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
 
 # Pagina iniziale
 st.title('Google Search Console API Companion')
+st.write("Google Cloud Console: https://console.cloud.google.com/apis/credentials")
+
 
 # Inserimento delle credenziali
 st.subheader('Inserisci le tue credenziali Google Cloud Project:')
-st.write("Google Cloud Console: https://console.cloud.google.com/apis/credentials")
 CLIENT_ID = st.text_input('Client ID')
 CLIENT_SECRET = st.text_input('Client Secret')
 
