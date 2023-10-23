@@ -17,7 +17,10 @@ if 'credentials' not in st.session_state:
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri=redirect_uri)
+    # Definisci il flusso di autorizzazione OAuth con redirect_uri tramite il costruttore
+    flow = OAuth2WebServerFlow(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, scope=OAUTH_SCOPE, redirect_uri=REDIRECT_URI)
+
+    
     
     # Verifica se le credenziali sono già memorizzate nella sessione corrente
     if st.session_state.credentials is None:
