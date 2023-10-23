@@ -10,13 +10,17 @@ import os
 if os.path.exists("cached_credentials.json"):
     os.remove("cached_credentials.json")
 
+# Inizializza la variabile di sessione per le credenziali
+if 'credentials' not in st.session_state:
+    st.session_state.credentials = None
+
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri=redirect_uri)
     
     # Verifica se le credenziali sono già memorizzate nella sessione corrente
-    if 'credentials' not in st.session_state:
+    if st.session_state.credentials is None:
         storage = Storage("cached_credentials.json")
         credentials = storage.get()
 
