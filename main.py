@@ -4,6 +4,15 @@ import pandas as pd
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+import os
+
+# Funzione per il reset delle credenziali
+def reset_credentials_file():
+    if os.path.exists("cached_credentials.json"):
+        os.remove("cached_credentials.json")
+
+# Reset delle credenziali all'avvio dell'app
+reset_credentials_file()
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
