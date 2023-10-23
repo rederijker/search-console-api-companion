@@ -14,6 +14,11 @@ if 'selected_site' not in st.session_state:
 
 if 'available_sites' not in st.session_state:
     st.session_state.available_sites = []
+# Definizione dello scope OAuth
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
+
+# URI di reindirizzamento
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
