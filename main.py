@@ -3,19 +3,15 @@ import httplib2
 import pandas as pd
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.file import Storage
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
     
-    # Verifica se le credenziali sono già memorizzate nella cache
-    storage = Storage("cached_credentials.json")
-    credentials = storage.get()
-    
-    if credentials is None:
-        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
+    # Verifica se le credenziali sono già memorizzate nella sessione
+    if 'credentials' not in st.session_state:
+        # Se le credenziali non sono presenti nella sessione, richiedi l'autorizzazione
         authorize_url = flow.step1_get_authorize_url(redirect_uri)
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
@@ -24,11 +20,11 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
             try:
                 # Scambia l'Authorization Code per le credenziali
                 credentials = flow.step2_exchange(auth_code)
-                
-                # Salva le credenziali nella cache
-                storage.put(credentials)
+                st.session_state.credentials = credentials
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
+    else:
+        credentials = st.session_state.credentials
     
     return credentials
 
