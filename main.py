@@ -5,9 +5,11 @@ from apiclient import errors
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 
-# Imposta le tue credenziali OAuth2
-CLIENT_ID = 'TUO_CLIENT_ID'
-CLIENT_SECRET = 'TUO_CLIENT_SECRET'
+st.title("Google Search Console API")
+
+# Campi di input per client_id e client_secret
+client_id = st.text_input("Inserisci il tuo Client ID:")
+client_secret = st.text_input("Inserisci il tuo Client Secret:", type="password")
 
 # Imposta il percorso di reindirizzamento
 REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
@@ -16,7 +18,7 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 
 # Creazione del flusso OAuth2
-flow = OAuth2WebServerFlow(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
+flow = OAuth2WebServerFlow(client_id, client_secret, OAUTH_SCOPE, REDIRECT_URI)
 
 # Genera l'URL per l'autorizzazione
 authorize_url = flow.step1_get_authorize_url(REDIRECT_URI)
@@ -29,68 +31,69 @@ st.write(authorize_url)
 auth_code = st.text_input("Inserisci il codice di autorizzazione qui:")
 
 # Scambio del codice di autorizzazione con le credenziali
-credentials = flow.step2_exchange(auth_code)
-st.write("Credenziali generate con successo!")
+if st.button("Genera Credenziali"):
+    credentials = flow.step2_exchange(auth_code)
+    st.write("Credenziali generate con successo!")
 
-# Crea un oggetto httplib2.Http e autorizza con le credenziali
-http = httplib2.Http()
-creds = credentials.authorize(http)
+    # Crea un oggetto httplib2.Http e autorizza con le credenziali
+    http = httplib2.Http()
+    creds = credentials.authorize(http)
 
-# Creazione del servizio GSC
-webmasters_service = build('searchconsole', 'v1', http=creds)
+    # Creazione del servizio GSC
+    webmasters_service = build('searchconsole', 'v1', http=creds)
 
-# Ottieni la lista dei siti nel tuo account GSC
-site_list = webmasters_service.sites().list().execute()
+    # Ottieni la lista dei siti nel tuo account GSC
+    site_list = webmasters_service.sites().list().execute()
 
-# Visualizza la lista dei siti
-st.write("Lista dei siti nel tuo account GSC:")
-st.write(site_list)
+    # Visualizza la lista dei siti
+    st.write("Lista dei siti nel tuo account GSC:")
+    st.write(site_list)
 
-# Seleziona un sito
-selected_site = st.selectbox("Seleziona un sito GSC", [site['siteUrl'] for site in site_list['siteEntry']])
+    # Seleziona un sito
+    selected_site = st.selectbox("Seleziona un sito GSC", [site['siteUrl'] for site in site_list['siteEntry']])
 
-# Mostra il sito selezionato
-st.write(f"Sito selezionato: {selected_site}")
+    # Mostra il sito selezionato
+    st.write(f"Sito selezionato: {selected_site}")
 
-# Funzionalità di ispezione di URL
-st.header("Ispezione di URL")
-url_to_inspect = st.text_input("Inserisci l'URL da ispezionare:")
-if st.button("Esegui Ispezione"):
-    request_body = {
-        'inspectionUrl': url_to_inspect,
-        'siteUrl': selected_site
-    }
-    response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-    st.write("Risultato dell'ispezione:")
-    st.write(response)
+    # Funzionalità di ispezione di URL
+    st.header("Ispezione di URL")
+    url_to_inspect = st.text_input("Inserisci l'URL da ispezionare:")
+    if st.button("Esegui Ispezione"):
+        request_body = {
+            'inspectionUrl': url_to_inspect,
+            'siteUrl': selected_site
+        }
+        response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+        st.write("Risultato dell'ispezione:")
+        st.write(response)
 
-# Funzionalità di accesso ai dati di analytics
-st.header("Accesso ai dati di analytics")
-start_date = st.date_input("Data di inizio")
-end_date = st.date_input("Data di fine")
+    # Funzionalità di accesso ai dati di analytics
+    st.header("Accesso ai dati di analytics")
+    start_date = st.date_input("Data di inizio")
+    end_date = st.date_input("Data di fine")
 
-if st.button("Estrai dati di analytics"):
-    request_body = {
-        "startDate": start_date.strftime('%Y-%m-%d'),
-        "endDate": end_date.strftime('%Y-%m-%d'),
-        "dimensions": ['QUERY', 'PAGE'],
-        "rowLimit": 25000,
-        "dataState": "final"
-    }
+    if st.button("Estrai dati di analytics"):
+        request_body = {
+            "startDate": start_date.strftime('%Y-%m-%d'),
+            "endDate": end_date.strftime('%Y-%m-%d'),
+            "dimensions": ['QUERY', 'PAGE'],
+            "rowLimit": 25000,
+            "dataState": "final"
+        }
 
-    response_data = webmasters_service.searchanalytics().query(siteUrl=selected_site, body=request_body).execute()
-    
-    data_list = []
-    for row in response_data['rows']:
-        data_list.append({
-            'query': row['keys'][0],
-            'page': row['keys'][1],
-            'clicks': row['clicks'],
-            'impressions': row['impressions'],
-            'ctr': row['ctr'],
-            'position': row['position']
-        })
+        response_data = webmasters_service.searchanalytics().query(siteUrl=selected_site, body=request_body).execute()
 
-    df = pd.DataFrame(data_list)
-    st.write("Dati di analytics:")
-    st.write(df)
+        data_list = []
+        for row in response_data['rows']:
+            data_list.append({
+                'query': row['keys'][0],
+                'page': row['keys'][1],
+                'clicks': row['clicks'],
+                'impressions': row['impressions'],
+                'ctr': row['ctr'],
+                'position': row['position']
+            })
+
+        df = pd.DataFrame(data_list)
+        st.write("Dati di analytics:")
+        st.write(df)
