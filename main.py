@@ -10,6 +10,10 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
     
+    # Inizializza le variabili di sessione
+    if 'credentials' not in st.session_state:
+        st.session_state.credentials = None
+    
     # Verifica se le credenziali sono già memorizzate nella sessione
     if st.session_state.credentials is None:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
