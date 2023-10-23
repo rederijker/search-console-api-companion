@@ -1,20 +1,35 @@
 import streamlit as st
 import httplib2
 import pandas as pd
-from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
+from apiclient.discovery import build
+from oauth2client.client import OAuth2WebServerFlow
+from oauth2client.file import Storage
 
 # Funzione per autorizzare l'app e ottenere le credenziali
-def authorize_app(client_id, client_secret, oauth_scope):
-    # Crea un flusso di autenticazione
-    flow = InstalledAppFlow.from_client_secrets_file(
-        client_secrets_file=client_secret,
-        scopes=oauth_scope
-    )
-
-    # Ottieni le credenziali
-    credentials = flow.run_local_server(port=0)
-
+def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
+    # Flusso di autorizzazione OAuth
+    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
+    
+    # Verifica se le credenziali sono già memorizzate nella cache
+    storage = Storage("cached_credentials.json")
+    credentials = storage.get()
+    
+    if credentials is None:
+        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
+        authorize_url = flow.step1_get_authorize_url(redirect_uri)
+        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
+        auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
+        
+        if auth_code:
+            try:
+                # Scambia l'Authorization Code per le credenziali
+                credentials = flow.step2_exchange(auth_code)
+                
+                # Salva le credenziali nella cache
+                storage.put(credentials)
+            except Exception as e:
+                st.write(f"Errore durante l'autorizzazione: {e}")
+    
     return credentials
 
 # Pagina iniziale
@@ -23,7 +38,7 @@ st.title('Google Search Console Link Suggestions')
 # Inserimento delle credenziali
 st.subheader('Inserisci le tue credenziali Google Cloud Project:')
 CLIENT_ID = st.text_input('Client ID')
-CLIENT_SECRET = st.file_uploader('Client Secret', type='json')
+CLIENT_SECRET = st.text_input('Client Secret')
 
 # Utilizza la session state per mantenere i dati
 if 'selected_site' not in st.session_state:
@@ -33,13 +48,16 @@ if 'available_sites' not in st.session_state:
     st.session_state.available_sites = []
 
 # Definizione dello scope OAuth
-OAUTH_SCOPE = ['https://www.googleapis.com/auth/webmasters.readonly']
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
+
+# URI di reindirizzamento
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 # Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Autorizza l'app e ottieni le credenziali
-    credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE)
-
+    credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
+    
     if credentials:
         # Crea un oggetto http autorizzato
         http = credentials.authorize(httplib2.Http())
@@ -47,8 +65,8 @@ if CLIENT_ID and CLIENT_SECRET:
         # Crea il servizio Google Search Console
         webmasters_service = build('searchconsole', 'v1', http=http)
         
+        # Ottieni la lista dei siti disponibili solo se non è già stata memorizzata nella sessione
         if not st.session_state.available_sites:
-            # Ottieni la lista dei siti disponibili
             site_list = webmasters_service.sites().list().execute()
             st.session_state.available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
         
@@ -65,7 +83,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     'inspectionUrl': url_to_inspect,
                     'siteUrl': st.session_state.selected_site
                 }
-                response = webmasters_service.urlTestingTools().mobileFriendlyTest().run(body=request_body).execute()
+                response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
 
         # Ottieni dati dalla Search Console
@@ -80,7 +98,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     "endDate": end_date.strftime('%Y-%m-%d'),
                     "dimensions": ['QUERY', 'PAGE'],
                     "rowLimit": row_limit,
-                    "dataState": "FINAL"
+                    "dataState": "final"
                 }
 
                 response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
