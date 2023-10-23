@@ -49,7 +49,7 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     return st.session_state.credentials
 
 # Pagina iniziale
-st.title('Google Search Console Link Suggestions')
+st.title('Google Search Console API Companion')
 
 # Inserimento delle credenziali
 st.subheader('Inserisci le tue credenziali Google Cloud Project:')
