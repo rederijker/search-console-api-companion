@@ -130,6 +130,7 @@ if tab2:
 
             df = pd.DataFrame(data_list)
             st.dataframe(df)
+            #questa parte che segue è quella AI
 
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
 
