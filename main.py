@@ -23,12 +23,12 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
+    flow = OAuth2WebServerFlow(client_id=client_secret, client_secret=client_secret, scope=oauth_scope, redirect_uri=redirect_uri)
     
     # Verifica se le credenziali sono già memorizzate nella cache
     if st.session_state.credentials is None:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
-        authorize_url = flow.step1_get_authorize_url(redirect_uri)
+        authorize_url = flow.step1_get_authorize_url()
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
@@ -41,6 +41,8 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
                 st.session_state.credentials = credentials
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
+    
+    return st.session_state.credentials
     
     return st.session_state.credentials
 
