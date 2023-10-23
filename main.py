@@ -1,99 +1,116 @@
 import streamlit as st
 import httplib2
 import pandas as pd
-from apiclient import errors
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
+from oauth2client.file import Storage
 
-st.title("Google Search Console API")
+# Inizializza le variabili di sessione
+if 'credentials' not in st.session_state:
+    st.session_state.credentials = None
 
-# Campi di input per client_id e client_secret
-client_id = st.text_input("Inserisci il tuo Client ID:")
-client_secret = st.text_input("Inserisci il tuo Client Secret:", type="password")
+if 'selected_site' not in st.session_state:
+    st.session_state.selected_site = None
 
-# Imposta il percorso di reindirizzamento
-REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+if 'available_sites' not in st.session_state:
+    st.session_state.available_sites = []
 
-# Imposta lo scope OAuth2
-OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
+# Funzione per autorizzare l'app e ottenere le credenziali
+def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
+    # Flusso di autorizzazione OAuth
+    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
+    
+    # Verifica se le credenziali sono già memorizzate nella cache
+    if st.session_state.credentials is None:
+        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
+        authorize_url = flow.step1_get_authorize_url(redirect_uri)
+        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
+        auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
+        
+        if auth_code:
+            try:
+                # Scambia l'Authorization Code per le credenziali
+                credentials = flow.step2_exchange(auth_code)
+                
+                # Memorizza le credenziali nella sessione
+                st.session_state.credentials = credentials
+            except Exception as e:
+                st.write(f"Errore durante l'autorizzazione: {e}")
+    
+    return st.session_state.credentials
 
-if st.button("Genera Credenziali"):
-    # Creazione del flusso OAuth2
-    flow = OAuth2WebServerFlow(client_id, client_secret, OAUTH_SCOPE, REDIRECT_URI)
+# Pagina iniziale
+st.title('Google Search Console Link Suggestions')
 
-    # Genera l'URL per l'autorizzazione
-    authorize_url = flow.step1_get_authorize_url(REDIRECT_URI)
+# Inserimento delle credenziali
+st.subheader('Inserisci le tue credenziali Google Cloud Project:')
+CLIENT_ID = st.text_input('Client ID')
+CLIENT_SECRET = st.text_input('Client Secret')
 
-    # Pagina di autorizzazione
-    st.write("Vai al seguente link nel tuo browser:")
-    st.write(authorize_url)
+# Utilizza la session state per mantenere i dati
+if CLIENT_ID and CLIENT_SECRET:
+    # Autorizza l'app e ottieni le credenziali
+    credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
+    
+    if credentials:
+        # Crea un oggetto http autorizzato
+        http = credentials.authorize(httplib2.Http())
+        
+        # Crea il servizio Google Search Console
+        webmasters_service = build('searchconsole', 'v1', http=http)
+        
+        # Ottieni la lista dei siti disponibili solo se non è già stata memorizzata nella sessione
+        if not st.session_state.available_sites:
+            site_list = webmasters_service.sites().list().execute()
+            st.session_state.available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
+        
+        # Seleziona un sito dalla lista
+        st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
 
-    # Ottieni l'autorizzazione dall'utente
-    auth_code = st.text_input("Inserisci il codice di autorizzazione qui:")
+        # Inserisci l'URL da ispezionare
+        url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
+        
+        # Esegui l'ispezione
+        if st.button('Ispeziona URL'):
+            if st.session_state.selected_site is not None:
+                request_body = {
+                    'inspectionUrl': url_to_inspect,
+                    'siteUrl': st.session_state.selected_site
+                }
+                response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+                st.write(f'Risultato dell\'ispezione: {response}')
 
-    # Scambio del codice di autorizzazione con le credenziali
-    credentials = flow.step2_exchange(auth_code)
-    st.write("Credenziali generate con successo!")
+        # Ottieni dati dalla Search Console
+        start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
+        end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
+        row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
 
-    # Crea un oggetto httplib2.Http e autorizza con le credenziali
-    http = httplib2.Http()
-    creds = credentials.authorize(http)
+        if st.button('Ottieni dati'):
+            if st.session_state.selected_site is not None:
+                request_body = {
+                    "startDate": start_date.strftime('%Y-%m-%d'),
+                    "endDate": end_date.strftime('%Y-%m-%d'),
+                    "dimensions": ['QUERY', 'PAGE'],
+                    "rowLimit": row_limit,
+                    "dataState": "final"
+                }
 
-    # Creazione del servizio GSC
-    webmasters_service = build('searchconsole', 'v1', http=creds)
+                response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
 
-    # Ottieni la lista dei siti nel tuo account GSC
-    site_list = webmasters_service.sites().list().execute()
+                data_list = []
+                for row in response_data['rows']:
+                    data_list.append({
+                        'query': row['keys'][0],
+                        'page': row['keys'][1],
+                        'clicks': row['clicks'],
+                        'impressions': row['impressions'],
+                        'ctr': row['ctr'],
+                        'position': row['position']
+                    })
 
-    # Visualizza la lista dei siti
-    st.write("Lista dei siti nel tuo account GSC:")
-    st.write(site_list)
+                df = pd.DataFrame(data_list)
 
-    # Seleziona un sito
-    selected_site = st.selectbox("Seleziona un sito GSC", [site['siteUrl'] for site in site_list['siteEntry']])
-
-    # Mostra il sito selezionato
-    st.write(f"Sito selezionato: {selected_site}")
-
-    # Funzionalità di ispezione di URL
-    st.header("Ispezione di URL")
-    url_to_inspect = st.text_input("Inserisci l'URL da ispezionare:")
-    if st.button("Esegui Ispezione"):
-        request_body = {
-            'inspectionUrl': url_to_inspect,
-            'siteUrl': selected_site
-        }
-        response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-        st.write("Risultato dell'ispezione:")
-        st.write(response)
-
-    # Funzionalità di accesso ai dati di analytics
-    st.header("Accesso ai dati di analytics")
-    start_date = st.date_input("Data di inizio")
-    end_date = st.date_input("Data di fine")
-
-    if st.button("Estrai dati di analytics"):
-        request_body = {
-            "startDate": start_date.strftime('%Y-%m-%d'),
-            "endDate": end_date.strftime('%Y-%m-%d'),
-            "dimensions": ['QUERY', 'PAGE'],
-            "rowLimit": 25000,
-            "dataState": "final"
-        }
-
-        response_data = webmasters_service.searchanalytics().query(siteUrl=selected_site, body=request_body).execute()
-
-        data_list = []
-        for row in response_data['rows']:
-            data_list.append({
-                'query': row['keys'][0],
-                'page': row['keys'][1],
-                'clicks': row['clicks'],
-                'impressions': row['impressions'],
-                'ctr': row['ctr'],
-                'position': row['position']
-            })
-
-        df = pd.DataFrame(data_list)
-        st.write("Dati di analytics:")
-        st.write(df)
+                # Filtra e suggerisci pagine interne
+                filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
+                st.subheader('Suggerimenti di pagine interne:')
+                st.dataframe(filtered_data)
