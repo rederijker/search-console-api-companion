@@ -3,33 +3,21 @@ import httplib2
 import pandas as pd
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
-
-# Inizializza le variabili di sessione
-if 'credentials' not in st.session_state:
-    st.session_state.credentials = None
-
-if 'selected_site' not in st.session_state:
-    st.session_state.selected_site = None
-
-if 'available_sites' not in st.session_state:
-    st.session_state.available_sites = []
-# Definizione dello scope OAuth
-OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
-
-# URI di reindirizzamento
-REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+from oauth2client.file import Storage
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, scope=OAUTH_SCOPE, redirect_uri=REDIRECT_URI)
+    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
     
     # Verifica se le credenziali sono già memorizzate nella cache
-    if st.session_state.credentials is None:
+    storage = Storage("cached_credentials.json")
+    credentials = storage.get()
+    
+    if credentials is None:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
-        authorize_url = flow.step1_get_authorize_url()
+        authorize_url = flow.step1_get_authorize_url(redirect_uri)
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
-
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
         if auth_code:
@@ -37,14 +25,12 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
                 # Scambia l'Authorization Code per le credenziali
                 credentials = flow.step2_exchange(auth_code)
                 
-                # Memorizza le credenziali nella sessione
-                st.session_state.credentials = credentials
+                # Salva le credenziali nella cache
+                storage.put(credentials)
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
     
-    return st.session_state.credentials
-    
-    return st.session_state.credentials
+    return credentials
 
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
@@ -55,6 +41,19 @@ CLIENT_ID = st.text_input('Client ID')
 CLIENT_SECRET = st.text_input('Client Secret')
 
 # Utilizza la session state per mantenere i dati
+if 'selected_site' not in st.session_state:
+    st.session_state.selected_site = None
+
+if 'available_sites' not in st.session_state:
+    st.session_state.available_sites = []
+
+# Definizione dello scope OAuth
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
+
+# URI di reindirizzamento
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
+# Seleziona un sito dalla lista
 if CLIENT_ID and CLIENT_SECRET:
     # Autorizza l'app e ottieni le credenziali
     credentials = authorize_app(CLIENT_ID, CLIENT_SECRET, OAUTH_SCOPE, REDIRECT_URI)
