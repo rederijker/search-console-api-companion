@@ -10,8 +10,11 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
     
+    # Inizializza le variabili di sessione
+    st.session_state.sync(credentials=[])
+    
     # Verifica se le credenziali sono già memorizzate nella sessione
-    if 'credentials' not in st.session_state:
+    if not st.session_state.credentials:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
         authorize_url = flow.step1_get_authorize_url(redirect_uri)
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
@@ -28,7 +31,6 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
                 st.write(f"Errore durante l'autorizzazione: {e}")
     
     return st.session_state.credentials
-
 
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
