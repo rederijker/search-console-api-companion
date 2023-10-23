@@ -34,6 +34,8 @@ if uploaded_file is not None:
 
     if 'client_id' in credentials_data and 'client_secret' in credentials_data:
         OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
+        REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
         credentials = authorize_app(credentials_data, OAUTH_SCOPE)
 
         
