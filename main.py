@@ -131,22 +131,28 @@ if tab2:
             df = pd.DataFrame(data_list)
             st.dataframe(df)
 
-# Widget per la chat con OpenAI
 openai_api_key = st.sidebar.text_input("OpenAI API Key", type="password")
-if "messages" not in st.session_state or st.sidebar.button("Clear conversation history"):
-    st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}
 
-# Chat Input
-prompt = st.chat_input(placeholder="What is this data about?")
-if prompt:
-    st.session_state.messages.append({"role": "user", "content": prompt})
+if "messages" not in st.session_state or st.sidebar.button("Clear conversation history"):
+    st.session_state["messages"] = [{"role": "assistant", "content": "How can I help you?"}]
+
+for msg in st.session_state.messages:
+    st.chat_message(msg["role"]).write(msg["content"])
+
+if st.button("Send"):
+    user_input = st.text_area("You: ", placeholder="What is this data about?")
+    if user_input:
+        st.session_state.messages.append({"role": "user", "content": user_input})
 
     if not openai_api_key:
         st.info("Please add your OpenAI API key to continue.")
         st.stop()
 
     llm = ChatOpenAI(
-        temperature=0, model="gpt-3.5-turbo-0613", openai_api_key=openai_api_key, streaming=True
+        temperature=0,
+        model="gpt-3.5-turbo-0613",
+        openai_api_key=openai_api_key,
+        streaming=True
     )
 
     pandas_df_agent = create_pandas_dataframe_agent(
