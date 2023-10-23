@@ -5,16 +5,19 @@ from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 
 # Funzione per autorizzare l'app e ottenere le credenziali
+# Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
 
-    # Verifica se le credenziali sono già memorizzate come variabili
-    if 'credentials' not in st.session_state:
-        # Inizializza credentials come None
-        st.session_state.credentials = None
+    # Inizializza credentials come None
+    credentials = None
 
-    if st.session_state.credentials is None:
+    # Verifica se le credenziali sono già memorizzate come variabili
+    if 'credentials' in st.session_state:
+        # Se le credenziali sono già state memorizzate come variabili, utilizzale direttamente
+        credentials = st.session_state.credentials
+    else:
         # Se le credenziali non sono state memorizzate come variabili, richiedi l'autorizzazione
         authorize_url = flow.step1_get_authorize_url(redirect_uri)
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
@@ -29,9 +32,6 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
                 st.session_state.credentials = credentials
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
-    else:
-        # Se le credenziali sono già state memorizzate come variabili, utilizzale direttamente
-        credentials = st.session_state.credentials
 
     return credentials
 
