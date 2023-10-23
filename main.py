@@ -52,6 +52,7 @@ st.title('Google Search Console API Companion')
 
 # Inserimento delle credenziali
 st.subheader('Inserisci le tue credenziali Google Cloud Project:')
+st.write("Google Cloud Console: https://console.cloud.google.com/apis/credentials")
 CLIENT_ID = st.text_input('Client ID')
 CLIENT_SECRET = st.text_input('Client Secret')
 
