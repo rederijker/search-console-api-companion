@@ -23,24 +23,6 @@ def authorize_app(credentials_data, oauth_scope):
             return credentials
         except Exception as e:
             st.write(f"Errore durante l'autorizzazione: {e}")
-        
-    if auth_code:
-        try:
-            credentials = flow.step2_exchange(auth_code)
-            storage = Storage(credentials_data['client_id'] + '.dat')
-            storage.put(credentials)
-            return credentials
-        except Exception as e:
-            st.write(f"Errore durante l'autorizzazione: {e}")
-        
-    if auth_code:
-        try:
-            credentials = flow.step2_exchange(auth_code)
-            storage = Storage(credentials_data['client_id'] + '.dat')
-            storage.put(credentials)
-            return credentials
-        except Exception as e:
-            st.write(f"Errore durante l'autorizzazione: {e}")
 
 st.title('Google Search Console Link Suggestions')
 
