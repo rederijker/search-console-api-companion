@@ -6,6 +6,10 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 import json
 
+# Definisci client_id e client_secret come stringhe vuote all'inizio
+client_id = ""
+client_secret = ""
+
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
@@ -52,8 +56,8 @@ if uploaded_file:
         client_secret = credentials_json.get("installed", {}).get("client_secret")
     except Exception as e:
         st.write(f"Errore nel caricamento del file JSON: {e}")
-        client_id = None
-        client_secret = None
+        client_id = ""
+        client_secret = ""
 
 # Utilizza la session state per mantenere i dati
 if 'selected_site' not in st.session_state:
