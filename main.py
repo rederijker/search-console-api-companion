@@ -1,29 +1,36 @@
 import streamlit as st
+import httplib2
+import pandas as pd
+from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-import httplib2
-from googleapiclient.discovery import build
-
-# Inizializza la variabile di stato della sessione per le credenziali
-if 'credentials' not in st.session_state:
-    st.session_state.credentials = None
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
+    # Flusso di autorizzazione OAuth
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
     
-    if st.session_state.credentials is None:
+    # Verifica se le credenziali sono già memorizzate nella cache
+    storage = Storage("cached_credentials.json")
+    credentials = storage.get()
+    
+    if credentials is None:
+        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
         authorize_url = flow.step1_get_authorize_url(redirect_uri)
+        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
         if auth_code:
             try:
+                # Scambia l'Authorization Code per le credenziali
                 credentials = flow.step2_exchange(auth_code)
-                st.session_state.credentials = credentials  # Memorizza le credenziali nella sessione
+                
+                # Salva le credenziali nella cache
+                storage.put(credentials)
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
     
-    return st.session_state.credentials
+    return credentials
 
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
@@ -78,9 +85,6 @@ if CLIENT_ID and CLIENT_SECRET:
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
-
-
-
 
         # Ottieni dati dalla Search Console
         start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
