@@ -6,7 +6,6 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 
 # RICORDARSI DI FARE L'AUTENTICAZIONE ENTRO 40 SEC
-
 # Inizializza le variabili di sessione
 if 'credentials' not in st.session_state:
     st.session_state.credentials = None
