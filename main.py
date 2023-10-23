@@ -7,10 +7,23 @@ from oauth2client.file import Storage
 import json
 
 def authorize_app(credentials_data, oauth_scope, redirect_uri):
-    flow = OAuth2WebServerFlow(credentials_data['client_id'], credentials_data['client_secret'], oauth_scope, redirect_uri)
-    authorize_url = flow.step1_get_authorize_url(redirect_uri)
+    flow = OAuth2WebServerFlow(client_id=credentials_data['client_id'],
+                               client_secret=credentials_data['client_secret'],
+                               scope=oauth_scope,
+                               redirect_uri=redirect_uri)
+    
+    authorize_url = flow.step1_get_authorize_url()
     st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
     auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
+        
+    if auth_code:
+        try:
+            credentials = flow.step2_exchange(auth_code)
+            storage = Storage(credentials_data['client_id'] + '.dat')
+            storage.put(credentials)
+            return credentials
+        except Exception as e:
+            st.write(f"Errore durante l'autorizzazione: {e}")
         
     if auth_code:
         try:
