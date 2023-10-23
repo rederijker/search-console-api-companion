@@ -6,61 +6,94 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 import json
 
-def authorize_app(credentials_data, oauth_scope):
-    flow = OAuth2WebServerFlow(client_id=credentials_data['client_id'],
-                               client_secret=credentials_data['client_secret'],
-                               scope=oauth_scope,
-                               redirect_uri='urn:ietf:wg:oauth:2.0:oob')
-    authorize_url = flow.step1_get_authorize_url()
-    st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
-    auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
+# Funzione per autorizzare l'app e ottenere le credenziali
+def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
+    # Flusso di autorizzazione OAuth
+    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
+    
+    # Verifica se le credenziali sono già memorizzate nella cache
+    storage = Storage("cached_credentials.json")
+    credentials = storage.get()
+    
+    if credentials is None:
+        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
+        authorize_url = flow.step1_get_authorize_url(redirect_uri)
+        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
+        auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
-    if auth_code:
-        try:
-            credentials = flow.step2_exchange(auth_code)
-            storage = Storage(credentials_data['client_id'] + '.dat')
-            storage.put(credentials)
-            return credentials
-        except Exception as e:
-            st.write(f"Errore durante l'autorizzazione: {e}")
+        if auth_code:
+            try:
+                # Scambia l'Authorization Code per le credenziali
+                credentials = flow.step2_exchange(auth_code)
+                
+                # Salva le credenziali nella cache
+                storage.put(credentials)
+            except Exception as e:
+                st.write(f"Errore durante l'autorizzazione: {e}")
+    
+    return credentials
 
+# Funzione per estrarre client_id e client_secret dal file JSON
+def extract_credentials_from_json(json_content):
+    try:
+        credentials = json.loads(json_content)
+        client_id = credentials.get("installed", {}).get("client_id")
+        client_secret = credentials.get("installed", {}).get("client_secret")
+        return client_id, client_secret
+    except (json.JSONDecodeError, AttributeError):
+        return None, None
+
+# Pagina iniziale
 st.title('Google Search Console Link Suggestions')
 
-uploaded_file = st.file_uploader("Carica il tuo file JSON delle credenziali", type="json")
+# Inserimento delle credenziali
+st.subheader('Carica un file JSON con le credenziali Google Cloud Project:')
+
+# Carica il file JSON con le credenziali
+uploaded_file = st.file_uploader("Carica il file JSON con le credenziali", type=["json"])
+
+# Utilizza la session state per mantenere i dati
+if 'selected_site' not in st.session_state:
+    st.session_state.selected_site = None
+
+if 'available_sites' not in st.session_state:
+    st.session_state.available_sites = []
+
+# Definizione dello scope OAuth
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
+
+# URI di reindirizzamento
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 
 if uploaded_file is not None:
-    credentials_data = json.loads(uploaded_file.read())
-    credentials_data = credentials_data.get('installed', {})
+    json_content = uploaded_file.read()
+    client_id, client_secret = extract_credentials_from_json(json_content)
+    if client_id and client_secret:
+        st.write(f"Client ID: {client_id}")
+        st.write(f"Client Secret: {client_secret}")
 
-    if 'client_id' in credentials_data and 'client_secret' in credentials_data:
-        OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
-        REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+        # Autorizza l'app e ottieni le credenziali
+        credentials = authorize_app(client_id, client_secret, OAUTH_SCOPE, REDIRECT_URI)
 
-        credentials = authorize_app(credentials_data, OAUTH_SCOPE)
-
-        
-
-        if 'selected_site' not in st.session_state:
-            st.session_state.selected_site = None
-
-        if 'available_sites' not in st.session_state:
-            st.session_state.available_sites = []
-
-        credentials = authorize_app(credentials_data, OAUTH_SCOPE, REDIRECT_URI)
-    
         if credentials:
+            # Crea un oggetto http autorizzato
             http = credentials.authorize(httplib2.Http())
-        
+
+            # Crea il servizio Google Search Console
             webmasters_service = build('searchconsole', 'v1', http=http)
-        
+
+            # Ottieni la lista dei siti disponibili solo se non è già stata memorizzata nella sessione
             if not st.session_state.available_sites:
                 site_list = webmasters_service.sites().list().execute()
                 st.session_state.available_sites = [site['siteUrl'] for site in site_list.get('siteEntry', [])]
-       
+
+            # Seleziona un sito dalla lista
             st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
 
+            # Inserisci l'URL da ispezionare
             url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
-        
+            
+            # Esegui l'ispezione
             if st.button('Ispeziona URL'):
                 if st.session_state.selected_site is not None:
                     request_body = {
@@ -70,6 +103,7 @@ if uploaded_file is not None:
                     response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                     st.write(f'Risultato dell\'ispezione: {response}')
 
+            # Ottieni dati dalla Search Console
             start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
             end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
             row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
@@ -99,10 +133,7 @@ if uploaded_file is not None:
 
                     df = pd.DataFrame(data_list)
 
+                    # Filtra e suggerisci pagine interne
                     filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
                     st.subheader('Suggerimenti di pagine interne:')
                     st.dataframe(filtered_data)
-    else:
-        st.error("Il file JSON non contiene le informazioni necessarie.")
-else:
-    st.warning("Si prega di caricare un file JSON con le credenziali.")
