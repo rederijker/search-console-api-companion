@@ -54,7 +54,7 @@ st.write("Google Cloud Console: https://console.cloud.google.com/apis/credential
 
 # Inserimento delle credenziali
 st.subheader('Inserisci le tue credenziali Google Cloud Project:')
-col1,col2=st.column(2)
+col1,col2=st.columns(2)
 with col1:
   CLIENT_ID = st.text_input('Client ID')
 with col2:
