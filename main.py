@@ -3,7 +3,6 @@ import httplib2
 import pandas as pd
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
-from oauth2client.file import Storage
 
 # Inizializza le variabili di sessione
 if 'credentials' not in st.session_state:
@@ -23,7 +22,7 @@ REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id=client_id, client_secret=client_secret, scope=oauth_scope, redirect_uri=redirect_uri)
+    flow = OAuth2WebServerFlow(client_id=CLIENT_ID, client_secret=CLIENT_SECRET, scope=OAUTH_SCOPE, redirect_uri=rREDIRECT_URI)
     
     # Verifica se le credenziali sono già memorizzate nella cache
     if st.session_state.credentials is None:
