@@ -121,8 +121,10 @@ if CLIENT_ID and CLIENT_SECRET:
                         })
     
                     df = pd.DataFrame(data_list)
+                    st.dataframe(df)
+                    
     
                     # Filtra e suggerisci pagine interne
-                    filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
-                    st.subheader('Suggerimenti di pagine interne:')
-                    st.dataframe(filtered_data)
+                    #filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
+                    #st.subheader('Suggerimenti di pagine interne:')
+                    #st.dataframe(filtered_data)
