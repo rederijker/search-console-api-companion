@@ -4,33 +4,40 @@ import pandas as pd
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
+import os
+
+# Rimuovi il file "cached_credentials.json" se esiste
+if os.path.exists("cached_credentials.json"):
+    os.remove("cached_credentials.json")
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
+    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri=redirect_uri)
     
-    # Verifica se le credenziali sono già memorizzate nella cache
-    storage = Storage("cached_credentials.json")
-    credentials = storage.get()
+    # Verifica se le credenziali sono già memorizzate nella sessione corrente
+    if 'credentials' not in st.session_state:
+        storage = Storage("cached_credentials.json")
+        credentials = storage.get()
+
+        if credentials is None:
+            # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
+            authorize_url = flow.step1_get_authorize_url(redirect_uri)
+            st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
+            auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
+            
+            if auth_code:
+                try:
+                    # Scambia l'Authorization Code per le credenziali
+                    credentials = flow.step2_exchange(auth_code)
+                    
+                    # Salva le credenziali nella cache della sessione
+                    st.session_state.credentials = credentials
+                    storage.put(credentials)
+                except Exception as e:
+                    st.write(f"Errore durante l'autorizzazione: {e}")
     
-    if credentials is None:
-        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
-        authorize_url = flow.step1_get_authorize_url(redirect_uri)
-        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
-        auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
-        
-        if auth_code:
-            try:
-                # Scambia l'Authorization Code per le credenziali
-                credentials = flow.step2_exchange(auth_code)
-                
-                # Salva le credenziali nella cache
-                storage.put(credentials)
-            except Exception as e:
-                st.write(f"Errore durante l'autorizzazione: {e}")
-    
-    return credentials
+    return st.session_state.credentials
 
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
