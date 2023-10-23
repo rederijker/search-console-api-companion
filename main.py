@@ -9,7 +9,12 @@ import json
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
+    flow = OAuth2WebServerFlow(
+        client_id=client_id,
+        client_secret=client_secret,
+        scope=oauth_scope,
+        redirect_uri=redirect_uri
+    )
     
     # Verifica se le credenziali sono già memorizzate nella cache
     storage = Storage("cached_credentials.json")
@@ -17,7 +22,7 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     
     if credentials is None:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
-        authorize_url = flow.step1_get_authorize_url(redirect_uri)
+        authorize_url = flow.step1_get_authorize_url()
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
@@ -74,7 +79,6 @@ if client_id and client_secret:
 
         # Crea il servizio Google Search Console
         webmasters_service = build('searchconsole', 'v1', http=http)
-        
         # Ottieni la lista dei siti disponibili solo se non è già stata memorizzata nella sessione
         if not st.session_state.available_sites:
             site_list = webmasters_service.sites().list().execute()
