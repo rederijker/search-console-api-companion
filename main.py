@@ -96,12 +96,12 @@ if CLIENT_ID and CLIENT_SECRET:
         with tab2:
             # Ottieni dati dalla Search Console
             col1, col2, col3 = st.columns(3)
-			with col1:
-            	start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
-			with col2:
-            	end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
-			with col3:
-            	row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
+		with col1:
+                   start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
+		with col2:
+                   end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
+		with col3:
+            	   row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
     
             if st.button('Ottieni dati'):
                 if st.session_state.selected_site is not None:
