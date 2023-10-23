@@ -76,50 +76,58 @@ if CLIENT_ID and CLIENT_SECRET:
         # Seleziona un sito dalla lista
         st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
 
-        # Inserisci l'URL da ispezionare
-        url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
-        
-        # Esegui l'ispezione
-        if st.button('Ispeziona URL'):
-            if st.session_state.selected_site is not None:
-                request_body = {
-                    'inspectionUrl': url_to_inspect,
-                    'siteUrl': st.session_state.selected_site
-                }
-                response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-                st.write(f'Risultato dell\'ispezione: {response}')
 
-        # Ottieni dati dalla Search Console
-        start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
-        end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
-        row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
 
-        if st.button('Ottieni dati'):
-            if st.session_state.selected_site is not None:
-                request_body = {
-                    "startDate": start_date.strftime('%Y-%m-%d'),
-                    "endDate": end_date.strftime('%Y-%m-%d'),
-                    "dimensions": ['QUERY', 'PAGE'],
-                    "rowLimit": row_limit,
-                    "dataState": "final"
-                }
 
-                response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
+        tab1, tab2 = st.tabs(["Ispezione URL", "Analytics"])
+        with tab1:      
 
-                data_list = []
-                for row in response_data['rows']:
-                    data_list.append({
-                        'query': row['keys'][0],
-                        'page': row['keys'][1],
-                        'clicks': row['clicks'],
-                        'impressions': row['impressions'],
-                        'ctr': row['ctr'],
-                        'position': row['position']
-                    })
 
-                df = pd.DataFrame(data_list)
+            # Inserisci l'URL da ispezionare
+            url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
+            
+            # Esegui l'ispezione
+            if st.button('Ispeziona URL'):
+                if st.session_state.selected_site is not None:
+                    request_body = {
+                        'inspectionUrl': url_to_inspect,
+                        'siteUrl': st.session_state.selected_site
+                    }
+                    response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+                    st.write(f'Risultato dell\'ispezione: {response}')
+         with tab1: 
 
-                # Filtra e suggerisci pagine interne
-                filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
-                st.subheader('Suggerimenti di pagine interne:')
-                st.dataframe(filtered_data)
+            # Ottieni dati dalla Search Console
+            start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
+            end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
+            row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
+    
+            if st.button('Ottieni dati'):
+                if st.session_state.selected_site is not None:
+                    request_body = {
+                        "startDate": start_date.strftime('%Y-%m-%d'),
+                        "endDate": end_date.strftime('%Y-%m-%d'),
+                        "dimensions": ['QUERY', 'PAGE'],
+                        "rowLimit": row_limit,
+                        "dataState": "final"
+                    }
+    
+                    response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
+    
+                    data_list = []
+                    for row in response_data['rows']:
+                        data_list.append({
+                            'query': row['keys'][0],
+                            'page': row['keys'][1],
+                            'clicks': row['clicks'],
+                            'impressions': row['impressions'],
+                            'ctr': row['ctr'],
+                            'position': row['position']
+                        })
+    
+                    df = pd.DataFrame(data_list)
+    
+                    # Filtra e suggerisci pagine interne
+                    filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
+                    st.subheader('Suggerimenti di pagine interne:')
+                    st.dataframe(filtered_data)
