@@ -4,24 +4,26 @@ from oauth2client.file import Storage
 import httplib2
 from googleapiclient.discovery import build
 
+# Inizializza la variabile di stato della sessione per le credenziali
+if 'credentials' not in st.session_state:
+    st.session_state.credentials = None
+
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
     
-    storage = st.session_state  # Utilizza la variabile di stato della sessione per memorizzare le credenziali
-    
-    if not hasattr(storage, 'credentials') or storage.credentials is None:
+    if st.session_state.credentials is None:
         authorize_url = flow.step1_get_authorize_url(redirect_uri)
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
         if auth_code:
             try:
                 credentials = flow.step2_exchange(auth_code)
-                storage.credentials = credentials  # Memorizza le credenziali nella sessione
+                st.session_state.credentials = credentials  # Memorizza le credenziali nella sessione
             except Exception as e:
                 st.write(f"Errore durante l'autorizzazione: {e}")
     
-    return storage.credentials
+    return st.session_state.credentials
 
 # Pagina iniziale
 st.title('Google Search Console Link Suggestions')
@@ -65,7 +67,7 @@ if CLIENT_ID and CLIENT_SECRET:
         st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
 
         # Inserisci l'URL da ispezionare
-        url_to_inspect = st.text_input('Inserisci l\'URL da ispezionare:')
+        url_to inspect = st.text_input('Inserisci l\'URL da ispezionare:')
         
         # Esegui l'ispezione
         if st.button('Ispeziona URL'):
@@ -76,6 +78,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 }
                 response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                 st.write(f'Risultato dell\'ispezione: {response}')
+
 
 
 
