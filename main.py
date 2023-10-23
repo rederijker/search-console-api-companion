@@ -4,20 +4,11 @@ import pandas as pd
 from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
-import os
-
-# Funzione per il reset delle credenziali
-def reset_credentials_file():
-    if os.path.exists("cached_credentials.json"):
-        os.remove("cached_credentials.json")
-
-# Reset delle credenziali all'avvio dell'app
-reset_credentials_file()
 
 # Funzione per autorizzare l'app e ottenere le credenziali
 def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri=redirect_uri)
+    flow = OAuth2WebServerFlow(client_id, client_secret, oauth_scope, redirect_uri)
     
     # Verifica se le credenziali sono già memorizzate nella cache
     storage = Storage("cached_credentials.json")
@@ -25,7 +16,7 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     
     if credentials is None:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione
-        authorize_url = flow.step1_get_authorize_url()
+        authorize_url = flow.step1_get_authorize_url(redirect_uri)
         st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
         
