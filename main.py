@@ -100,7 +100,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
         # Ottieni dati dalla Search Console
-        col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3, col4 = st.columns(4)
             with col1:
                 start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
             with col2:
