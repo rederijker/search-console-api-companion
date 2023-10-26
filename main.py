@@ -123,8 +123,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             'clicks': row['clicks'],
                             'impressions': row['impressions'],
                             'ctr': row['ctr'],
-                            'position': row['position']
-                            
+                            'position': row['position']                            
                         })
     
                     df = pd.DataFrame(data_list)
