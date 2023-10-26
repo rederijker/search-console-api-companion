@@ -145,6 +145,8 @@ if CLIENT_ID and CLIENT_SECRET:
     
                     df = pd.DataFrame(data_list)
                     st.dataframe(df)
+                    st.bar_chart(data=df)
+
                     
     
                     # Filtra e suggerisci pagine interne
