@@ -127,7 +127,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         "dimensions": ['DATE', 'QUERY', 'PAGE'],
                         "rowLimit": row_limit,
                         "dataState": "final",
-                        "type": selected_type
+                        "type": selected_type,
+                        "aggregationType": "byPage"
+
                     }
     
                     response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
