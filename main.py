@@ -7,7 +7,7 @@ from oauth2client.file import Storage
 import numpy as np
 
 st.set_page_config(
-    page_title="Search Console API Companion-Cristiano Caggiula",
+    page_title="Search Console API Companion",
     page_icon="🔍",
     layout="wide"
 )
