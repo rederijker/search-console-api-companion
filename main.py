@@ -99,29 +99,30 @@ if CLIENT_ID and CLIENT_SECRET:
                     st.write(f'Risultato dell\'ispezione: {response}')
 
         with tab2:
+    # Ottieni dati dalla Search Console
             col1, col2, col3, col4 = st.columns(4)
-                with col1:
-                    start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
-                with col2:
-                    end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
-                with col3:
-                    # Opzioni per il tipo di dati nell'API
-                    options_type = {
-                        'Web': 'web',
-                        'News': 'news',
-                        'Discovery': 'discovery',
-                        'Image': 'image',
-                        'Video': 'video'
-                    }
-                    selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
-            
-                with col4:
-                    row_limit_options = ['No', 'Yes']
-                    check_box_row = st.radio('Row limit', row_limit_options)
-                    if check_box_row == 'Yes':
-                        row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
-                    else:
-                        row_limit = None  # Nessun limite
+            with col1:
+                start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
+            with col2:
+                end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
+            with col3:
+                # Opzioni per il tipo di dati nell'API
+                options_type = {
+                    'Web': 'web',
+                    'News': 'news',
+                    'Discovery': 'discovery',
+                    'Image': 'image',
+                    'Video': 'video'
+                }
+                selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
+        
+            with col4:
+                row_limit_options = ['No', 'Yes']
+                check_box_row = st.radio('Row limit', row_limit_options)
+                if check_box_row == 'Yes':
+                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
+                else:
+                    row_limit = None  # Nessun limite
 
         # Aggiungi un bottone per ottenere i dati in batch
         if st.button('Ottieni dati'):
