@@ -122,12 +122,9 @@ if CLIENT_ID and CLIENT_SECRET:
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
                     batch_size = 25000  # Dimensione del batch
-            
+                    
                     data_list = []  # Inizializza una lista per i dati
-            
-                    # Aggiungi una barra di caricamento
-                    progress_bar = st.progress(0.0)
-            
+                    
                     while True:
                         request_body = {
                             "startDate": start_date.strftime('%Y-%m-%d'),
@@ -139,9 +136,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             "type": selected_type,
                             "aggregationType": "byPage"
                         }
-            
+                        
                         response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-            
+                        
                         for row in response_data.get('rows', []):
                             data_list.append({
                                 'date': row['keys'][0],
@@ -152,23 +149,16 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'ctr': row['ctr'],
                                 'position': row['position']
                             })
-            
+                        
                         if len(response_data.get('rows', [])) < batch_size:
                             # Se abbiamo meno righe di quanto richiesto, abbiamo ottenuto tutti i dati
                             break
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += batch_size
-            
-                        # Aggiorna la barra di caricamento in base al progresso
-                        progress = start_row / 25000  # Cambia 25000 in base al limite effettivo
-                        progress_bar.progress(progress)
-            
-                    # Rimuovi la barra di caricamento alla fine
-                    progress_bar.empty()
-            
+                    
                     df = pd.DataFrame(data_list)
                     st.dataframe(df)
-            
+                    
                     chart_data = pd.DataFrame(df, columns=["impressions", "date"])
                     st.line_chart(chart_data, x="date", y=["impressions"], color=["#FF0000"])
