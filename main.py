@@ -125,7 +125,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         "endDate": end_date.strftime('%Y-%m-%d'),
                         "dimensions": ['DATE', 'QUERY', 'PAGE'],
                         "rowLimit": row_limit,
-                        "dataState": "final"
+                        "dataState": "final",
+                        "type": selected_type
                     }
     
                     response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
