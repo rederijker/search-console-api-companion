@@ -112,7 +112,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     'News': 'news',
                     'Discovery': 'discovery',
                     'Image': 'image',
-                    'Vide': 'video'
+                    'Video': 'video'
                 }
                 selected_type = st.selectbox('Choose channel:', list(options.keys()))
 
