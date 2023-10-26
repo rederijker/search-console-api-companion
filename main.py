@@ -99,38 +99,35 @@ if CLIENT_ID and CLIENT_SECRET:
                     st.write(f'Risultato dell\'ispezione: {response}')
 
         with tab2:
-        # Ottieni dati dalla Search Console
+    # Ottieni dati dalla Search Console
             col1, col2, col3, col4 = st.columns(4)
-            with col1:
-                start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
-            with col2:
-                end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
-        
-            with col3:
-                # Opzioni per il tipo di dati nell'API
-                options_type = {
-                    'Web': 'web',
-                    'News': 'news',
-                    'Discovery': 'discovery',
-                    'Image': 'image',
-                    'Video': 'video'
-                }
-                selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
-        
-            with col4:
-                row_limit_options = ['No', 'Yes']
-                check_box_row = st.radio('Row limit', row_limit_options)
-                if check_box_row == 'Yes':
-                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
-                else:
-                    row_limit = None  # Nessun limite
-    
+                with col1:
+                    start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
+                with col2:
+                    end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
+                with col3:
+                    # Opzioni per il tipo di dati nell'API
+                    options_type = {
+                        'Web': 'web',
+                        'News': 'news',
+                        'Discovery': 'discovery',
+                        'Image': 'image',
+                        'Video': 'video'
+                    }
+                    selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
+            
+                with col4:
+                    row_limit_options = ['No', 'Yes']
+                    check_box_row = st.radio('Row limit', row_limit_options)
+                    if check_box_row == 'Yes':
+                        row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
+                    else:
+                        row_limit = None  # Nessun limite
+
         # Aggiungi un bottone per ottenere i dati in batch
         if st.button('Ottieni dati'):
             if st.session_state.selected_site is not None:
                 start_row = 0  # Inizia dalla prima riga
-                batch_size = 25000  # Dimensione del batch predefinita
-    
                 data_list = []  # Inizializza una lista per i dati
     
                 while True:
@@ -145,7 +142,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     }
     
                     if row_limit is not None:
-                        request_body["rowLimit"] = batch_size
+                        request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
     
                     response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
     
@@ -160,12 +157,12 @@ if CLIENT_ID and CLIENT_SECRET:
                             'position': row['position']
                         })
     
-                    if len(response_data.get('rows', [])) < batch_size:
-                        # Se abbiamo meno righe di quanto richiesto, abbiamo ottenuto tutti i dati
+                    if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
+                        # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
                         break
                     else:
                         # Altrimenti, incrementa il valore di startRow per la prossima richiesta
-                        start_row += batch_size
+                        start_row += 25000
     
                 df = pd.DataFrame(data_list)
                 st.dataframe(df)
