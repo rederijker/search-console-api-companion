@@ -110,7 +110,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 options_type = options = {
                     'Web': 'web',
                     'News': 'news',
-                    'Discovery': 'discovery'
+                    'Discovery': 'discovery',
                     'Image': 'image',
                     'Vide': 'video
                 }
