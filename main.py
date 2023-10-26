@@ -108,9 +108,9 @@ if CLIENT_ID and CLIENT_SECRET:
             with col3:
                 row_limit_options = ['Yes', 'No']
                 check_box_row = st.radio(row_limit_options)
-                    if check_box_row = 'Yes':
-                        row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
-                    else
+                if check_box_row = 'Yes':
+                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
+                else
             with col4:
                 # Opzioni per il tipo di dati nell'API
                 options_type = {
