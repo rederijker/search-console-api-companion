@@ -117,7 +117,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     data_list = []
                     for row in response_data['rows']:
                         data_list.append({
-                            'date': row['keys'[0],
+                            'date': row['keys'][0],
                             'query': row['keys'][1],
                             'page': row['keys'][2],
                             'clicks': row['clicks'],
