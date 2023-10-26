@@ -105,6 +105,9 @@ if CLIENT_ID and CLIENT_SECRET:
                 end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
             with col3:
                 row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
+            with col4:
+                selected_type = st.selectbox('Seleziona il tipo:', ['Web', 'News', 'Discovery', 'Image', 'Video'])
+
     
             if st.button('Ottieni dati'):
                 if st.session_state.selected_site is not None:
