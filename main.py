@@ -57,9 +57,9 @@ st.write("Google Cloud Console: https://console.cloud.google.com/apis/credential
 st.subheader('Inserisci le tue credenziali Google Cloud Project:')
 col1, col2 = st.columns(2)
 with col1:
-    CLIENT_ID = st.text_input('Client ID')
+    CLIENT_ID = st.text_input('Client ID', type='password')
 with col2:
-    CLIENT_SECRET = st.text_input('Client Secret')
+    CLIENT_SECRET = st.text_input('Client Secret', type='password')
 
 # Utilizza la session state per mantenere i dati utente
 if CLIENT_ID and CLIENT_SECRET:
