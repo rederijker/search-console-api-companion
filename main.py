@@ -124,7 +124,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             'impressions': row['impressions'],
                             'ctr': row['ctr'],
                             'position': row['position']                            
-                        })
+                            })
     
                     df = pd.DataFrame(data_list)
                     st.dataframe(df)
