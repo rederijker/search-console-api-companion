@@ -107,7 +107,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     request_body = {
                         "startDate": start_date.strftime('%Y-%m-%d'),
                         "endDate": end_date.strftime('%Y-%m-%d'),
-                        "dimensions": ['QUERY', 'PAGE', 'DATE'],
+                        "dimensions": ['DATE', 'QUERY', 'PAGE'],
                         "rowLimit": row_limit,
                         "dataState": "final"
                     }
