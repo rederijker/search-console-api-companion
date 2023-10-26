@@ -145,7 +145,10 @@ if CLIENT_ID and CLIENT_SECRET:
     
                     df = pd.DataFrame(data_list)
                     st.dataframe(df)
-                    st.bar_chart(data=df)
+                    chart_data = df(np.random.randn(20, 3), columns=["impressions","date"])
+                    st.line_chart(chart_data, x="date", y=["impressions"], color=["#FF0000"] Optional
+)
+                 
 
                     
     
