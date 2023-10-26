@@ -98,15 +98,24 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
             # Ottieni dati dalla Search Console
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4 = st.columns(4)
             with col1:
-                start_date = st.date_input('Data di inizio', pd.to_datetime('2023-01-01'))
+                start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
             with col2:
-                end_date = st.date_input('Data di fine', pd.to_datetime('2023-10-28'))
+                end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
             with col3:
-                row_limit = st.number_input('Limite di righe', min_value=1, max_value=25000, value=25000)
+                row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
             with col4:
-                selected_type = st.selectbox('Seleziona il tipo:', ['Web', 'News', 'Discovery', 'Image', 'Video'])
+                #for type parameters in API
+                options_type = options = {
+                    'Web': 'web',
+                    'News': 'news',
+                    'Discovery': 'discovery'
+                    'Image': 'image',
+                    'Vide': 'video
+                }
+                selected_type = st.selectbox('Choose channel:', list(options.keys()))
+
 
     
             if st.button('Ottieni dati'):
