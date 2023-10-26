@@ -80,7 +80,7 @@ if CLIENT_ID and CLIENT_SECRET:
         # Seleziona un sito dalla lista
         st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
 
-        tab1, tab2 = st.tabs(["Ispezione URL", "Analytics"])
+        tab1, tab2 = st.tabs(["URL Inspection", "Search Analytics"])
         
         with tab1:
             # Inserisci l'URL da ispezionare
