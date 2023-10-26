@@ -6,6 +6,12 @@ from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 import numpy as np
 
+st.set_page_config(
+    page_title="Google Search Console API Companion",
+    page_icon="🔍",
+    layout="wide"
+)
+
 # RICORDARSI DI FARE L'AUTENTICAZIONE ENTRO 40 SEC
 
 # Inizializza le variabili di sessione per la gestione dei dati utente
