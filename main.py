@@ -117,45 +117,48 @@ if CLIENT_ID and CLIENT_SECRET:
                 }
                 selected_type = st.selectbox('Choose channel:', list(options.keys()))
 
-
-    
+            # Aggiungi un bottone per ottenere i dati in batch
             if st.button('Ottieni dati'):
                 if st.session_state.selected_site is not None:
-                    request_body = {
-                        "startDate": start_date.strftime('%Y-%m-%d'),
-                        "endDate": end_date.strftime('%Y-%m-%d'),
-                        "dimensions": ['DATE', 'QUERY', 'PAGE'],
-                        "rowLimit": row_limit,
-                        "dataState": "final",
-                        "type": selected_type,
-                        "aggregationType": "byPage"
-
-                    }
-    
-                    response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-    
-                    data_list = []
-                    for row in response_data['rows']:
-                        data_list.append({
-                            'date': row['keys'][0],
-                            'query': row['keys'][1],
-                            'page': row['keys'][2],
-                            'clicks': row['clicks'],
-                            'impressions': row['impressions'],
-                            'ctr': row['ctr'],
-                            'position': row['position']                            
+                    start_row = 0  # Inizia dalla prima riga
+                    batch_size = 25000  # Dimensione del batch
+                    
+                    data_list = []  # Inizializza una lista per i dati
+                    
+                    while True:
+                        request_body = {
+                            "startDate": start_date.strftime('%Y-%m-%d'),
+                            "endDate": end_date.strftime('%Y-%m-%d'),
+                            "dimensions": ['DATE', 'QUERY', 'PAGE'],
+                            "rowLimit": batch_size,
+                            "startRow": start_row,
+                            "dataState": "final",
+                            "type": selected_type,
+                            "aggregationType": "byPage"
+                        }
+                        
+                        response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
+                        
+                        for row in response_data.get('rows', []):
+                            data_list.append({
+                                'date': row['keys'][0],
+                                'query': row['keys'][1],
+                                'page': row['keys'][2],
+                                'clicks': row['clicks'],
+                                'impressions': row['impressions'],
+                                'ctr': row['ctr'],
+                                'position': row['position']
                             })
-    
+                        
+                        if len(response_data.get('rows', [])) < batch_size:
+                            # Se abbiamo meno righe di quanto richiesto, abbiamo ottenuto tutti i dati
+                            break
+                        else:
+                            # Altrimenti, incrementa il valore di startRow per la prossima richiesta
+                            start_row += batch_size
+                    
                     df = pd.DataFrame(data_list)
                     st.dataframe(df)
                     
-                    chart_data = pd.DataFrame(df, columns=["impressions","date"])
+                    chart_data = pd.DataFrame(df, columns=["impressions", "date"])
                     st.line_chart(chart_data, x="date", y=["impressions"], color=["#FF0000"])
-                 
-
-                    
-    
-                    # Filtra e suggerisci pagine interne
-                    #filtered_data = df[(df['position'] >= 11) & (df['position'] <= 20) & (df['impressions'] >= 100)]
-                    #st.subheader('Suggerimenti di pagine interne:')
-                    #st.dataframe(filtered_data)
