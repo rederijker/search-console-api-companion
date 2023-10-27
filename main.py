@@ -191,4 +191,4 @@ if CLIENT_ID and CLIENT_SECRET:
                 st.dataframe(df)
     
                 chart_data = pd.DataFrame(df, columns=["impressions", "date"])
-                st.line_chart(chart_data, x="date", y=["impressions", "clicks"], color=["#FF0000"], olor=["#FFFFFF"])
+                st.line_chart(chart_data, x="date", y=["impressions", "clicks"], color=["#FF0000"], color=["#FFFFFF"])
