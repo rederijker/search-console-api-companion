@@ -64,7 +64,7 @@ st.write(
 
 
 # Inserimento delle credenziali Google Cloud Project
-st.subheader('Inserisci le tue credenziali Google Cloud Project:')
+st.subheader('Insert Google Cloud Project Credential:')
 st.write("Google Cloud Console: https://console.cloud.google.com/apis/credentials")
 
 col1, col2 = st.columns(2)
