@@ -112,7 +112,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
     # Ottieni dati dalla Search Console
-            col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3, col4 = st.columns(5)
             with col1:
                 start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
             with col2:
@@ -135,6 +135,10 @@ if CLIENT_ID and CLIENT_SECRET:
                     row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
                 else:
                     row_limit = None  # Nessun limite
+            with col5:
+                aggregation_type = ['No', 'Auto', 'by Page']
+                check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
+                
 
         # Aggiungi un bottone per ottenere i dati in batch
         if st.button('Ottieni dati'):
@@ -150,11 +154,19 @@ if CLIENT_ID and CLIENT_SECRET:
                         "startRow": start_row,
                         "dataState": "final",
                         "type": selected_type,
-                        "aggregationType": "byPage"
                     }
     
                     if row_limit is not None:
                         request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
+                    if aggregation_type == 'by Page':
+                        request_body["aggregationType"] = "byPage"
+                    if aggregation_type == 'Auto':
+                        request_body["aggregationType"] = "auto"
+                    else:
+                        request_body[]
+                        
+
+                        
     
                     response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
     
