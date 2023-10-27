@@ -160,7 +160,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
                     if aggregation_type == 'by Page':
                         request_body["aggregationType"] = "byPage"
-                    if aggregation_type == 'Auto':
+                    elif aggregation_type == 'Auto':
                         request_body["aggregationType"] = "auto"
                     
                         
