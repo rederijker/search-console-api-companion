@@ -163,7 +163,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     if aggregation_type == 'Auto':
                         request_body["aggregationType"] = "auto"
                     else:
-                        request_body[]
+                        request_body[""]
                         
 
                         
