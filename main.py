@@ -162,8 +162,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         request_body["aggregationType"] = "byPage"
                     if aggregation_type == 'Auto':
                         request_body["aggregationType"] = "auto"
-                    else:
-                        request_body[""]
+                    
                         
 
                         
