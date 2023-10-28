@@ -142,7 +142,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
                 
                 # Aggiungi una selectbox per le dimensioni
-                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device','Country'])
+                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
         
             # Aggiungi un bottone per ottenere i dati in batch
             if st.button('Ottieni dati'):
