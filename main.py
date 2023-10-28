@@ -1,4 +1,4 @@
-import streamlit as st
+fimport streamlit as st
 import httplib2
 import pandas as pd
 from apiclient.discovery import build
@@ -62,7 +62,7 @@ st.write(
     "Welcome to **Search Console API Companion**! Explore and analyze Google Search Console data with ease. Authenticate effortlessly, choose your website, and access features like URL inspection and search analytics. Customize your searches and enjoy unlimited rows of data, without the need for programming skills. Unleash the full potential of your website's visibility with this user-friendly tool, perfect for webmasters, SEO experts, and digital marketers."
 )
 
-
+st.expander("How get credential")
 # Inserimento delle credenziali Google Cloud Project
 st.subheader('Insert Google Cloud Project Credential:')
 st.write("Google Cloud Console: https://console.cloud.google.com/apis/credentials")
