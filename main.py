@@ -112,8 +112,8 @@ if CLIENT_ID and CLIENT_SECRET:
                     response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                     st.write(f'Risultato dell\'ispezione: {response}')
 
-        with tab2:
-    # Ottieni dati dalla Search Console
+       with tab2:
+            # Ottieni dati dalla Search Console
             col1, col2, col3, col4, col5 = st.columns(5)
             with col1:
                 start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
@@ -140,59 +140,67 @@ if CLIENT_ID and CLIENT_SECRET:
             with col5:
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
-                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query'])
-
                 
+                # Aggiungi una selectbox per le dimensioni
+                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query'])
         
-        # Aggiungi un bottone per ottenere i dati in batch
-        if st.button('Ottieni dati'):
-            if st.session_state.selected_site is not None:
-                start_row = 0  # Inizia dalla prima riga
-                data_list = []  # Inizializza una lista per i dati
-    
-                while True:
-                    request_body = {
-                        "startDate": start_date.strftime('%Y-%m-%d'),
-                        "endDate": end_date.strftime('%Y-%m-%d'),
-                        "dimensions": ['DATE', 'QUERY', 'PAGE'],
-                        "startRow": start_row,
-                        "dataState": "final",
-                        "type": selected_type,
-                    }
-    
-                    if row_limit is not None:
-                        request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
-                    if aggregation_type == 'by Page':
-                        request_body["aggregationType"] = "byPage"
-                    elif aggregation_type == 'Auto':
-                        request_body["aggregationType"] = "auto"
-                    
-                        
-
-                        
-    
-                    response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-    
-                    for row in response_data.get('rows', []):
-                        data_list.append({
-                            'date': row['keys'][0],
-                            'query': row['keys'][1],
-                            'page': row['keys'][2],
-                            'clicks': row['clicks'],
-                            'impressions': row['impressions'],
-                            'ctr': row['ctr'],
-                            'position': row['position']
-                        })
-    
-                    if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
-                        # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
-                        break
-                    else:
-                        # Altrimenti, incrementa il valore di startRow per la prossima richiesta
-                        start_row += 25000
-    
-                df = pd.DataFrame(data_list)
-                st.dataframe(df)
-    
-                chart_data = pd.DataFrame(df, columns=["impressions","clicks", "date"])
-                st.line_chart(chart_data, x="date", y=["impressions", "clicks"], color=["#FF0000", "#00FF00"])
+            # Aggiungi un bottone per ottenere i dati in batch
+            if st.button('Ottieni dati'):
+                if st.session_state.selected_site is not None:
+                    start_row = 0  # Inizia dalla prima riga
+                    data_list = []  # Inizializza una lista per i dati
+        
+                    # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
+                    dimensions = []
+                    if 'Date' in selected_dimensions:
+                        dimensions.append('DATE')
+                    if 'Query' in selected_dimensions:
+                        dimensions.append('QUERY')
+                    if 'Page' in selected_dimensions:
+                        dimensions.append('PAGE')
+        
+                    while True:
+                        request_body = {
+                            "startDate": start_date.strftime('%Y-%m-%d'),
+                            "endDate": end_date.strftime('%Y-%m-%d'),
+                            "dimensions": dimensions,  # Utilizza le dimensioni selezionate dall'utente
+                            "startRow": start_row,
+                            "dataState": "final",
+                            "type": selected_type,
+                        }
+        
+                        if row_limit is not None:
+                            request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
+                        if check_box_aggregation == 'by Page':
+                            request_body["aggregationType"] = "byPage"
+                        elif check_box_aggregation == 'Auto':
+                            request_body["aggregationType"] = "auto"
+        
+                        response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
+        
+                        for row in response_data.get('rows', []):
+                            data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
+                            if 'Date' in selected_dimensions:
+                                data_entry['Date'] = row['keys'][dimensions.index('DATE')]
+                            if 'Query' in selected_dimensions:
+                                data_entry['Query'] = row['keys'][dimensions.index('QUERY')]
+                            if 'Page' in selected_dimensions:
+                                data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
+                            data_entry['Clicks'] = row['clicks']
+                            data_entry['Impressions'] = row['impressions']
+                            data_entry['CTR'] = row['ctr']
+                            data_entry['Position'] = row['position']
+                            data_list.append(data_entry)
+        
+                        if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
+                            # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
+                            break
+                        else:
+                            # Altrimenti, incrementa il valore di startRow per la prossima richiesta
+                            start_row += 25000
+        
+                    df = pd.DataFrame(data_list)
+                    st.dataframe(df)
+        
+                    chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
+                    st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
