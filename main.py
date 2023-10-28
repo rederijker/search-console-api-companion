@@ -114,7 +114,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
             # Ottieni dati dalla Search Console
-            col1, col2, col3, col4, col5 = st.columns(5)
+            col1, col2, col3, col4, col5, col6 = st.columns(6)
             with col1:
                 start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
             with col2:
@@ -129,20 +129,24 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Video': 'video'
                 }
                 selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
-        
             with col4:
+                # Aggiungi una selectbox per le dimensioni
+                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
+
+            
+        
+            with col5:
                 row_limit_options = ['No', 'Yes']
                 check_box_row = st.radio('Row limit', row_limit_options)
                 if check_box_row == 'Yes':
                     row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
                 else:
                     row_limit = None  # Nessun limite
-            with col5:
+            with col6:
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
                 
-                # Aggiungi una selectbox per le dimensioni
-                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
+                
         
             # Aggiungi un bottone per ottenere i dati in batch
             if st.button('Ottieni dati'):
