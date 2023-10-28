@@ -142,7 +142,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
                 
                 # Aggiungi una selectbox per le dimensioni
-                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device'])
+                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device','Country'])
         
             # Aggiungi un bottone per ottenere i dati in batch
             if st.button('Ottieni dati'):
@@ -160,6 +160,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         dimensions.append('PAGE')
                     if 'Device' in selected_dimensions:
                         dimensions.append('DEVICE')
+                    if 'Country' in selected_dimensions:
+                        dimensions.append('COUNTRY')
         
                     while True:
                         request_body = {
@@ -190,6 +192,8 @@ if CLIENT_ID and CLIENT_SECRET:
                                 data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
                             if 'Device' in selected_dimensions:
                                 data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
+                            if 'Device' in selected_dimensions:
+                                data_entry['Device'] = row['keys'][dimensions.index('COUNTRY')]
                             data_entry['Clicks'] = row['clicks']
                             data_entry['Impressions'] = row['impressions']
                             data_entry['CTR'] = row['ctr']
