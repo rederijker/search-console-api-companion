@@ -151,12 +151,21 @@ if CLIENT_ID and CLIENT_SECRET:
             if st.session_state.selected_site is not None:
                 start_row = 0  # Inizia dalla prima riga
                 data_list = []  # Inizializza una lista per i dati
+
+                # Costruisci il parametro "dimensions" in base alla selezione dell'utente
+                dimension = []
+                if 'Date' in selected_dimensions:
+                    dimensions.append('DATE')
+                if 'Page' in selected_dimensions:
+                    dimensions.append('PAGE')
+                if 'Query' in selected_dimensions:
+                    dimensions.append('QUERY')
     
                 while True:
                     request_body = {
                         "startDate": start_date.strftime('%Y-%m-%d'),
                         "endDate": end_date.strftime('%Y-%m-%d'),
-                        "dimensions": ['DATE', 'QUERY', 'PAGE'],
+                        "dimensions": dimensions,
                         "startRow": start_row,
                         "dataState": "final",
                         "type": selected_type,
