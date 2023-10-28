@@ -214,5 +214,5 @@ if CLIENT_ID and CLIENT_SECRET:
                     df = pd.DataFrame(data_list)
                     st.dataframe(df)
         
-                    chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
-                    st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
+                    #chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
+                    #st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
