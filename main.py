@@ -112,7 +112,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                     st.write(f'Risultato dell\'ispezione: {response}')
 
-       with tab2:
+        with tab2:
             # Ottieni dati dalla Search Console
             col1, col2, col3, col4, col5 = st.columns(5)
             with col1:
