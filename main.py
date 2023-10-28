@@ -39,7 +39,7 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
     if st.session_state.credentials is None:
         # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione all'utente
         authorize_url = flow.step1_get_authorize_url()
-        st.write(f"Per autorizzare l'app, segui [questo link]({authorize_url})")
+        st.write(f"➡️ Go to this [questo link]({authorize_url} and autorize app")
 
         auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
 
