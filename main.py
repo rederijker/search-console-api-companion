@@ -193,7 +193,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             if 'Device' in selected_dimensions:
                                 data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
                             if 'Country' in selected_dimensions:
-                                data_entry['Device'] = row['keys'][dimensions.index('COUNTRY')]
+                                data_entry['Country'] = row['keys'][dimensions.index('COUNTRY')]
                             data_entry['Clicks'] = row['clicks']
                             data_entry['Impressions'] = row['impressions']
                             data_entry['CTR'] = row['ctr']
