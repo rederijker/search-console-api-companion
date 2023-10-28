@@ -188,7 +188,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 data_entry['Query'] = row['keys'][dimensions.index('QUERY')]                            
                             if 'Page' in selected_dimensions:
                                 data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
-                            if 'Page' in selected_dimensions:
+                            if 'Device' in selected_dimensions:
                                 data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
                             data_entry['Clicks'] = row['clicks']
                             data_entry['Impressions'] = row['impressions']
