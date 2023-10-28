@@ -158,6 +158,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         dimensions.append('QUERY')
                     if 'Page' in selected_dimensions:
                         dimensions.append('PAGE')
+                    if 'Device' in selected_dimensions:
+                        dimensions.append('DEVICE')
         
                     while True:
                         request_body = {
@@ -183,11 +185,11 @@ if CLIENT_ID and CLIENT_SECRET:
                             if 'Date' in selected_dimensions:
                                 data_entry['Date'] = row['keys'][dimensions.index('DATE')]
                             if 'Query' in selected_dimensions:
-                                data_entry['Query'] = row['keys'][dimensions.index('QUERY')]
-                            if 'Page' in selected_dimensions:
-                                data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
+                                data_entry['Query'] = row['keys'][dimensions.index('QUERY')]                            
                             if 'Page' in selected_dimensions:
                                 data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
+                            if 'Page' in selected_dimensions:
+                                data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
                             data_entry['Clicks'] = row['clicks']
                             data_entry['Impressions'] = row['impressions']
                             data_entry['CTR'] = row['ctr']
