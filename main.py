@@ -140,8 +140,10 @@ if CLIENT_ID and CLIENT_SECRET:
             with col5:
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
-                
+                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query'])
 
+                
+        
         # Aggiungi un bottone per ottenere i dati in batch
         if st.button('Ottieni dati'):
             if st.session_state.selected_site is not None:
