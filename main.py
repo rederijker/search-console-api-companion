@@ -245,34 +245,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
                         fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
                         
-                       # Calcola le coordinate x e y per le etichette dei quadranti in modo uniforme
-                        # Aggiungi le etichette ai quadranti all'esterno del grafico
-                        
- 
-                        
-                        # ... (Altri passaggi per preparare il DataFrame)
-             
-                        
-                        # Definisci le posizioni fisse delle etichette dei quadranti
-                        label_positions = {
-                            'Quadrante 1': (0.1, 0.9),
-                            'Quadrante 2': (0.9, 0.9),
-                            'Quadrante 3': (0.1, 0.1),
-                            'Quadrante 4': (0.9, 0.1)
-                        }
-                        
-                        # Aggiungi le etichette ai quadranti alle posizioni fisse
-                        for label, position in label_positions.items():
-                            fig.add_annotation(
-                                go.layout.Annotation(
-                                    x=position[0],
-                                    y=position[1],
-                                    text=label,
-                                    showarrow=False,
-                                    font=dict(size=14, color='black')
-                                )
-                            )
-                        
+                     
                         # Personalizza il layout del grafico
                     
 
