@@ -246,21 +246,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
                         
                      
-                        x_quad1, y_quad1 = x_coordinate1, y_coordinate1  # Sostituisci con le coordinate reali
-                        x_quad2, y_quad2 = x_coordinate2, y_coordinate2
-                        x_quad3, y_quad3 = x_coordinate3, y_coordinate3
-                        x_quad4, y_quad4 = x_coordinate4, y_coordinate4
-
-
-                        # Aggiungi etichette personalizzate per le quattro punte
-                        fig.add_trace(go.Scatter(x=[x_quad1, x_quad2, x_quad3, x_quad4],
-                                                 y=[y_quad1, y_quad2, y_quad3, y_quad4],
-                                                 mode='text',
-                                                 text=['Etichetta Quadrante 1', 'Etichetta Quadrante 2', 'Etichetta Quadrante 3', 'Etichetta Quadrante 4'],
-                                                 textposition='top center',
-                                                 textfont=dict(size=12)
-                                                 ))
-
+                    
 
 
 
