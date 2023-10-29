@@ -218,12 +218,13 @@ if CLIENT_ID and CLIENT_SECRET:
                         if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
                             # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
                             break
-                        batches += 1
-                        completion_percentage = (batches * 25000) / total_rows * 100
-                        st.write(f"Download progress: {completion_percentage:.2f}%")
+                            batches += 1
+                            
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
+                        completion_percentage = (batches * 25000) / total_rows * 100
+                        st.write(f"Download progress: {completion_percentage:.2f}%")
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
