@@ -217,3 +217,32 @@ if CLIENT_ID and CLIENT_SECRET:
         
                     #chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
                     #st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
+                    import matplotlib.pyplot as plt
+
+                    # Crea il DataFrame con i dati delle query
+                    # ...
+                    
+                    # Estrai le colonne rilevanti dal DataFrame
+                    query = df['Query']
+                    CTR = df['CTR']
+                    Position = df['Position']
+                    
+                    # Crea il grafico a bolle
+                    plt.figure(figsize=(10, 8))
+                    plt.scatter(CTR, Position, s=NumeroClic, c=ColoreDispositivo, alpha=0.5)
+                    
+                    # Aggiungi linee di riferimento rosse
+                    plt.axhline(y=mediaPosizione, color='red', linestyle='--')
+                    plt.axvline(x=mediaCTR, color='red', linestyle='--')
+                    
+                    # Etichette degli assi e titolo
+                    plt.xlabel('CTR')
+                    plt.ylabel('Posizione Media')
+                    plt.title('Rendimento delle Query')
+                    
+                    # Spiegazioni
+                    plt.text(max(CTR) - 5, max(Position) - 1, "Posizione superiore, CTR elevato", fontsize=10, color='green')
+                    # Aggiungi spiegazioni per gli altri quadranti
+                    
+                    # Mostra il grafico
+                    st.pyplot(plt)
