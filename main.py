@@ -253,7 +253,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Mostra il grafico interattivo
                         with st.container():
-                            st.plotly_chart(fig)
+                            st.plotly_chart(fig, use_container_width=True)
                     with col2:
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
