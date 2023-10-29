@@ -269,10 +269,10 @@ if CLIENT_ID and CLIENT_SECRET:
                         #mostrare df
 
                         with st.expander("Top position and high CTR Queries"):           
-                            st.text("For these queries, there's not much you need to do; you're already doing a great job.")
+                            st.write("For these queries, there's not much you need to do; you're already doing a great job.")
                             st.write(df_upper_high_ctr)
                         with st.expander("Low position and high CTR Queries"):
-                            st.text("""
+                            st.write("""
                             Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
 
                             -If you don't have a dedicated page, think about creating one to consolidate all the information on your website related to this subject.
@@ -281,7 +281,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             """)
                             st.write(df_lower_high_ctr)
                         with st.expander("Low position and low CTR Queries"):
-                            st.text("""
+                            st.write("""
                             When looking at queries with low CTR (both with low and top position), it's especially interesting to look at the bubble sizes to understand which queries have a low CTR but are still driving significant traffic. While the queries in this quadrant might seem unworthy of your effort, they can be divided into two main groups:
                             
                             **Related queries**: If the query in question is important to you, it's a good start to have it appearing in Search already. Prioritize these queries over queries that are not appearing in Search results at all, as they'll be easier to optimize.
@@ -290,7 +290,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             """)
                             st.write(df_lower_low_ctr)
                         with st.expander("Top position and low CTR Queries"):
-                            st.text("""
+                            st.write("""
                             These queries might have a low click-through rate (CTR) for various reasons. Check the largest bubbles to find signs of the following:
 
                             Your competitors may be using structured data markup and appearing with rich results, attracting users to click on their results instead of yours. Consider optimizing for the most common visual elements in Google Search.
