@@ -245,16 +245,20 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
                         fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
                         
-                        # Personalizza il layout del grafico
-                       # Calcola le coordinate x e y per le etichette dei quadranti in base ai dati
-                        x_quad1 = df['CTR'].min()
-                        y_quad1 = df['Position'].mean()
-                        x_quad2 = df['CTR'].mean()
-                        y_quad2 = df['Position'].mean()
-                        x_quad3 = df['CTR'].min()
-                        y_quad3 = df['Position'].min()
-                        x_quad4 = df['CTR'].mean()
-                        y_quad4 = df['Position'].min()
+                       # Calcola le coordinate x e y per le etichette dei quadranti in modo uniforme
+                        x_center = df['CTR'].mean()
+                        y_center = df['Position'].mean()
+                        x_range = df['CTR'].max() - df['CTR'].min()
+                        y_range = df['Position'].max() - df['Position'].min()
+                        
+                        x_quad1 = x_center - x_range / 4
+                        y_quad1 = y_center + y_range / 4
+                        x_quad2 = x_center + x_range / 4
+                        y_quad2 = y_center + y_range / 4
+                        x_quad3 = x_center - x_range / 4
+                        y_quad3 = y_center - y_range / 4
+                        x_quad4 = x_center + x_range / 4
+                        y_quad4 = y_center - y_range / 4
                         
                         # Aggiungi le etichette ai quadranti
                         fig.add_annotation(
@@ -289,13 +293,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 font=dict(size=14, color='black')
                             )
                         )
-                        
-                        # Personalizza il layout del grafico
-                        fig.update_layout(
-                            title='Grafico delle Query (Scala Logaritmica)',
-                            xaxis_title='CTR (Log)',
-                            yaxis_title='Posizione Media (Log)'
-                        )
+
 
                         
                         # Mostra il grafico interattivo
