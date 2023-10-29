@@ -246,15 +246,20 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
                         
                         # Personalizza il layout del grafico
-                        fig.update_layout(
-                            title='Grafico delle Query',
-                            xaxis_title='CTR',
-                            yaxis_title='Posizione Media'
-                        )
-                        # Aggiungi etichette ai quadranti
+                       # Calcola le coordinate x e y per le etichette dei quadranti in base ai dati
+                        x_quad1 = df['CTR'].min()
+                        y_quad1 = df['Position'].mean()
+                        x_quad2 = df['CTR'].mean()
+                        y_quad2 = df['Position'].mean()
+                        x_quad3 = df['CTR'].min()
+                        y_quad3 = df['Position'].min()
+                        x_quad4 = df['CTR'].mean()
+                        y_quad4 = df['Position'].min()
+                        
+                        # Aggiungi le etichette ai quadranti
                         fig.add_annotation(
                             go.layout.Annotation(
-                                x=0.3, y=0.7,
+                                x=x_quad1, y=y_quad1,
                                 text='Quadrante 1',
                                 showarrow=False,
                                 font=dict(size=14, color='black')
@@ -262,7 +267,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         )
                         fig.add_annotation(
                             go.layout.Annotation(
-                                x=0.7, y=0.7,
+                                x=x_quad2, y=y_quad2,
                                 text='Quadrante 2',
                                 showarrow=False,
                                 font=dict(size=14, color='black')
@@ -270,7 +275,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         )
                         fig.add_annotation(
                             go.layout.Annotation(
-                                x=0.3, y=0.3,
+                                x=x_quad3, y=y_quad3,
                                 text='Quadrante 3',
                                 showarrow=False,
                                 font=dict(size=14, color='black')
@@ -278,12 +283,20 @@ if CLIENT_ID and CLIENT_SECRET:
                         )
                         fig.add_annotation(
                             go.layout.Annotation(
-                                x=0.7, y=0.3,
+                                x=x_quad4, y=y_quad4,
                                 text='Quadrante 4',
                                 showarrow=False,
                                 font=dict(size=14, color='black')
                             )
                         )
+                        
+                        # Personalizza il layout del grafico
+                        fig.update_layout(
+                            title='Grafico delle Query (Scala Logaritmica)',
+                            xaxis_title='CTR (Log)',
+                            yaxis_title='Posizione Media (Log)'
+                        )
+
                         
                         # Mostra il grafico interattivo
                         with st.container():
