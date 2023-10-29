@@ -265,7 +265,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         #Per ciascun quadrante, creare un DataFrame separato
                         df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                         df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressios', 'Clicks', 'CTR', 'Position']]
+                        df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                         #mostrare df
 
                         with st.expander("Posizione superiore, CTR elevato"):                            
