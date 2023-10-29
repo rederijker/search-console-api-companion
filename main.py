@@ -227,7 +227,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 st.subheader("Your data")
                 df = pd.DataFrame(data_list)
                 st.dataframe(df, width=2000)
-                    st.subheader("QUERIES ANALYSIS")
+                st.subheader("QUERIES ANALYSIS")
 
                     col1, col2 = st.columns(2)
                     with col1:
