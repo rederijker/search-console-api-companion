@@ -5,6 +5,8 @@ from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 import numpy as np
+import matplotlib.pyplot as plt
+
 
 st.set_page_config(
     page_title="Search Console API Companion",
@@ -223,26 +225,34 @@ if CLIENT_ID and CLIENT_SECRET:
                     # ...
                     
                     # Estrai le colonne rilevanti dal DataFrame
-                    query = df['Query']
-                    CTR = df['CTR']
-                    Position = df['Position']
+
+                    # Calcola la media per la posizione media e il CTR
+                    average_position = df['Position'].mean()
+                    average_ctr = df['CTR'].mean()
                     
-                    # Crea il grafico a bolle
-                    plt.figure(figsize=(10, 8))
-                    plt.scatter(CTR, Position, s=clicks, c=ColoreDispositivo, alpha=0.5)
+                    # Crea i dati per i quadranti
+                    upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
+                    lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
+                    lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
+                    upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
                     
-                    # Aggiungi linee di riferimento rosse
-                    plt.axhline(y=mediaPosizione, color='red', linestyle='--')
-                    plt.axvline(x=mediaCTR, color='red', linestyle='--')
+                    # Plotta il grafico a bolle
+                    plt.figure(figsize=(10, 6))
                     
-                    # Etichette degli assi e titolo
+                    plt.scatter(upper_high_ctr['CTR'], upper_high_ctr['Position'], s=upper_high_ctr['Clicks'], c='green', alpha=0.7, label='Posizione superiore, CTR elevato')
+                    plt.scatter(lower_high_ctr['CTR'], lower_high_ctr['Position'], s=lower_high_ctr['Clicks'], c='blue', alpha=0.7, label='Posizione bassa, CTR elevato')
+                    plt.scatter(lower_low_ctr['CTR'], lower_low_ctr['Position'], s=lower_low_ctr['Clicks'], c='orange', alpha=0.7, label='Posizione bassa, CTR basso')
+                    plt.scatter(upper_low_ctr['CTR'], upper_low_ctr['Position'], s=upper_low_ctr['Clicks'], c='red', alpha=0.7, label='Posizione superiore, CTR basso')
+                    
+                    # Aggiungi le linee di riferimento rosse
+                    plt.axhline(average_position, color='red', linestyle='--', label='Media Posizione')
+                    plt.axvline(average_ctr, color='red', linestyle='--', label='Media CTR')
+                    
                     plt.xlabel('CTR')
                     plt.ylabel('Posizione Media')
-                    plt.title('Rendimento delle Query')
+                    plt.title('Grafico delle Query')
+                    plt.legend()
+                    plt.grid(True)
                     
-                    # Spiegazioni
-                    plt.text(max(CTR) - 5, max(Position) - 1, "Posizione superiore, CTR elevato", fontsize=10, color='green')
-                    # Aggiungi spiegazioni per gli altri quadranti
-                    
-                    # Mostra il grafico
-                    st.pyplot(plt)
+                    plt.show()
+
