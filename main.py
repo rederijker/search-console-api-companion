@@ -274,12 +274,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             )
                         
                         # Personalizza il layout del grafico
-                        fig.update_layout(
-                            title='Grafico delle Query (Scala Logaritmica)',
-                            xaxis_title='CTR (Log)',
-                            yaxis_title='Posizione Media (Log)'
-                        )
-
+                    
 
                         
                         # Mostra il grafico interattivo
