@@ -254,4 +254,30 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Mostra il grafico interattivo
                         st.plotly_chart(fig)
                     with col2:
-                        st.text("ciao")
+                        #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
+                        upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
+                        lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
+                        lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
+                        upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
+                        df_upper_high_ctr = upper_high_ctr[['Query', 'Position', 'CTR', 'Clicks', 'Device']]
+                        #Per ciascun quadrante, creare un DataFrame separato
+                        df_lower_high_ctr = lower_high_ctr[['Query', 'Position', 'CTR', 'Clicks', 'Device']]
+                        df_lower_low_ctr = lower_low_ctr[['Query', 'Position', 'CTR', 'Clicks', 'Device']]
+                        df_upper_low_ctr = upper_low_ctr[['Query', 'Position', 'CTR', 'Clicks', 'Device']]
+                        #mostrare df
+                        st.subheader('Posizione superiore, CTR elevato:')
+
+                        st.write(df_upper_high_ctr)
+                        
+                        st.subheader('Posizione bassa, CTR elevato:')
+                        st.write(df_lower_high_ctr)
+                        
+                        st.subheader('Posizione bassa, CTR basso:')
+                        st.write(df_lower_low_ctr)
+                        
+                        st.subheader('Posizione superiore, CTR basso:')
+                        st.write(df_upper_low_ctr)
+                        
+                        
+                        
+                        
