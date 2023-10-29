@@ -263,9 +263,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
                         df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impression', 'Clicks' 'CTR', 'Position']]
                         #Per ciascun quadrante, creare un DataFrame separato
-                        df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impression', 'Clicks' 'CTR', 'Position']]
-                        df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impression', 'Clicks' 'CTR', 'Position']]
-                        df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impression', 'Clicks' 'CTR', 'Position']]
+                        df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impression', 'Clicks', 'CTR', 'Position']]
+                        df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impression', 'Clicks', 'CTR', 'Position']]
+                        df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impression', 'Clicks', 'CTR', 'Position']]
                         #mostrare df
 
                         with st.expander("Posizione superiore, CTR elevato"):                            
