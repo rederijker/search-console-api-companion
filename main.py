@@ -173,9 +173,6 @@ if CLIENT_ID and CLIENT_SECRET:
                     if 'Country' in selected_dimensions:
                         dimensions.append('COUNTRY')
         
-                    batches=0
-                    total_rows = 0
-
                     while True:
                         request_body = {
                             "startDate": start_date.strftime('%Y-%m-%d'),
@@ -194,8 +191,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             request_body["aggregationType"] = "auto"
         
                         response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-                        total_rows = response_data.get('responseAggregation', {}).get('rows', 0)
-
         
                         for row in response_data.get('rows', []):
                             data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
@@ -218,13 +213,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
                             # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
                             break
-                            batches += 1
-                            
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
-                    completion_percentage = (batches * 25000) / total_rows * 100
-                    st.write(f"Download progress: {completion_percentage:.2f}%")
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
