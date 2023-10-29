@@ -219,7 +219,6 @@ if CLIENT_ID and CLIENT_SECRET:
         
                     #chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
                     #st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
-                    import matplotlib.pyplot as plt
 
                     # Crea il DataFrame con i dati delle query
                     # ...
@@ -227,32 +226,21 @@ if CLIENT_ID and CLIENT_SECRET:
                     # Estrai le colonne rilevanti dal DataFrame
 
                     # Calcola la media per la posizione media e il CTR
-                    average_position = df['Position'].mean()
-                    average_ctr = df['CTR'].mean()
-                    
-                    # Crea i dati per i quadranti
-                    upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
-                    lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
-                    lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
-                    upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
-                    
-                    # Plotta il grafico a bolle
-                    plt.figure(figsize=(10, 6))
-                    
-                    plt.scatter(upper_high_ctr['CTR'], upper_high_ctr['Position'], s=upper_high_ctr['Clicks'], c='green', alpha=0.7, label='Posizione superiore, CTR elevato')
-                    plt.scatter(lower_high_ctr['CTR'], lower_high_ctr['Position'], s=lower_high_ctr['Clicks'], c='blue', alpha=0.7, label='Posizione bassa, CTR elevato')
-                    plt.scatter(lower_low_ctr['CTR'], lower_low_ctr['Position'], s=lower_low_ctr['Clicks'], c='orange', alpha=0.7, label='Posizione bassa, CTR basso')
-                    plt.scatter(upper_low_ctr['CTR'], upper_low_ctr['Position'], s=upper_low_ctr['Clicks'], c='red', alpha=0.7, label='Posizione superiore, CTR basso')
-                    
-                    # Aggiungi le linee di riferimento rosse
-                    plt.axhline(average_position, color='red', linestyle='--', label='Media Posizione')
-                    plt.axvline(average_ctr, color='red', linestyle='--', label='Media CTR')
-                    
-                    plt.xlabel('CTR')
-                    plt.ylabel('Posizione Media')
-                    plt.title('Grafico delle Query')
-                    plt.legend()
-                    plt.grid(True)
-                    
-                    plt.show()
+                    df = pd.DataFrame(data_list)
 
+                    # Crea il grafico a bolle con Plotly
+                    fig = px.scatter(df, x='CTR', y='Position', size='Clicks', color='Device', hover_data=['Query'])
+                    
+                    # Aggiungi linee di riferimento per la media di CTR e posizione
+                    fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
+                    fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
+                    
+                    # Personalizza il layout del grafico
+                    fig.update_layout(
+                        title='Grafico delle Query',
+                        xaxis_title='CTR',
+                        yaxis_title='Posizione Media'
+                    )
+                    
+                    # Mostra il grafico interattivo
+                    st.plotly_chart(fig)
