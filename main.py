@@ -267,18 +267,15 @@ if CLIENT_ID and CLIENT_SECRET:
                         df_lower_low_ctr = lower_low_ctr[['Query', 'Position', 'CTR', 'Clicks', 'Device']]
                         df_upper_low_ctr = upper_low_ctr[['Query', 'Position', 'CTR', 'Clicks', 'Device']]
                         #mostrare df
-                        with st.expander("Posizione superiore, CTR elevato"):
-                            
+
+                        with st.expander("Posizione superiore, CTR elevato"):                            
                             st.write(df_upper_high_ctr)
-                        
-                        st.subheader('Posizione bassa, CTR elevato:')
-                        st.write(df_lower_high_ctr)
-                        
-                        st.subheader('Posizione bassa, CTR basso:')
-                        st.write(df_lower_low_ctr)
-                        
-                        st.subheader('Posizione superiore, CTR basso:')
-                        st.write(df_upper_low_ctr)
+                        with st.expander("Posizione bassa, CTR elevato"):
+                            st.write(df_lower_high_ctr)
+                        with st.expander("Posizione bassa, CTR basso"):
+                            st.write(df_lower_low_ctr)
+                        with st.expander("Posizione superiore, CTR basso"):                      
+                            st.write(df_upper_low_ctr)
                         
                         
                         
