@@ -229,7 +229,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     
                     # Crea il grafico a bolle
                     plt.figure(figsize=(10, 8))
-                    plt.scatter(CTR, Position, s=NumeroClic, c=ColoreDispositivo, alpha=0.5)
+                    plt.scatter(CTR, Position, s=clicks, c=ColoreDispositivo, alpha=0.5)
                     
                     # Aggiungi linee di riferimento rosse
                     plt.axhline(y=mediaPosizione, color='red', linestyle='--')
