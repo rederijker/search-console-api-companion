@@ -248,45 +248,36 @@ if CLIENT_ID and CLIENT_SECRET:
                        # Calcola le coordinate x e y per le etichette dei quadranti in modo uniforme
                         # Aggiungi le etichette ai quadranti all'esterno del grafico
                         
-                        x_quad1 = df['CTR'].min()
-                        y_quad1 = df['Position'].max()
-                        x_quad2 = df['CTR'].max()
-                        y_quad2 = df['Position'].max()
-                        x_quad3 = df['CTR'].min()
-                        y_quad3 = df['Position'].min()
-                        x_quad4 = df['CTR'].max()
-                        y_quad4 = df['Position'].min()
-                        fig.add_annotation(
-                            go.layout.Annotation(
-                                x=x_quad1, y=y_quad1,
-                                text='Quadrante 1',
-                                showarrow=False,
-                                font=dict(size=14, color='white')
+ 
+                        
+                        # ... (Altri passaggi per preparare il DataFrame)
+             
+                        
+                        # Definisci le posizioni fisse delle etichette dei quadranti
+                        label_positions = {
+                            'Quadrante 1': (0.1, 0.9),
+                            'Quadrante 2': (0.9, 0.9),
+                            'Quadrante 3': (0.1, 0.1),
+                            'Quadrante 4': (0.9, 0.1)
+                        }
+                        
+                        # Aggiungi le etichette ai quadranti alle posizioni fisse
+                        for label, position in label_positions.items():
+                            fig.add_annotation(
+                                go.layout.Annotation(
+                                    x=position[0],
+                                    y=position[1],
+                                    text=label,
+                                    showarrow=False,
+                                    font=dict(size=14, color='black')
+                                )
                             )
-                        )
-                        fig.add_annotation(
-                            go.layout.Annotation(
-                                x=x_quad2, y=y_quad2,
-                                text='Quadrante 2',
-                                showarrow=False,
-                                font=dict(size=14, color='white')
-                            )
-                        )
-                        fig.add_annotation(
-                            go.layout.Annotation(
-                                x=x_quad3, y=y_quad3,
-                                text=' 3',
-                                showarrow=False,
-                                font=dict(size=14, color='white')
-                            )
-                        )
-                        fig.add_annotation(
-                            go.layout.Annotation(
-                                x=x_quad4, y=y_quad4,
-                                text=' 4',
-                                showarrow=False,
-                                font=dict(size=14, color='white')
-                            )
+                        
+                        # Personalizza il layout del grafico
+                        fig.update_layout(
+                            title='Grafico delle Query (Scala Logaritmica)',
+                            xaxis_title='CTR (Log)',
+                            yaxis_title='Posizione Media (Log)'
                         )
 
 
