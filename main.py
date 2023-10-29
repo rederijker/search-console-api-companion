@@ -250,6 +250,39 @@ if CLIENT_ID and CLIENT_SECRET:
                             xaxis_title='CTR',
                             yaxis_title='Posizione Media'
                         )
+                        # Aggiungi etichette ai quadranti
+                        fig.add_annotation(
+                            go.layout.Annotation(
+                                x=0.3, y=0.7,
+                                text='Quadrante 1',
+                                showarrow=False,
+                                font=dict(size=14, color='black')
+                            )
+                        )
+                        fig.add_annotation(
+                            go.layout.Annotation(
+                                x=0.7, y=0.7,
+                                text='Quadrante 2',
+                                showarrow=False,
+                                font=dict(size=14, color='black')
+                            )
+                        )
+                        fig.add_annotation(
+                            go.layout.Annotation(
+                                x=0.3, y=0.3,
+                                text='Quadrante 3',
+                                showarrow=False,
+                                font=dict(size=14, color='black')
+                            )
+                        )
+                        fig.add_annotation(
+                            go.layout.Annotation(
+                                x=0.7, y=0.3,
+                                text='Quadrante 4',
+                                showarrow=False,
+                                font=dict(size=14, color='black')
+                            )
+                        )
                         
                         # Mostra il grafico interattivo
                         with st.container():
