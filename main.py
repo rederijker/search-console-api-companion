@@ -215,36 +215,43 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
-        
+                    st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
+
+                    st.subheader("Insght")
+
+                    col1, col2 = st.columns(2)
+                    with col1:
         
-                    #chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
-                    #st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
-
-                    # Crea il DataFrame con i dati delle query
-                    # ...
-                    
-                    # Estrai le colonne rilevanti dal DataFrame
-
-                    # Calcola la media per la posizione media e il CTR
-                    df = pd.DataFrame(data_list)
-
-                    # Crea il grafico a bolle con Plotly
-                    fig = px.scatter(df, x='CTR', y='Position', size='Clicks', color='Device', hover_data=['Query'], log_x=True, log_y=True)
-                    fig.update_yaxes(autorange="reversed")
-
-                    
-                    # Aggiungi linee di riferimento per la media di CTR e posizione
-                    fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
-                    fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
-                    
-                    # Personalizza il layout del grafico
-                    fig.update_layout(
-                        title='Grafico delle Query',
-                        xaxis_title='CTR',
-                        yaxis_title='Posizione Media'
-                    )
-                    
-                    # Mostra il grafico interattivo
-                    st.plotly_chart(fig)
+                        #chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
+                        #st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
+    
+                        # Crea il DataFrame con i dati delle query
+                        # ...
+                        
+                        # Estrai le colonne rilevanti dal DataFrame
+    
+                        # Calcola la media per la posizione media e il CTR
+                        df = pd.DataFrame(data_list)
+    
+                        # Crea il grafico a bolle con Plotly
+                        fig = px.scatter(df, x='CTR', y='Position', size='Clicks', color='Device', hover_data=['Query'], log_x=True, log_y=True)
+                        fig.update_yaxes(autorange="reversed")
+    
+                        
+                        # Aggiungi linee di riferimento per la media di CTR e posizione
+                        fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
+                        fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
+                        
+                        # Personalizza il layout del grafico
+                        fig.update_layout(
+                            title='Grafico delle Query',
+                            xaxis_title='CTR',
+                            yaxis_title='Posizione Media'
+                        )
+                        
+                        # Mostra il grafico interattivo
+                        st.plotly_chart(fig)
+                    with col2:
+                        st.text("ciao")
