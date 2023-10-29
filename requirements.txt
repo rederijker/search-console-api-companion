@@ -6,3 +6,4 @@ google_auth_oauthlib
 langchain
 openai
 matplotlib
+plotly
