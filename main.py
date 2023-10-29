@@ -223,8 +223,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
-                        completion_percentage = (batches * 25000) / total_rows * 100
-                        st.write(f"Download progress: {completion_percentage:.2f}%")
+                    completion_percentage = (batches * 25000) / total_rows * 100
+                    st.write(f"Download progress: {completion_percentage:.2f}%")
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
