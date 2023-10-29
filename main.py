@@ -247,6 +247,15 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                        # Calcola le coordinate x e y per le etichette dei quadranti in modo uniforme
                         # Aggiungi le etichette ai quadranti all'esterno del grafico
+                        
+                        x_quad1 = df['CTR'].min()
+                        y_quad1 = df['Position'].max()
+                        x_quad2 = df['CTR'].max()
+                        y_quad2 = df['Position'].max()
+                        x_quad3 = df['CTR'].min()
+                        y_quad3 = df['Position'].min()
+                        x_quad4 = df['CTR'].max()
+                        y_quad4 = df['Position'].min()
                         fig.add_annotation(
                             go.layout.Annotation(
                                 x=x_quad1, y=y_quad1,
