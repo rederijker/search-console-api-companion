@@ -162,8 +162,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         filter_value = st.text_input(f'Filter Value for {dimension}')
                     st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
                 
-                #aggregation_type = ['No', 'Auto', 'by Page']
-                #check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
+                aggregation_type = ['No', 'Auto', 'by Page']
+                check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
                 
                 
         
