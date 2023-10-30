@@ -29,6 +29,9 @@ if 'selected_site' not in st.session_state:
 if 'available_sites' not in st.session_state:
     st.session_state.available_sites = []
 
+if 'dimension_filters' not in st.session_state:
+    st.session_state.dimension_filters = {}
+
 # Definizione dello scope OAuth per l'autorizzazione
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
 
@@ -138,6 +141,12 @@ if CLIENT_ID and CLIENT_SECRET:
             with col3:
                 # Aggiungi una selectbox per le dimensioni
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
+                for dimension in selected_dimensions:
+                    st.write(f"Filters for {dimension}:")
+                    operator = st.selectbox(f'Operator for {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
+                    filter_value = st.text_input(f'Filter Value for {dimension}')
+                    st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
+
 
             
         
@@ -182,6 +191,20 @@ if CLIENT_ID and CLIENT_SECRET:
                             "dataState": "final",
                             "type": selected_type,
                         }
+                        for dimension in selected_dimensions:
+                            if dimension in st.session_state.dimension_filters:
+                                filter_operator = st.session_state.dimension_filters[dimension]['operator']
+                                filter_value = st.session_state.dimension_filters[dimension]['filter_value']
+                                if filter_value:
+                                    if 'dimensionFilterGroups' not in request_body:
+                                        request_body['dimensionFilterGroups'] = []
+                                    request_body['dimensionFilterGroups'].append({
+                                        'filters': [{
+                                            'dimension': dimension,
+                                            'expression': filter_value,
+                                            'operator': filter_operator
+                                        }]
+                                    })
         
                         if row_limit is not None:
                             request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
