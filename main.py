@@ -145,7 +145,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page'] )
                 with st.expander(f"Filters for Dimensions:"):
                  for dimension in selected_dimensions:
-                     unique_key = 0
+                    unique_key = 0
                     col1, col2 =st.columns(2)
                     with col1:
                         operator = st.selectbox(f' {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
