@@ -5,11 +5,6 @@ from apiclient.discovery import build
 from oauth2client.client import OAuth2WebServerFlow
 from oauth2client.file import Storage
 import numpy as np
-import matplotlib.pyplot as plt
-import plotly.express as px
-import plotly.graph_objects as go  # Importa il modulo go da Plotly
-
-
 
 st.set_page_config(
     page_title="Search Console API Companion",
@@ -28,9 +23,6 @@ if 'selected_site' not in st.session_state:
 
 if 'available_sites' not in st.session_state:
     st.session_state.available_sites = []
-
-if 'dimension_filters' not in st.session_state:
-    st.session_state.dimension_filters = {}
 
 # Definizione dello scope OAuth per l'autorizzazione
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
@@ -104,7 +96,6 @@ if CLIENT_ID and CLIENT_SECRET:
         st.session_state.selected_site = st.selectbox('Seleziona un sito web:', st.session_state.available_sites)
 
         # Crea due tab per la selezione delle funzionalità
-        
         tab1, tab2 = st.tabs(["URL INSPECTION", "SEARCH ANALYTICS"])
 
         with tab1:
@@ -123,8 +114,12 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
             # Ottieni dati dalla Search Console
-            col1, col2, col3 = st.columns(3)
+            col1, col2, col3, col4, col5, col6 = st.columns(6)
             with col1:
+                start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
+            with col2:
+                end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
+            with col3:
                 # Opzioni per il tipo di dati nell'API
                 options_type = {
                     'Web': 'web',
@@ -133,45 +128,23 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Image': 'image',
                     'Video': 'video'
                 }
-              
-                selected_type = st.selectbox('CHANNEL', list(options_type.keys()))
-                with st.container():                   
-                         start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))                   
-                         end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
-               
-                
-            with col2:
+                selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
+            with col4:
                 # Aggiungi una selectbox per le dimensioni
-                selected_dimensions = st.multiselect('DIMENSIONS', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page'] )
-                with st.expander(f"Filters for Dimensions"):
-                 unique_key = 0
-                 for dimension in selected_dimensions:                    
-                    col1, col2 =st.columns(2)
-                    with col1:
-                        operator = st.selectbox(f' {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
-                    with col2:
-                        filter_value = st.text_input(label="", placeholder=" value", key=unique_key)
-                    unique_key += 1
-                    st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
-                    
-                    
+                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
 
-       
-            with col3:
-                with st.container():
-                    col1, col2 = st.columns(2)
-                    with col1:
-                         aggregation_type = ['No', 'Auto', 'by Page']
-                         check_box_aggregation = st.radio('AGGREGATION TYPE', aggregation_type)
-
-                    with col2:                                       
-               
-                        row_limit_options = ['No', 'Yes']
-                        check_box_row = st.radio('SET ROW LIMIT?', row_limit_options)
-                        if check_box_row == 'Yes':
-                            row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
-                        else:
-                            row_limit = None  # Nessun limite
+            
+        
+            with col5:
+                row_limit_options = ['No', 'Yes']
+                check_box_row = st.radio('Row limit', row_limit_options)
+                if check_box_row == 'Yes':
+                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
+                else:
+                    row_limit = None  # Nessun limite
+            with col6:
+                aggregation_type = ['No', 'Auto', 'by Page']
+                check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
                 
                 
         
@@ -203,20 +176,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             "dataState": "final",
                             "type": selected_type,
                         }
-                        for dimension in selected_dimensions:
-                            if dimension in st.session_state.dimension_filters:
-                                filter_operator = st.session_state.dimension_filters[dimension]['operator']
-                                filter_value = st.session_state.dimension_filters[dimension]['filter_value']
-                                if filter_value:
-                                    if 'dimensionFilterGroups' not in request_body:
-                                        request_body['dimensionFilterGroups'] = []
-                                    request_body['dimensionFilterGroups'].append({
-                                        'filters': [{
-                                            'dimension': dimension,
-                                            'expression': filter_value,
-                                            'operator': filter_operator
-                                        }]
-                                    })
         
                         if row_limit is not None:
                             request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
@@ -251,94 +210,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
-                    st.subheader("Your data")
-                    df = pd.DataFrame(data_list)
-                    st.dataframe(df, width=2000)
-
-                    st.subheader("QUERIES ANALYSIS")
-
-                    col1, col2 = st.columns(2)
-                    with col1:
         
-                        #chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
-                        #st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
-    
-                        # Crea il DataFrame con i dati delle query
-                        # ...
-                        
-                        # Estrai le colonne rilevanti dal DataFrame
-    
-                        # Calcola la media per la posizione media e il CTR
-                        df = pd.DataFrame(data_list)
-    
-                        # Crea il grafico a bolle con Plotly
-                        fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
-                        fig.update_yaxes(autorange="reversed")
-    
-                        
-                        # Aggiungi linee di riferimento per la media di CTR e posizione
-                        fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
-                        fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))                   
-                     
-                    
-
-
-
-                        
-                        # Mostra il grafico interattivo
-                        with st.container():
-                            st.plotly_chart(fig, use_container_width=True)
-                    
-                        average_position = df['Position'].mean()
-                        average_ctr = df['CTR'].mean()
-                        #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
-                        upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
-                        lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
-                        lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
-                        upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
-                        df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        #Per ciascun quadrante, creare un DataFrame separato
-                        df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        #mostrare df
-
-                        with st.expander("Top position and high CTR Queries"):           
-                            st.write("For these queries, there's not much you need to do; you're already doing a great job.")
-                            st.write(df_upper_high_ctr)
-                        with st.expander("Low position and high CTR Queries"):
-                            st.write("""
-                            Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
-
-                            -If you don't have a dedicated page, think about creating one to consolidate all the information on your website related to this subject.
-
-                            -If you already have a page, contemplate adding more content to better address the needs of users searching for this query.
-                            """)
-                            st.write(df_lower_high_ctr)
-                        with st.expander("Low position and low CTR Queries"):
-                            st.write("""
-                            When looking at queries with low CTR (both with low and top position), it's especially interesting to look at the bubble sizes to understand which queries have a low CTR but are still driving significant traffic. While the queries in this quadrant might seem unworthy of your effort, they can be divided into two main groups:
-                            
-                            **Related queries**: If the query in question is important to you, it's a good start to have it appearing in Search already. Prioritize these queries over queries that are not appearing in Search results at all, as they'll be easier to optimize.
-                            
-                            **Unrelated queries**: If your site doesn't cover content related to this query, maybe it's a good opportunity to fine tune your content or focus on queries that will bring relevant traffic.
-                            """)
-                            st.write(df_lower_low_ctr)
-                        with st.expander("Top position and low CTR Queries"):
-                            st.write("""
-                            These queries might have a low click-through rate (CTR) for various reasons. Check the largest bubbles to find signs of the following:
-
-                            Your competitors may be using structured data markup and appearing with rich results, attracting users to click on their results instead of yours. Consider optimizing for the most common visual elements in Google Search.
-
-                            You may have optimized, or be "accidentally" ranking for a query that users are not interested in relation to your site. This might not be an issue for you, in which case you can ignore those queries. If you prefer people not to find you through those queries (for example, they contain offensive words), try to fine-tune your content to remove mentions that could be seen as synonyms or related queries to the one bringing traffic.
-
-                            People may have already found the information they needed, for example, your company's opening hours, address, or phone number. Check the queries that were used and the URLs that contained the information. If one of your website goals is to drive people to your stores, this is working as intended; if you believe that people should visit your website for extra information, you could try to optimize your titles and descriptions to make that clear. See the next section for more details.
-                            """)
-                            st.write(df_upper_low_ctr)
-
-                    with col2:
-                        st.text("")
-                        
-                        
-                        
-                        
+                    df = pd.DataFrame(data_list)
+                    st.dataframe(df)
+        
+                    chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
+                    st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
