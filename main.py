@@ -154,7 +154,8 @@ if CLIENT_ID and CLIENT_SECRET:
                     col1, col2 = st.columns(2)
                     with col1:
                          aggregation_type = ['No', 'Auto', 'by Page']
-                        check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
+                         check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
+
                     with col2:                                       
                
                         row_limit_options = ['No', 'Yes']
