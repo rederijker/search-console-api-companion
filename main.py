@@ -150,7 +150,12 @@ if CLIENT_ID and CLIENT_SECRET:
 
        
             with col3:
-                
+                with st.container():
+                    col1, col2: st.columns(2)
+                    with col1:
+                        st.text("cia")
+                    with col2:
+                        st.text("cia")
                 
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
