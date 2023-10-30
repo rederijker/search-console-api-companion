@@ -123,8 +123,10 @@ if CLIENT_ID and CLIENT_SECRET:
             col1, col2, col3, col4, col5, col6 = st.columns(6)
             with col1:
                 start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
-            with col2:
                 end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
+
+            with col2:
+                st.text("")
             with col3:
                 # Opzioni per il tipo di dati nell'API
                 options_type = {
