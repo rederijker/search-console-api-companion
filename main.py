@@ -141,6 +141,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
                     with col2:
                         end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
+                st.text("")
                 
             with col2:
                 # Aggiungi una selectbox per le dimensioni
