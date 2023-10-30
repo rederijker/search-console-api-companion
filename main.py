@@ -135,7 +135,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 }
               
                 selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
-                st.container():
+                with st.container():
                 col1, col2 = st.columns(2)
                 with col1:
                     start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
