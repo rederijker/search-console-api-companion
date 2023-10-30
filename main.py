@@ -146,7 +146,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     row_limit = None  # Nessun limite
             with col3:
                 # Aggiungi una selectbox per le dimensioni
-                selected_dimensions = st.checkbox('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
+                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
                
 
 
