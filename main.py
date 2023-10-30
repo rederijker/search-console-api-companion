@@ -155,7 +155,7 @@ if CLIENT_ID and CLIENT_SECRET:
             with col4:
                 with st.expander(f"Filters for Dimensions:"):
                  for dimension in selected_dimensions:
-                    col1, col2 =st.coliumns(2)
+                    col1, col2 =st.columns(2)
                     with col1:
                         operator = st.selectbox(f'Operator for {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
                     with col2:
