@@ -120,14 +120,12 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
             # Ottieni dati dalla Search Console
-            col1, col2, col3, col4, col5, col6 = st.columns(6)
+            col1, col2, col3, col4, col5 = st.columns(5)
             with col1:
                 start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
                 end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
 
             with col2:
-                st.text("")
-            with col3:
                 # Opzioni per il tipo di dati nell'API
                 options_type = {
                     'Web': 'web',
@@ -137,20 +135,20 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Video': 'video'
                 }
                 selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
-            with col4:
+            with col3:
                 # Aggiungi una selectbox per le dimensioni
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
 
             
         
-            with col5:
+            with col4:
                 row_limit_options = ['No', 'Yes']
                 check_box_row = st.radio('Row limit', row_limit_options)
                 if check_box_row == 'Yes':
                     row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
                 else:
                     row_limit = None  # Nessun limite
-            with col6:
+            with col5:
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
                 
@@ -245,8 +243,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
                         fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
-                        fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
-                        
+                        fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))                   
                      
                     
 
@@ -256,7 +253,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Mostra il grafico interattivo
                         with st.container():
                             st.plotly_chart(fig, use_container_width=True)
-                    with col2:
+                    
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
@@ -303,6 +300,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             People may have already found the information they needed, for example, your company's opening hours, address, or phone number. Check the queries that were used and the URLs that contained the information. If one of your website goals is to drive people to your stores, this is working as intended; if you believe that people should visit your website for extra information, you could try to optimize your titles and descriptions to make that clear. See the next section for more details.
                             """)
                             st.write(df_upper_low_ctr)
+
+                    with col2:
+                        st.text("")
                         
                         
                         
