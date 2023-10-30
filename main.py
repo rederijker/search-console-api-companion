@@ -123,7 +123,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
             # Ottieni dati dalla Search Console
-            col1, col2, col3, col4, col5 = st.columns(5)
+            col1, col2, col3, col4 = st.columns(4)
             with col1:
                 start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
                 end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
@@ -162,7 +162,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         filter_value = st.text_input(f'Filter Value for {dimension}')
                     st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
                 
-            with col5:
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
                 
