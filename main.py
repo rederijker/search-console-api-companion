@@ -143,13 +143,13 @@ if CLIENT_ID and CLIENT_SECRET:
             with col2:
                 # Aggiungi una selectbox per le dimensioni
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page'] )
-                with st.expander(f"Filters for Dimensions:"):
+                with st.expander(f"Filters for Dimensions"):
                  for dimension in selected_dimensions:
                     col1, col2 =st.columns(2)
                     with col1:
-                        operator = st.selectbox(f'Operator for {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
+                        operator = st.selectbox(f'{dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
                     with col2:
-                        filter_value = st.text_input(f'Filter Value for {dimension}')
+                        filter_value = st.text_input(f'Value')
                     st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
 
        
