@@ -147,16 +147,17 @@ if CLIENT_ID and CLIENT_SECRET:
             with col3:
                 # Aggiungi una selectbox per le dimensioni
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
-                for dimension in selected_dimensions:
-                    st.write(f"Filters for {dimension}:")
-                    operator = st.selectbox(f'Operator for {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
-                    filter_value = st.text_input(f'Filter Value for {dimension}')
-                    st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
+               
 
 
             
         
             with col4:
+                 for dimension in selected_dimensions:
+                    st.write(f"Filters for {dimension}:")
+                    operator = st.selectbox(f'Operator for {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
+                    filter_value = st.text_input(f'Filter Value for {dimension}')
+                    st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
                 
             with col5:
                 aggregation_type = ['No', 'Auto', 'by Page']
