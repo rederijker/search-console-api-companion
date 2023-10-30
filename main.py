@@ -123,12 +123,8 @@ if CLIENT_ID and CLIENT_SECRET:
 
         with tab2:
             # Ottieni dati dalla Search Console
-            col1, col2, col3, col4 = st.columns(4)
+            col1, col2, col3 = st.columns(3)
             with col1:
-                start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
-                end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
-
-            with col2:
                 # Opzioni per il tipo di dati nell'API
                 options_type = {
                     'Web': 'web',
@@ -138,21 +134,11 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Video': 'video'
                 }
                 selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
-                row_limit_options = ['No', 'Yes']
-                check_box_row = st.radio('Row limit', row_limit_options)
-                if check_box_row == 'Yes':
-                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
-                else:
-                    row_limit = None  # Nessun limite
-            with col3:
+                start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))
+                end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
+            with col2:
                 # Aggiungi una selectbox per le dimensioni
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page'] )
-               
-
-
-            
-        
-            with col4:
                 with st.expander(f"Filters for Dimensions:"):
                  for dimension in selected_dimensions:
                     col1, col2 =st.columns(2)
@@ -161,9 +147,19 @@ if CLIENT_ID and CLIENT_SECRET:
                     with col2:
                         filter_value = st.text_input(f'Filter Value for {dimension}')
                     st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
+
+       
+            with col3:
+                
                 
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
+                row_limit_options = ['No', 'Yes']
+                check_box_row = st.radio('Row limit', row_limit_options)
+                if check_box_row == 'Yes':
+                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
+                else:
+                    row_limit = None  # Nessun limite
                 
                 
         
