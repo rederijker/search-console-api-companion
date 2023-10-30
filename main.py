@@ -138,6 +138,12 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Video': 'video'
                 }
                 selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
+                row_limit_options = ['No', 'Yes']
+                check_box_row = st.radio('Row limit', row_limit_options)
+                if check_box_row == 'Yes':
+                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
+                else:
+                    row_limit = None  # Nessun limite
             with col3:
                 # Aggiungi una selectbox per le dimensioni
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
@@ -151,12 +157,7 @@ if CLIENT_ID and CLIENT_SECRET:
             
         
             with col4:
-                row_limit_options = ['No', 'Yes']
-                check_box_row = st.radio('Row limit', row_limit_options)
-                if check_box_row == 'Yes':
-                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
-                else:
-                    row_limit = None  # Nessun limite
+                
             with col5:
                 aggregation_type = ['No', 'Auto', 'by Page']
                 check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
