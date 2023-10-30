@@ -134,7 +134,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Video': 'video'
                 }
               
-                selected_type = st.selectbox('CHANNEL:', list(options_type.keys()))
+                selected_type = st.selectbox('CHANNEL', list(options_type.keys()))
                 with st.container():                   
                          start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))                   
                          end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
