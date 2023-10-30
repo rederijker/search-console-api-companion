@@ -134,7 +134,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Video': 'video'
                 }
               
-                selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
+                selected_type = st.selectbox('CHANNEL:', list(options_type.keys()))
                 with st.container():                   
                          start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))                   
                          end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
@@ -142,15 +142,15 @@ if CLIENT_ID and CLIENT_SECRET:
                 
             with col2:
                 # Aggiungi una selectbox per le dimensioni
-                selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page'] )
-                with st.expander(f"Filters for Dimensions:"):
+                selected_dimensions = st.multiselect('DIMENSIONS', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page'] )
+                with st.expander(f"Filters for Dimensions"):
                  unique_key = 0
                  for dimension in selected_dimensions:                    
                     col1, col2 =st.columns(2)
                     with col1:
                         operator = st.selectbox(f' {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
                     with col2:
-                        filter_value = st.text_input(label="", placeholder="type value", key=unique_key)
+                        filter_value = st.text_input(label="", placeholder=" value", key=unique_key)
                     st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
                     unique_key =+1
 
@@ -160,12 +160,12 @@ if CLIENT_ID and CLIENT_SECRET:
                     col1, col2 = st.columns(2)
                     with col1:
                          aggregation_type = ['No', 'Auto', 'by Page']
-                         check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
+                         check_box_aggregation = st.radio('AGGREGATION TYPE', aggregation_type)
 
                     with col2:                                       
                
                         row_limit_options = ['No', 'Yes']
-                        check_box_row = st.radio('Row limit', row_limit_options)
+                        check_box_row = st.radio('SET ROW LIMIT?', row_limit_options)
                         if check_box_row == 'Yes':
                             row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
                         else:
