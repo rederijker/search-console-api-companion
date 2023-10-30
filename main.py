@@ -153,18 +153,16 @@ if CLIENT_ID and CLIENT_SECRET:
                 with st.container():
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.text("cia")
-                    with col2:
-                        st.text("cia")
-                
-                aggregation_type = ['No', 'Auto', 'by Page']
-                check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
-                row_limit_options = ['No', 'Yes']
-                check_box_row = st.radio('Row limit', row_limit_options)
-                if check_box_row == 'Yes':
-                    row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
-                else:
-                    row_limit = None  # Nessun limite
+                         aggregation_type = ['No', 'Auto', 'by Page']
+                        check_box_aggregation = st.radio('Aggregation Type', aggregation_type)
+                    with col2:                                       
+               
+                        row_limit_options = ['No', 'Yes']
+                        check_box_row = st.radio('Row limit', row_limit_options)
+                        if check_box_row == 'Yes':
+                            row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
+                        else:
+                            row_limit = None  # Nessun limite
                 
                 
         
