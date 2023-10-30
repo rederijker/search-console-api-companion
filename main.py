@@ -178,7 +178,7 @@ if CLIENT_ID and CLIENT_SECRET:
             # Aggiungi un bottone per ottenere i dati in batch
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
-                    total_data = calculate_total_data()  # Calcola il numero totale di dati
+                    
                     progress_bar = st.progress(0)
                     
                     start_row = 0  # Inizia dalla prima riga
@@ -254,7 +254,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
-                        progress = min(start_row / total_data, 1.0)
+                        progress = min(start_row / 25000, 1.0)
                         progress_bar.progress(progress)
                        
                     st.subheader("Your data")
