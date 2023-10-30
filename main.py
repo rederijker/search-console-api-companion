@@ -136,17 +136,8 @@ if CLIENT_ID and CLIENT_SECRET:
                 }
                 selected_type = st.selectbox('Choose channel:', list(options_type.keys()))
             with col3:
-                user_filters = {}
-
                 # Aggiungi una selectbox per le dimensioni
                 selected_dimensions = st.multiselect('Select Dimensions', ['Date', 'Page', 'Query', 'Device', 'Country'])
-                for dimension in selected_dimensions:
-                    with st.expander(f"Filter for {dimension}"):
-                        user_filter = st.text_input(f'Filter for {dimension}', key=dimension)
-                        # Aggiungi il filtro al dizionario dei filtri se è stato inserito
-                        if user_filter:
-                            user_filters[dimension] = user_filter
-                
 
             
         
