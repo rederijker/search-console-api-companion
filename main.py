@@ -178,6 +178,7 @@ if CLIENT_ID and CLIENT_SECRET:
             # Aggiungi un bottone per ottenere i dati in batch
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
+                    progress_bar = st.progress(0)
                     start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
         
@@ -251,9 +252,12 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
+                        progress_bar.progress(start_row / totale_dati)  # Aggiorna la barra di avanzamento in base al progresso
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
+                    progress_bar.empty()
+
 
                     st.subheader("QUERIES ANALYSIS")
 
