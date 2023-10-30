@@ -151,8 +151,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         operator = st.selectbox(f' {dimension}', ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex'])
                     with col2:
                         filter_value = st.text_input(label="", placeholder=" value", key=unique_key)
-                    unique_key =+1
+                    
                     st.session_state.dimension_filters[dimension] = {'operator': operator, 'filter_value': filter_value}
+                    unique_key += 1
                     
 
        
