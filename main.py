@@ -175,10 +175,12 @@ if CLIENT_ID and CLIENT_SECRET:
                 
         
             # Aggiungi un bottone per ottenere i dati in batch
+            # Aggiungi un bottone per ottenere i dati in batch
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
+                    batch_count = 0  # Conteggio dei batch
             
                     # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
                     dimensions = []
@@ -193,72 +195,82 @@ if CLIENT_ID and CLIENT_SECRET:
                     if 'Country' in selected_dimensions:
                         dimensions.append('COUNTRY')
             
-                    while True:
-                        request_body = {
-                            "startDate": start_date.strftime('%Y-%m-%d'),
-                            "endDate": end_date.strftime('%Y-%m-%d'),
-                            "dimensions": dimensions,  # Utilizza le dimensioni selezionate dall'utente
-                            "startRow": start_row,
-                            "dataState": "final",
-                            "type": selected_type,
-                        }
-                        for dimension in selected_dimensions:
-                            if dimension in st.session_state.dimension_filters:
-                                filter_operator = st.session_state.dimension_filters[dimension]['operator']
-                                filter_value = st.session_state.dimension_filters[dimension]['filter_value']
-                                if filter_value:
-                                    if 'dimensionFilterGroups' not in request_body:
-                                        request_body['dimensionFilterGroups'] = []
-                                    request_body['dimensionFilterGroups'].append({
-                                        'filters': [{
-                                            'dimension': dimension,
-                                            'expression': filter_value,
-                                            'operator': filter_operator
-                                        }]
-                                    })
+                    with st.empty():
+                        progress_bar = st.progress(0)  # Barra di avanzamento inizializzata a 0%
             
-                        if row_limit is not None:
-                            request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
-                        else:
-                            request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.000
+                        while True:
+                            request_body = {
+                                "startDate": start_date.strftime('%Y-%m-%d'),
+                                "endDate": end_date.strftime('%Y-%m-%d'),
+                                "dimensions": dimensions,  # Utilizza le dimensioni selezionate dall'utente
+                                "startRow": start_row,
+                                "dataState": "final",
+                                "type": selected_type,
+                            }
+                            for dimension in selected_dimensions:
+                                if dimension in st.session_state.dimension_filters:
+                                    filter_operator = st.session_state.dimension_filters[dimension]['operator']
+                                    filter_value = st.session_state.dimension_filters[dimension]['filter_value']
+                                    if filter_value:
+                                        if 'dimensionFilterGroups' not in request_body:
+                                            request_body['dimensionFilterGroups'] = []
+                                        request_body['dimensionFilterGroups'].append({
+                                            'filters': [{
+                                                'dimension': dimension,
+                                                'expression': filter_value,
+                                                'operator': filter_operator
+                                            }]
+                                        })
             
-                        if check_box_aggregation == 'by Page':
-                            request_body["aggregationType"] = "byPage"
-                        elif check_box_aggregation == 'Auto':
-                            request_body["aggregationType"] = "auto"
+                            if row_limit is not None:
+                                request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
+                            else:
+                                request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.000
             
-                        response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
+                            if check_box_aggregation == 'by Page':
+                                request_body["aggregationType"] = "byPage"
+                            elif check_box_aggregation == 'Auto':
+                                request_body["aggregationType"] = "auto"
             
-                        for row in response_data.get('rows', []):
-                            data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
-                            if 'Date' in selected_dimensions:
-                                data_entry['Date'] = row['keys'][dimensions.index('DATE')]
-                            if 'Query' in selected_dimensions:
-                                data_entry['Query'] = row['keys'][dimensions.index('QUERY')]
-                            if 'Page' in selected_dimensions:
-                                data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
-                            if 'Device' in selected_dimensions:
-                                data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
-                            if 'Country' in selected_dimensions:
-                                data_entry['Country'] = row['keys'][dimensions.index('COUNTRY')]
-                            data_entry['Clicks'] = row['clicks']
-                            data_entry['Impressions'] = row['impressions']
-                            data_entry['CTR'] = row['ctr']
-                            data_entry['Position'] = row['position']
-                            data_list.append(data_entry)
+                            response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
             
-                        if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
-                            # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
-                            break
-                        else:
-                            # Altrimenti, incrementa il valore di startRow per la prossima richiesta
-                            start_row += 25000
+                            for row in response_data.get('rows', []):
+                                data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
+                                if 'Date' in selected_dimensions:
+                                    data_entry['Date'] = row['keys'][dimensions.index('DATE')]
+                                if 'Query' in selected_dimensions:
+                                    data_entry['Query'] = row['keys'][dimensions.index('QUERY')]
+                                if 'Page' in selected_dimensions:
+                                    data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
+                                if 'Device' in selected_dimensions:
+                                    data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
+                                if 'Country' in selected_dimensions:
+                                    data_entry['Country'] = row['keys'][dimensions.index('COUNTRY')]
+                                data_entry['Clicks'] = row['clicks']
+                                data_entry['Impressions'] = row['impressions']
+                                data_entry['CTR'] = row['ctr']
+                                data_entry['Position'] = row['position']
+                                data_list.append(data_entry)
             
-                    st.subheader("Your data")
-                    df = pd.DataFrame(data_list)
-                    st.dataframe(df, width=2000)
+                            if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
+                                # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
+                                break
+                            else:
+                                # Altrimenti, incrementa il valore di startRow per la prossima richiesta
+                                start_row += 25000
+                                batch_count += 1
+                                progress = (start_row + 1) / row_limit if row_limit else 0.0
+                                progress_bar.progress(progress)
             
-                    st.subheader("QUERIES ANALYSIS")
+                        st.subheader("Your data")
+                        df = pd.DataFrame(data_list)
+                        st.dataframe(df, width=2000)
+            
+                        st.subheader("QUERIES ANALYSIS")
+            
+                        if batch_count > 0:
+                            st.warning(f"Abbiamo completato {batch_count} batch di 25.000 righe ciascuno.")
+
             
 
 
