@@ -202,6 +202,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             "dataState": "final",
                             "type": selected_type,
                         }
+                        if row_limit is not None:
+                            request_body["rowLimit"] = row_limit
                         for dimension in selected_dimensions:
                             if dimension in st.session_state.dimension_filters:
                                 filter_operator = st.session_state.dimension_filters[dimension]['operator']
