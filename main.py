@@ -177,11 +177,14 @@ if CLIENT_ID and CLIENT_SECRET:
             # Aggiungi un bottone per ottenere i dati in batch
             # Aggiungi un bottone per ottenere i dati in batch
             # Aggiungi un bottone per ottenere i dati in batch
+            # Inizializza una variabile per tenere traccia del numero di batch completati
+            batch_count = 0
+            
+            # Aggiungi un bottone per ottenere i dati in batch
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
-                    batch_count = 0  # Conteggio dei batch
             
                     # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
                     dimensions = []
@@ -196,82 +199,88 @@ if CLIENT_ID and CLIENT_SECRET:
                     if 'Country' in selected_dimensions:
                         dimensions.append('COUNTRY')
             
-                    with st.empty():
-                        progress_bar = st.progress(0)  # Barra di avanzamento inizializzata a 0%
+                    # Aggiungi uno spinner per indicare il caricamento
+                    progress_bar = st.progress(0.0)
+                    while True:
+                        request_body = {
+                            "startDate": start_date.strftime('%Y-%m-%d'),
+                            "endDate": end_date.strftime('%Y-%m-%d'),
+                            "dimensions": dimensions,  # Utilizza le dimensioni selezionate dall'utente
+                            "startRow": start_row,
+                            "dataState": "final",
+                            "type": selected_type,
+                        }
+                        for dimension in selected_dimensions:
+                            if dimension in st.session_state.dimension_filters:
+                                filter_operator = st.session_state.dimension_filters[dimension]['operator']
+                                filter_value = st.session_state.dimension_filters[dimension]['filter_value']
+                                if filter_value:
+                                    if 'dimensionFilterGroups' not in request_body:
+                                        request_body['dimensionFilterGroups'] = []
+                                    request_body['dimensionFilterGroups'].append({
+                                        'filters': [{
+                                            'dimension': dimension,
+                                            'expression': filter_value,
+                                            'operator': filter_operator
+                                        }]
+                                    })
             
-                        while True:
-                            request_body = {
-                                "startDate": start_date.strftime('%Y-%m-%d'),
-                                "endDate": end_date.strftime('%Y-%m-%d'),
-                                "dimensions": dimensions,  # Utilizza le dimensioni selezionate dall'utente
-                                "startRow": start_row,
-                                "dataState": "final",
-                                "type": selected_type,
-                            }
-                            for dimension in selected_dimensions:
-                                if dimension in st.session_state.dimension_filters:
-                                    filter_operator = st.session_state.dimension_filters[dimension]['operator']
-                                    filter_value = st.session_state.dimension_filters[dimension]['filter_value']
-                                    if filter_value:
-                                        if 'dimensionFilterGroups' not in request_body:
-                                            request_body['dimensionFilterGroups'] = []
-                                        request_body['dimensionFilterGroups'].append({
-                                            'filters': [{
-                                                'dimension': dimension,
-                                                'expression': filter_value,
-                                                'operator': filter_operator
-                                            }]
-                                        })
+                        if row_limit is not None:
+                            request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
+                        else:
+                            request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.000
             
-                            if row_limit is not None:
-                                request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
-                            else:
-                                request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.000
+                        if check_box_aggregation == 'by Page':
+                            request_body["aggregationType"] = "byPage"
+                        elif check_box_aggregation == 'Auto':
+                            request_body["aggregationType"] = "auto"
             
-                            if check_box_aggregation == 'by Page':
-                                request_body["aggregationType"] = "byPage"
-                            elif check_box_aggregation == 'Auto':
-                                request_body["aggregationType"] = "auto"
+                        response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
             
-                            response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
+                        for row in response_data.get('rows', []):
+                            data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
+                            if 'Date' in selected_dimensions:
+                                data_entry['Date'] = row['keys'][dimensions.index('DATE')]
+                            if 'Query' in selected_dimensions:
+                                data_entry['Query'] = row['keys'][dimensions.index('QUERY')]
+                            if 'Page' in selected_dimensions:
+                                data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
+                            if 'Device' in selected_dimensions:
+                                data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
+                            if 'Country' in selected_dimensions:
+                                data_entry['Country'] = row['keys'][dimensions.index('COUNTRY')]
+                            data_entry['Clicks'] = row['clicks']
+                            data_entry['Impressions'] = row['impressions']
+                            data_entry['CTR'] = row['ctr']
+                            data_entry['Position'] = row['position']
+                            data_list.append(data_entry)
             
-                            for row in response_data.get('rows', []):
-                                data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
-                                if 'Date' in selected_dimensions:
-                                    data_entry['Date'] = row['keys'][dimensions.index('DATE')]
-                                if 'Query' in selected_dimensions:
-                                    data_entry['Query'] = row['keys'][dimensions.index('QUERY')]
-                                if 'Page' in selected_dimensions:
-                                    data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
-                                if 'Device' in selected_dimensions:
-                                    data_entry['Device'] = row['keys'][dimensions.index('DEVICE')]
-                                if 'Country' in selected_dimensions:
-                                    data_entry['Country'] = row['keys'][dimensions.index('COUNTRY')]
-                                data_entry['Clicks'] = row['clicks']
-                                data_entry['Impressions'] = row['impressions']
-                                data_entry['CTR'] = row['ctr']
-                                data_entry['Position'] = row['position']
-                                data_list.append(data_entry)
+                        if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
+                            # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
+                            progress_bar.progress(1.0)  # Aggiorna la barra di avanzamento a 100% alla fine
+                            batch_count += 1
+                            break
+                        else:
+                            # Calcola il progresso e aggiorna la barra di avanzamento
+                            progress = (start_row + len(response_data.get('rows', []))) / (row_limit if row_limit is not None else 25000)
+                            progress_bar.progress(progress)
             
-                            if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
-                                # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
-                                break
-                            else:
-                                # Altrimenti, incrementa il valore di startRow per la prossima richiesta
-                                start_row += 25000
-                                batch_count += 1
-                                progress = min((start_row + 1) / row_limit, 1.0) if row_limit else 0.0  # Limita il valore a 1.0
-                                progress_bar.progress(progress)
+                            # Aggiorna il messaggio con il numero di batch completati
+                            batch_count += 1
+                            st.text(f"Batch scarica {batch_count}")
             
-                        st.subheader("Your data")
-                        df = pd.DataFrame(data_list)
-                        st.dataframe(df, width=2000)
+                            # Altrimenti, incrementa il valore di startRow per la prossima richiesta
+                            start_row += 25000
             
-                        st.subheader("QUERIES ANALYSIS")         
+                    st.subheader("Your data")
+                    df = pd.DataFrame(data_list)
+                    st.dataframe(df, width=2000)
+            
+                    st.subheader("QUERIES ANALYSIS")
+
+                          
 
             
-                        if batch_count > 0:
-                            st.warning(f"Abbiamo completato {batch_count} batch di 25.000 righe ciascuno.")
 
             
 
