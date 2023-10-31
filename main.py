@@ -179,7 +179,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
-        
+            
                     # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
                     dimensions = []
                     if 'Date' in selected_dimensions:
@@ -192,7 +192,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         dimensions.append('DEVICE')
                     if 'Country' in selected_dimensions:
                         dimensions.append('COUNTRY')
-        
+            
                     while True:
                         request_body = {
                             "startDate": start_date.strftime('%Y-%m-%d'),
@@ -202,8 +202,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             "dataState": "final",
                             "type": selected_type,
                         }
-                        if row_limit is not None:
-                            request_body["rowLimit"] = row_limit
                         for dimension in selected_dimensions:
                             if dimension in st.session_state.dimension_filters:
                                 filter_operator = st.session_state.dimension_filters[dimension]['operator']
@@ -218,22 +216,25 @@ if CLIENT_ID and CLIENT_SECRET:
                                             'operator': filter_operator
                                         }]
                                     })
-        
+            
                         if row_limit is not None:
                             request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
+                        else:
+                            request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.000
+            
                         if check_box_aggregation == 'by Page':
                             request_body["aggregationType"] = "byPage"
                         elif check_box_aggregation == 'Auto':
                             request_body["aggregationType"] = "auto"
-        
+            
                         response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-        
+            
                         for row in response_data.get('rows', []):
                             data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
                             if 'Date' in selected_dimensions:
                                 data_entry['Date'] = row['keys'][dimensions.index('DATE')]
                             if 'Query' in selected_dimensions:
-                                data_entry['Query'] = row['keys'][dimensions.index('QUERY')]                            
+                                data_entry['Query'] = row['keys'][dimensions.index('QUERY')]
                             if 'Page' in selected_dimensions:
                                 data_entry['Page'] = row['keys'][dimensions.index('PAGE')]
                             if 'Device' in selected_dimensions:
@@ -245,18 +246,21 @@ if CLIENT_ID and CLIENT_SECRET:
                             data_entry['CTR'] = row['ctr']
                             data_entry['Position'] = row['position']
                             data_list.append(data_entry)
-        
+            
                         if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
                             # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
                             break
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
+            
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
-
+            
                     st.subheader("QUERIES ANALYSIS")
+            
+
 
                     col1, col2 = st.columns(2)
                     with col1:
