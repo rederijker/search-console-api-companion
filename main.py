@@ -267,10 +267,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         df = pd.DataFrame(data_list)
                         st.dataframe(df, width=2000)
             
-                        st.subheader("QUERIES ANALYSIS")
-
-            if batch_count > 0:
-                st.warning(f"Abbiamo completato {batch_count} batch di 25.000 righe ciascuno.")
+                        st.subheader("QUERIES ANALYSIS")         
 
             
                         if batch_count > 0:
