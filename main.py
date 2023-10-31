@@ -176,7 +176,9 @@ if CLIENT_ID and CLIENT_SECRET:
         
             # Aggiungi un bottone per ottenere i dati in batch
             loading_message = st.empty()
-            spinner = st.empty()
+            image_url = "https://mir-s3-cdn-cf.behance.net/project_modules/disp/e2a03d31641415.565a78be188d4.gif"
+
+
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
@@ -184,6 +186,8 @@ if CLIENT_ID and CLIENT_SECRET:
                                 # Add a message to indicate data retrieval
                     loading_message = st.empty()
                     loading_message.text("Sto scaricando i dati...")
+                    # Visualizza l'immagine GIF utilizzando l'elemento Markdown
+                    st.markdown(f"![GIF]({image_url})")
                     
                     # Add a spinner to show loading activity
                     spinner = st.spinner()
