@@ -175,15 +175,9 @@ if CLIENT_ID and CLIENT_SECRET:
                 
         
             # Aggiungi un bottone per ottenere i dati in batch
-            # Aggiungi un bottone per ottenere i dati in batch
-            # Aggiungi un bottone per ottenere i dati in batch
-            # Inizializza una variabile per tenere traccia del numero di batch completati
-            # Calcola il numero totale di batch
-            total_batches = (row_limit + 24999) // 25000 if row_limit is not None else 1
-            
-            # Aggiungi un bottone per ottenere i dati in batch
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
+                    start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
             
                     # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
@@ -199,12 +193,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     if 'Country' in selected_dimensions:
                         dimensions.append('COUNTRY')
             
-                    # Aggiungi uno spinner per indicare il caricamento
-                    progress_bar = st.progress(0.0)
-            
-                    # Utilizza un ciclo for per eseguire i batch
-                    for batch_number in range(total_batches):
-                        start_row = batch_number * 25000
+                    while True:
                         request_body = {
                             "startDate": start_date.strftime('%Y-%m-%d'),
                             "endDate": end_date.strftime('%Y-%m-%d'),
@@ -258,21 +247,18 @@ if CLIENT_ID and CLIENT_SECRET:
                             data_entry['Position'] = row['position']
                             data_list.append(data_entry)
             
-                        # Calcola il progresso e aggiorna la barra di avanzamento
-                        progress = (batch_number + 1) / total_batches
-                        progress_bar.progress(progress)
-            
-                        # Aggiorna il messaggio con il numero di batch completati
-                        st.text(f"Batch scarica {batch_number + 1}")
+                        if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
+                            # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
+                            break
+                        else:
+                            # Altrimenti, incrementa il valore di startRow per la prossima richiesta
+                            start_row += 25000
             
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
             
                     st.subheader("QUERIES ANALYSIS")
-
-            
-
             
 
 
