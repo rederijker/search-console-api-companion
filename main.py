@@ -263,6 +263,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             # Calcola il progresso e aggiorna la barra di avanzamento
                             progress = (start_row + len(response_data.get('rows', []))) / (row_limit if row_limit is not None else 25000)
+                            progress = min(progress, 1.0)  # Limita il progresso a 1.0
                             progress_bar.progress(progress)
             
                             # Aggiorna il messaggio con il numero di batch completati
