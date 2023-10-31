@@ -176,6 +176,7 @@ if CLIENT_ID and CLIENT_SECRET:
         
             # Aggiungi un bottone per ottenere i dati in batch
             # Aggiungi un bottone per ottenere i dati in batch
+            # Aggiungi un bottone per ottenere i dati in batch
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
@@ -259,7 +260,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
                                 batch_count += 1
-                                progress = (start_row + 1) / row_limit if row_limit else 0.0
+                                progress = min((start_row + 1) / row_limit, 1.0) if row_limit else 0.0  # Limita il valore a 1.0
                                 progress_bar.progress(progress)
             
                         st.subheader("Your data")
@@ -267,6 +268,10 @@ if CLIENT_ID and CLIENT_SECRET:
                         st.dataframe(df, width=2000)
             
                         st.subheader("QUERIES ANALYSIS")
+
+            if batch_count > 0:
+                st.warning(f"Abbiamo completato {batch_count} batch di 25.000 righe ciascuno.")
+
             
                         if batch_count > 0:
                             st.warning(f"Abbiamo completato {batch_count} batch di 25.000 righe ciascuno.")
