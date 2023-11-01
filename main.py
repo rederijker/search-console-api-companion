@@ -294,14 +294,10 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=df['Position'].min(), y1=df['Position'].max(), line=dict(color='red', dash='dash'))
                         fig.add_shape(type='line', x0=df['CTR'].min(), x1=df['CTR'].max(), y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))                   
                      
-                    
-
-
-
-                        
+                                    
                         # Mostra il grafico interattivo
                         with st.container():
-                            st.scatter_chart(fig, use_container_width=True)
+                            st.plotly_chart(fig, use_container_width=True)
                     
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
