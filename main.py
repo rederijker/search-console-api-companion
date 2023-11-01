@@ -253,19 +253,15 @@ if CLIENT_ID and CLIENT_SECRET:
                                 data_entry['Position'] = row['position']
                                 data_list.append(data_entry)
                             
+                            
                             if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
                                 # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
                                 break
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
-                                
-                            
-
-            
-
+                            st.text(f"Progresso: {int(start_row/row_limit*100)}%")                     
                     # Alla fine del processo, mostra un messaggio di completamento
-                    st.write("Dati scaricati con successo!")
 
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
