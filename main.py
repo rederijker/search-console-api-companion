@@ -375,7 +375,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
                         
 # Calcola i dati per il grafico delle impressioni e dei clic
-                        chart_data = df.columns=["Clicks", "Impressions", "Date"]
                        
                    
 
