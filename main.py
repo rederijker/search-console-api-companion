@@ -474,4 +474,4 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                             # Mostra il grafico ECharts utilizzando st_echarts
                             st_echarts(option=options, theme='chalk', height=400, width='100%')
-                            criar_grafico_echarts()
+                            criar_grafico_echarts(df)
