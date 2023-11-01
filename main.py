@@ -307,8 +307,8 @@ if CLIENT_ID and CLIENT_SECRET:
     
                         # Calcola la media per la posizione media e il CTR
                         df = pd.DataFrame(data_list)
-                        min_ctr = df['CTR'].min()
-                        max_ctr = df['CTR'].max()
+                        min_ctr = df['CTR'].min()*100
+                        max_ctr = df['CTR'].max()*100
                         min_position = df['Position'].min()
                         max_position = df['Position'].max()
                         
@@ -324,6 +324,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.update_yaxes(autorange="reversed")
                         fig.update_yaxes(range=[min_position, max_position], type="log")
                         fig.update_xaxes(range=[min_ctr, max_ctr], type="log")
+                        
 
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
