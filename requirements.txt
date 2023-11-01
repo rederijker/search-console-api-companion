@@ -7,4 +7,4 @@ langchain
 openai
 matplotlib
 plotly
-streamlit_extras
+streamlit-extras
