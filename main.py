@@ -309,8 +309,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         df = pd.DataFrame(data_list)
                         min_ctr = df['CTR'].min()
                         max_ctr = df['CTR'].max()
-                        min_position = df['Position'].min()
-                        max_position = df['Position'].max()
+                        
                         
                         # Calcola i valori medi di CTR e posizione
                         average_ctr = df['CTR'].mean()
@@ -319,7 +318,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Crea il grafico a bolle con Plotly
                         fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                         fig.update_yaxes(autorange="reversed")
-                        fig.update_xaxes(range=[min_ctr, max_ctr], type="log")
                         fig.update_yaxes(range=[min_position, max_position], type="log")
 
                         
