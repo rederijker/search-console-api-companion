@@ -271,7 +271,8 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     total_clicks_m = df['Clicks'].sum()
                     average_ctr_m = df['CTR'].mean()
-                    formatted_ctr_m = "{:.2f}".format(average_ctr_m)
+                    average_ctr_perc= average_ctr_m * 100
+                    formatted_ctr_m = "{:.2f}%".format(average_ctr_perc)
                     total_impressions_m = df['Impressions'].sum()
                     col1, col2, col3, col4, col5 = st.columns(5)
 
