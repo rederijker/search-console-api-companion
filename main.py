@@ -175,22 +175,10 @@ if CLIENT_ID and CLIENT_SECRET:
                 
         
             # Aggiungi un bottone per ottenere i dati in batch
-            loading_message = st.empty()
-            image_url = "https://mir-s3-cdn-cf.behance.net/project_modules/disp/e2a03d31641415.565a78be188d4.gif"
-
-
             if st.button('GET DATA'):
                 if st.session_state.selected_site is not None:
-                    
+                    start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
-                                # Add a message to indicate data retrieval
-                    loading_message = st.empty()
-                    loading_message.text("Sto scaricando i dati...")
-                    # Visualizza l'immagine GIF utilizzando l'elemento Markdown
-                    st.markdown(f"![GIF]({image_url})")
-                    
-                    # Add a spinner to show loading activity
-                    spinner = st.spinner()
             
                     # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
                     dimensions = []
@@ -206,8 +194,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         dimensions.append('COUNTRY')
             
                     while True:
-   
-
                         request_body = {
                             "startDate": start_date.strftime('%Y-%m-%d'),
                             "endDate": end_date.strftime('%Y-%m-%d'),
@@ -267,9 +253,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                             start_row += 25000
-                            st.text("Continuo a scaricare")
-                            
-                    loading_message.empty()
+            
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     st.dataframe(df, width=2000)
