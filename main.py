@@ -308,6 +308,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         df = pd.DataFrame(data_list)
 
+                        df['CTR'] = df['CTR'] * 100
+
                         min_ctr = df['CTR'].min()
                         max_ctr = df['CTR'].max()
                         min_position = df['Position'].min()
@@ -322,19 +324,20 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         fig.update_yaxes(autorange="reversed")
                         fig.update_yaxes(range=[min_position, max_position])
-                        fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
+                        fig.update_xaxes(range=[min_ctr, max_ctr])
                         fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
                         
                         # Imposta il formato percentuale per le etichette dell'asse X
-                        fig.update_xaxes(tickformat='%')
+                        fig.update_xaxes(tickformat='.2%')  # Visualizza due cifre decimali nel formato percentuale
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
                         fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                        fig.add_shape(type='line', x0=min_ctr * 100, x1=max_ctr * 100, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
+                        fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                         
                         # Mostra il grafico interattivo
                         with st.container():
                             st.plotly_chart(fig, use_container_width=True)
+                        #
                 
                         # Mostra il grafico interattivo
                         with st.container():
