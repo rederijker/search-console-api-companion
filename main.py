@@ -10,7 +10,6 @@ import plotly.express as px
 import plotly.graph_objects as go  # Importa il modulo go da Plotly
 import time
 
-
 st.set_page_config(
     page_title="Search Console API Companion",
     page_icon="🔍",
