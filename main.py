@@ -271,7 +271,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     with col1:
                         st.text("")
                     with col2:
-                        st.metric(label="f {average_position:.2f}", value=average_position)
+                        st.metric(label="Average Position", value={average_position:.2f})
                     with col3:
                         st.metric(label="Total Clicks", value=total_clicks)
 
