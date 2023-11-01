@@ -351,23 +351,40 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
                         
-                        # Estrai i dati direttamente dal DataFrame
-                       
+# Calcola i dati per il grafico delle impressioni e dei clic
+                        date_list = df['Date'].tolist()
+                        impressions_list = df['Impressions'].tolist()
+                        clicks_list = df['Clicks'].tolist()
                         
-                        # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
+                        # Crea un grafico con tre assi
+                        fig = go.Figure()
                         
-                        # Estrai i dati direttamente dal DataFrame
-                       
+                        # Traccia per le impressioni
+                        fig.add_trace(
+                            go.Scatter(x=date_list, y=impressions_list, name='Impressions', line=dict(color='blue'), yaxis='y')
+                        )
                         
-                        # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
+                        # Traccia per i clic
+                        fig.add_trace(
+                            go.Scatter(x=date_list, y=clicks_list, name='Clicks', line=dict(color='green'), yaxis='y2')
+                        )
                         
-                        # Estrai i dati direttamente dal DataFrame
-                        data_list = {
-                            'CTR': df['CTR'].tolist(),
-                            'Position': df['Position'].tolist(),
-                            'Clicks': df['Clicks'].tolist(),
-                            'Query': df['Query'].tolist()
-                        }
+                        # Imposta gli assi personalizzati
+                        fig.update_layout(
+                            yaxis=dict(title='Impressions', side='left', showgrid=False),
+                            yaxis2=dict(title='Clicks', side='right', overlaying='y', showgrid=False),
+                            xaxis=dict(title='Date'),
+                        )
+                        
+                        # Aggiungi titoli e personalizzazioni
+                        fig.update_layout(
+                            title="Impressions and Clicks Over Time",
+                            legend=dict(orientation="h"),
+                            template="plotly_dark"
+                        )
+                        
+                        # Mostra il grafico
+                        st.plotly_chart(fig, use_container_width=True)
                         
                       
                         
