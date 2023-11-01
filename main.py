@@ -314,6 +314,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Calcolare i valori medi di CTR e Posizione
                         average_ctr = df['CTR'].mean()
+                        st.write(average_ctr)
+                        st.write(max_ctr)
+                        st.write(min_ctr)
                         average_position = df['Position'].mean()
                                                 
                         # Crea il grafico a bolle con Plotly
