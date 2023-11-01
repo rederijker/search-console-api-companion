@@ -260,7 +260,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
-                            st.text(f"Progresso: {int(start_row/row_limit*100)}%")                     
+                                st.text(f"Progresso: {int((start_row / row_limit) * 100)}%" if row_limit is not None else "Progresso: Calcolo...")
+
                     # Alla fine del processo, mostra un messaggio di completamento
 
                     st.subheader("Your data")
