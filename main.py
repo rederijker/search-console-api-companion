@@ -291,7 +291,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     def example():
                         col1, col2, col3 = st.columns(3)
                     
-                        col1.metric(label="Gain", value=5000, delta=1000)
+                        col1.metric(label="Gain", value=5000, delta=1000, box_shadow=True, background_color="#3f51b5")
                         col2.metric(label="Loss", value=5000, delta=-1000)
                         col3.metric(label="No Change", value=5000, delta=0)
                     
