@@ -324,7 +324,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                         fig.update_yaxes(autorange="reversed")
                         fig.update_yaxes(range=[min_position, max_position])
-                        fig.update_xaxes(range=[min_ctr, max_ctr])
+                        fig.update_xaxes(range=[min_ctr*100, max_ctr*100])
                         
 
                         
