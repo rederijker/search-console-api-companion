@@ -259,7 +259,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
-                            st.text(f"Scaricati {start_row} righe su {row_limit} (progresso: {int(start_row/row_limit*100)}%)")
+                                st.write("Continuo lo scaricamento")
+                            
 
             
 
