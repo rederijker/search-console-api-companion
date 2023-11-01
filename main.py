@@ -308,8 +308,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         df = pd.DataFrame(data_list)
                         
-                        min_ctr = df['CTR_percent'].min()
-                        max_ctr = df['CTR_percent'].max()
+                        min_ctr = df['CTR'].min()
+                        max_ctr = df['CTR'].max()
                         min_position = df['Position'].min()
                         max_position = df['Position'].max()
                         
