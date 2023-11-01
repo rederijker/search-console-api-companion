@@ -319,6 +319,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Crea il grafico a bolle con Plotly
                         fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                         fig.update_yaxes(autorange="reversed")
+                        fig.update_xaxes(range=[min_ctr, max_ctr], type="log")
+                        fig.update_yaxes(range=[min_position, max_position], type="log")
+
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
                         fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='red', dash='dash'))
