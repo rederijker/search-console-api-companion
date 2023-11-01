@@ -394,7 +394,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     with tab2:
                         st.text("")
-                        df['Data'] = pd.to_datetime(df['Data'])  # Converti la colonna Data in tipo datetime
+                        df['Data'] = pd.to_datetime(df['Date'])  # Converti la colonna Data in tipo datetime
 
                         # Crea un grafico a serie temporale
                         st.title('Grafico Serie Temporale')
@@ -405,8 +405,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Puoi anche personalizzare il grafico aggiungendo etichette, titoli, ecc.
                         plt.figure(figsize=(10, 6))
-                        plt.plot(df['Data'], df['Impression'], label='Impression')
-                        plt.xlabel('Data')
+                        plt.plot(df['Date'], df['Impression'], label='Impression')
+                        plt.xlabel('Date')
                         plt.ylabel('Impression')
                         plt.xticks(rotation=45)
                         plt.title('Report del Traffico')
