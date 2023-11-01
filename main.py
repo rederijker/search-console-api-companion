@@ -332,10 +332,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
                         fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                         
-                        # Mostra il grafico interattivo
-                        with st.container():
-                            st.plotly_chart(fig, use_container_width=True)
-                        
+                                             
                         
                         
                         #QUERY INSIGHT             
