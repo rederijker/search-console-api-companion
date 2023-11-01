@@ -307,9 +307,6 @@ if CLIENT_ID and CLIENT_SECRET:
     
                         # Calcola la media per la posizione media e il CTR
                         df = pd.DataFrame(data_list)
-                        df['CTR_percent'] = df['CTR'] * 100  # Moltiplica per 100 per ottenere la percentuale
-                        df['CTR'] = df['CTR'].map('{:.2f}'.format)  # Formatta come stringa con due decimali
-                        df['CTR_percent'] = df['CTR_percent'].map('{:.2f}%'.format)  # Formatta come percentuale con due decimali
                         
                         min_ctr = df['CTR_percent'].min()
                         max_ctr = df['CTR_percent'].max()
