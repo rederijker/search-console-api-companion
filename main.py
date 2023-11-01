@@ -291,6 +291,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.update_yaxes(autorange="reversed")
                         fig.update_xaxes(type="log")
                         fig.update_yaxes(type="log")
+                        x_tickvals = [0.001, 0.01, 0.1, 1, 10]  # Valori logaritmici per l'asse x
+                        y_tickvals = [0.1, 1, 10, 100]  # Valori logaritmici per l'asse
 
     
                         
