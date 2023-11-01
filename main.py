@@ -370,6 +370,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.write(df_upper_low_ctr)
 
                     with tab2:
+                        st.text("")
                        
                         
                         # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
