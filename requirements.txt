@@ -8,3 +8,4 @@ openai
 matplotlib
 plotly
 streamlit-extras
+streamlit-raw-echarts
