@@ -309,7 +309,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         df = pd.DataFrame(data_list)
     
                         # Crea il grafico a bolle con Plotly
-                        fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                        fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'], log_y=True, log_x=True,)
                         fig.update_yaxes(autorange="reversed")
                         
     
