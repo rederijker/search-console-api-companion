@@ -276,7 +276,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     with col1:
         
                         chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
-                        st.line_chart(chart_data, x="Date", y=[ "Clicks"], color=["#FF0000", "#00FF00"])
+                        st.line_chart(chart_data, x="Date", y=["Clicks", ['Impressions'], color=["#FF0000", "#00FF00"])
     
                         # Crea il DataFrame con i dati delle query
                         # ...
