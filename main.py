@@ -307,8 +307,6 @@ if CLIENT_ID and CLIENT_SECRET:
     
                         # Calcola la media per la posizione media e il CTR
                         df = pd.DataFrame(data_list)
-                         # Valore minimo
-                        # Calcola i valori minimi e massimi per gli assi
                         min_ctr = df['CTR'].min()
                         max_ctr = df['CTR'].max()
                         min_position = df['Position'].min()
@@ -321,12 +319,11 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Aggiungi linee di riferimento per la media di CTR e posizione
                         fig.add_shape(type='line', x0=df['CTR'].mean(), x1=df['CTR'].mean(), y0=min_position, y1=max_position, line=dict(color='red', dash='dash'))
                         fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=df['Position'].mean(), y1=df['Position'].mean(), line=dict(color='red', dash='dash'))
-
-                                    
+                        
                         # Mostra il grafico interattivo
                         with st.container():
                             st.plotly_chart(fig, use_container_width=True)
-                      
+                            
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
