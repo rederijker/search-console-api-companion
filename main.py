@@ -351,7 +351,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
                         
 # Calcola i dati per il grafico delle impressioni e dei clic
-                        chart_data = df.columns=["Clicks", "Impressions", "Date"])
+                        chart_data = df.columns=["Clicks", "Impressions", "Date"]
                         st.line_chart(chart_data, x="Impressions", y=["Clicks", "Date"], color=["#FF0000", "#0000FF"])
                         date_list = df['Date']
                         impressions_list = df['Impressions']
