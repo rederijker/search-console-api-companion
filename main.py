@@ -275,8 +275,8 @@ if CLIENT_ID and CLIENT_SECRET:
                     col1, col2 = st.columns(2)
                     with col1:
         
-                        #chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
-                        #st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
+                        chart_data = pd.DataFrame(df, columns=["Impressions", "Clicks", "Date"])
+                        st.line_chart(chart_data, x="Date", y=["Impressions", "Clicks"], color=["#FF0000", "#00FF00"])
     
                         # Crea il DataFrame con i dati delle query
                         # ...
@@ -289,11 +289,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Crea il grafico a bolle con Plotly
                         fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                         fig.update_yaxes(autorange="reversed")
-                        fig.update_xaxes(type="log")
-                        fig.update_yaxes(type="log")
-                        x_tickvals = [0.001, 0.01, 0.1, 1, 10]  # Valori logaritmici per l'asse x
-                        y_tickvals = [0.1, 1, 10, 100]  # Valori logaritmici per l'asse
-
+                        
     
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
