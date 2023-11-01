@@ -312,7 +312,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Crea il grafico a bolle con Plotly
                         fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'], log_y=True, log_x=True,)
                         fig.update_yaxes(autorange="reversed")
-                        fig.update_xaxes(type="log", tickvals=[0, 0.5, 1], ticktext=["0", "0.5", "1"])
+                        fig.update_xaxes(type="log", tickvals=[0, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1], ticktext=["0", "0.2", "0.3", "0.42", "0.5", "0.6", "0.7", "0.8", "0.9", "1"]])
                         fig.update_yaxes(type="log", tickvals=[1, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100], ticktext=["1", "10", "20", "30", "40", "50", "60", "70", "80", "90", "100"])
                         
     
