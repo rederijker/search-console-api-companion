@@ -199,7 +199,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     with st.spinner("Downloading data..."):
             
                         while True:                       
-                               
+                            st.write("Invio richiesta")
                             request_body = {
                                 "startDate": start_date.strftime('%Y-%m-%d'),
                                 "endDate": end_date.strftime('%Y-%m-%d'),
@@ -252,7 +252,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 data_entry['CTR'] = row['ctr']
                                 data_entry['Position'] = row['position']
                                 data_list.append(data_entry)
-                
+                            st.write("verifico altri dati")
                             if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
                                 # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
                                 break
