@@ -324,7 +324,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Mostra il grafico interattivo
                         with st.container():
                             st.plotly_chart(fig, use_container_width=True)
-                    
+                      
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
@@ -332,12 +332,16 @@ if CLIENT_ID and CLIENT_SECRET:
                         lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
                         lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
                         upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
-                        df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        #Per ciascun quadrante, creare un DataFrame separato
-                        df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                        #mostrare df
+                        try:
+                            df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                            #Per ciascun quadrante, creare un DataFrame separato
+                            df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                            df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                            df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                            #mostrare df
+                        except KeyError as e:
+                            st.text("Il campo 'Page' non è presente nel DataFrame df_upper_high_ctr")
+
 
                         with st.expander("Top position and high CTR Queries"):           
                             st.write("For these queries, there's not much you need to do; you're already doing a great job.")
