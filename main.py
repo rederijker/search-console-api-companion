@@ -403,15 +403,22 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Aggiungi il CTR come secondo grafico
                         st.line_chart(df.set_index('Data')['CTR'])
                         
-                        # Puoi anche personalizzare il grafico aggiungendo etichette, titoli, ecc.
                         plt.figure(figsize=(10, 6))
-                        plt.plot(df['Date'], df['Impression'], label='Impression')
-                        plt.xlabel('Date')
-                        plt.ylabel('Impression')
+                        plt.plot(df['Data'], df['Impressions'], label='Impressions')
+                        plt.xlabel('Data')
+                        plt.ylabel('Impressions')
                         plt.xticks(rotation=45)
-                        plt.title('Report del Traffico')
+                        
+                        # Crea una seconda linea sullo stesso grafico per il CTR
+                        plt.twinx()  # Questo crea un secondo asse Y sullo stesso grafico
+                        plt.plot(df['Data'], df['CTR'], label='CTR', color='red')
+                        plt.ylabel('CTR')
+                        
+                        # Aggiungi una legenda per entrambe le linee
                         plt.legend(loc='upper left')
-                        st.pyplot(plt)  # Aggiungi il grafico personalizzato a Streamlit
+                        
+                        # Mostra il grafico sovrapposto
+                        st.pyplot(plt)
                         
                         # Mostra il dataframe
                         st.subheader('Dati')
