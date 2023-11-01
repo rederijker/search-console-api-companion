@@ -369,7 +369,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Crea il grafico a dispersione con Streamlit
                         st.subheader("Grafico a dispersione")
-                        st.scatter(df['CTR'], df['Position'], c=df['Clicks'], cmap='viridis', alpha=0.7)
+                        st.scatter_chart(df['CTR'], df['Position'], c=df['Clicks'], cmap='viridis', alpha=0.7)
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
                         ctr_mean = df['CTR'].mean()
