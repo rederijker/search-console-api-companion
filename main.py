@@ -262,9 +262,12 @@ if CLIENT_ID and CLIENT_SECRET:
                                 
 
                     # Alla fine del processo, mostra un messaggio di completamento
-
+                    
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
+                    average_position = df['Position'].mean()
+                    st.metric(label="Average position", value=average_position, delta="1.2 °F")
+
                     st.dataframe(df, width=2000)
             
                     st.subheader("QUERIES ANALYSIS")
