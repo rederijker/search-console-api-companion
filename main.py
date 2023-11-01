@@ -393,33 +393,85 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
 
                     with tab2:
-                        st.text("")
-                        df['Data'] = pd.to_datetime(df['Date'])  # Converti la colonna Data in tipo datetime
-
-                        # Crea un grafico a serie temporale
-                        st.title('Grafico Serie Temporale')
-                        st.line_chart(df.set_index('Data'))
+                        def criar_grafico_echarts(df):
+                            # Formatta la colonna 'CTR' del DataFrame
+                            df['CTR'] = df['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
+                            df['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
                         
-                        # Aggiungi il CTR come secondo grafico
-                        st.line_chart(df.set_index('Data')['CTR'])
+                            # Opzioni per il grafico ECharts
+                            options = {
+                                "xAxis": {
+                                    "type": "category",
+                                    "data": df['Date'].tolist(),
+                                    "axisLabel": {
+                                        "formatter": "{value}"
+                                    }
+                                },
+                                "yAxis": {"type": "value", "name": ""},
+                                "grid": {
+                                    "right": 20,
+                                    "left": 65,
+                                    "top": 45,
+                                    "bottom": 50,
+                                },
+                                "legend": {
+                                    "show": True,
+                                    "top": "top",
+                                    "align": "auto",
+                                    "selected": {  # Definendo la selezione iniziale delle serie
+                                        "Clicks": True,         # La serie "Clicks" è selezionata
+                                        "Impressions": True,    # La serie "Impressions" è selezionata
+                                        "CTR": False,           # La serie "CTR" non è selezionata
+                                        "Position": False       # La serie "Position" non è selezionata
+                                    }
+                                },
+                                "tooltip": {"trigger": "axis", },
+                                "series": [
+                                    {
+                                        "type": "line",
+                                        "name": "Clicks",
+                                        "data": df['Clicks'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 2.4, "color": "#8be9fd"},
+                                        "showSymbol": False,  # Rimuove i marker dei dati per questa serie
+                                    },
+                                    {
+                                        "type": "line",
+                                        "name": "Impressions",
+                                        "data": df['Impressions'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 2.4, "color": "#ffb86c"},
+                                        "showSymbol": False,  # Rimuove i marker dei dati per questa serie
+                                    },
+                                    {
+                                        "type": "line",
+                                        "name": "CTR",
+                                        "data": df['CTR'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 2.4, "color": "#50fa7b"},
+                                        "showSymbol": False,  # Rimuove i marker dei dati per questa serie
+                                    },
+                                    {
+                                        "type": "line",
+                                        "name": "Position",
+                                        "data": df['Position'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 2.4, "color": "#ff79c6"},
+                                        "showSymbol": False,  # Rimuove i marker dei dati per questa serie
+                                        "yAxisIndex": 1,  # Indica che questa serie utilizzerà il secondo asse Y
+                                        "axisLabel": {
+                                            "show": False  # Nasconde le etichette dell'asse Y per questa serie
+                                        }
+                                    },
+                                ],
+                                "yAxis": [
+                                    {"type": "value", "name": ""},
+                                    {"type": "value", "inverse": True, "show": False},  # Secondo asse Y con l'opzione "inverse"
+                                ],
+                                "backgroundColor": "#282a36",
+                                "color": ["#8be9fd", "#ffb86c", "#50fa7b", "#ff79c6"],
+                            }
                         
-                        plt.figure(figsize=(10, 6))
-                        plt.plot(df['Data'], df['Impressions'], label='Impressions')
-                        plt.xlabel('Data')
-                        plt.ylabel('Impressions')
-                        plt.xticks(rotation=45)
-                        
-                        # Crea una seconda linea sullo stesso grafico per il CTR
-                        plt.twinx()  # Questo crea un secondo asse Y sullo stesso grafico
-                        plt.plot(df['Data'], df['CTR'], label='CTR', color='red')
-                        plt.ylabel('CTR')
-                        
-                        # Aggiungi una legenda per entrambe le linee
-                        plt.legend(loc='upper left')
-                        
-                        # Mostra il grafico sovrapposto
-                        st.pyplot(plt)
-                        
-                        # Mostra il dataframe
-                        st.subheader('Dati')
-                        st.write(df)
+                            # Mostra il grafico ECharts utilizzando st_echarts
+                            st_echarts(option=options, theme='chalk', height=400, width='100%')
+                            criar_grafico_echarts(df)
