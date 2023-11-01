@@ -9,3 +9,4 @@ matplotlib
 plotly
 streamlit-extras
 streamlit-raw-echarts
+streamlit-echarts
