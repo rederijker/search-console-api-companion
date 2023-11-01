@@ -347,7 +347,36 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.write(df_upper_low_ctr)
 
                     with col2:
-                        st.text("")
+                       
+                        
+                        # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
+                        
+                        # Estrai i dati direttamente dal DataFrame
+                        data_list = {
+                            'CTR': df['CTR'].tolist(),
+                            'Position': df['Position'].tolist(),
+                            'Clicks': df['Clicks'].tolist(),
+                            'Query': df['Query'].tolist()
+                        }
+                        
+                        # Crea il DataFrame
+                        df = pd.DataFrame(data_list)
+                        
+                        # Crea il grafico a dispersione con Streamlit
+                        st.subheader("Grafico a dispersione")
+                        st.scatter(df['CTR'], df['Position'], marker='o', c=df['Clicks'], cmap='viridis', alpha=0.7)
+                        
+                        # Aggiungi linee di riferimento per la media di CTR e posizione
+                        ctr_mean = df['CTR'].mean()
+                        position_mean = df['Position'].mean()
+                        st.line_chart({'CTR Media': [ctr_mean], 'Posizione Media': [position_mean]})
+                        
+                        # Aggiungi una legenda per i punti
+                        st.write("Legenda:")
+                        st.write("- Il colore dei punti rappresenta il numero di Clicks.")
+                        st.write(f"- CTR Medio: {ctr_mean}")
+                        st.write(f"- Posizione Media: {position_mean}")
+
                         
                         
                         
