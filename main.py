@@ -476,5 +476,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                             # Mostra il grafico ECharts utilizzando st_echarts
                             st_echarts(options=options, theme='chalk', height=400, width='100%')
+                            components.html(st_echarts(options=option, theme='chalk', height=400, width='100%'))
+
                             
                         criar_grafico_echarts(df)
