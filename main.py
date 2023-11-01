@@ -266,23 +266,26 @@ if CLIENT_ID and CLIENT_SECRET:
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     average_position = df['Position'].mean()
-                    formatted_average = "{:.2f}".format(average_position)
+                    formatted_average_m= "{:.2f}".format(average_position)
 
-                    total_clicks = df['Clicks'].sum()
-                    average_ctr = df['CTR'].mean()
-                    formatted_ctr = "{:.2f}".format(average_ctr)
-                    total_impressions = df['Impressions'].sum()
-                    col1, col2, col3, col4 = st.columns(4)
+                    total_clicks_m = df['Clicks'].sum()
+                    average_ctr_m = df['CTR'].mean()
+                    formatted_ctr_m = "{:.2f}".format(average_ctr)
+                    total_impressions_m = df['Impressions'].sum()
+                    col1, col2, col3, col4, col5 = st.columns(5)
 
                     with col1:
-                        st.metric(label="Total Clicks", value=total_clicks)
-                        st.text("")
+                        st.text("Metrics")
+
                     with col2:
-                        st.metric(label="Total Impressions", value=total_impressions)         
+                        st.metric(label="Total Clicks", value=total_clicks_m)
+                        st.text("")
                     with col3:
-                        st.metric(label="Average Position", value=formatted_average)
+                        st.metric(label="Total Impressions", value=total_impressions_m)         
                     with col4:
-                        st.metric(label="Average CTR", value=formatted_ctr)
+                        st.metric(label="Average Position", value=formatted_average_m)
+                    with col5:
+                        st.metric(label="Average CTR", value=formatted_ctr_m)
                         
 
                     st.dataframe(df, width=2000)
@@ -372,10 +375,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
 # Calcola i dati per il grafico delle impressioni e dei clic
                         chart_data = df.columns=["Clicks", "Impressions", "Date"]
-                        st.line_chart(chart_data, x="Impressions", y=["Clicks", "Date"], color=["#FF0000", "#0000FF"])
-                        date_list = df['Date']
-                        impressions_list = df['Impressions']
-                        ctr_list = df['CTR']
+                       
                    
 
                         
