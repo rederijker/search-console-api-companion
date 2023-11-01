@@ -357,6 +357,11 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
                         
                         # Estrai i dati direttamente dal DataFrame
+                       
+                        
+                        # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
+                        
+                        # Estrai i dati direttamente dal DataFrame
                         data_list = {
                             'CTR': df['CTR'].tolist(),
                             'Position': df['Position'].tolist(),
@@ -367,20 +372,29 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Crea il DataFrame
                         df = pd.DataFrame(data_list)
                         
-                        # Crea il grafico a dispersione con Streamlit
-                        st.subheader("Grafico a dispersione")
-                        st.scatter_chart(df['CTR'], df['Position'], c=df['Clicks'], cmap='viridis', alpha=0.7)
+                        # Crea il grafico a dispersione con Matplotlib
+                        fig, ax = plt.subplots()
+                        scatter = ax.scatter(df['CTR'], df['Position'], c=df['Clicks'], cmap='viridis', alpha=0.7)
+                        ax.set_xlabel('CTR')
+                        ax.set_ylabel('Position')
+                        ax.set_title('Grafico a dispersione')
+                        
+                        # Aggiungi una legenda per i punti
+                        ax.legend(*scatter.legend_elements(), title='Clicks')
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
                         ctr_mean = df['CTR'].mean()
                         position_mean = df['Position'].mean()
-                        st.line_chart({'CTR Media': [ctr_mean], 'Posizione Media': [position_mean]})
+                        ax.axvline(x=ctr_mean, color='red', linestyle='--', label=f'CTR Medio: {ctr_mean}')
+                        ax.axhline(y=position_mean, color='green', linestyle='--', label=f'Posizione Media: {position_mean}')
+                        
+                        # Mostra il grafico in Streamlit
+                        st.pyplot(fig)
                         
                         # Aggiungi una legenda per i punti
                         st.write("Legenda:")
                         st.write("- Il colore dei punti rappresenta il numero di Clicks.")
-                        st.write(f"- CTR Medio: {ctr_mean}")
-                        st.write(f"- Posizione Media: {position_mean}")
+
 
 
                         
