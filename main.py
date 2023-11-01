@@ -394,3 +394,25 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     with tab2:
                         st.text("")
+                        df['Data'] = pd.to_datetime(df['Data'])  # Converti la colonna Data in tipo datetime
+
+                        # Crea un grafico a serie temporale
+                        st.title('Grafico Serie Temporale')
+                        st.line_chart(df.set_index('Data'))
+                        
+                        # Aggiungi il CTR come secondo grafico
+                        st.line_chart(df.set_index('Data')['CTR'])
+                        
+                        # Puoi anche personalizzare il grafico aggiungendo etichette, titoli, ecc.
+                        plt.figure(figsize=(10, 6))
+                        plt.plot(df['Data'], df['Impression'], label='Impression')
+                        plt.xlabel('Data')
+                        plt.ylabel('Impression')
+                        plt.xticks(rotation=45)
+                        plt.title('Report del Traffico')
+                        plt.legend(loc='upper left')
+                        st.pyplot(plt)  # Aggiungi il grafico personalizzato a Streamlit
+                        
+                        # Mostra il dataframe
+                        st.subheader('Dati')
+                        st.write(df)
