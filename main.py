@@ -266,12 +266,15 @@ if CLIENT_ID and CLIENT_SECRET:
                     st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     average_position = df['Position'].mean()
+                    formatted_average = "{:.2f}".format(average_position)
+
                     total_clicks = df['Clicks'].sum()
                     col1, col2, col3 = st.columns(3)
                     with col1:
                         st.text("")
                     with col2:
-                        st.metric(label="Average Position", value={average_position:.2f})
+                        st.metric(label="Average Position", value=formatted_average)
+
                     with col3:
                         st.metric(label="Total Clicks", value=total_clicks)
 
