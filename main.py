@@ -313,7 +313,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         max_position = df['Position'].max()
                         
                         # Calcolare i valori medi di CTR e Posizione
-                        average_ctr = df['CTR'].mean()
+                        average_ctr = df['CTR'].mean()*100
                         st.write(average_ctr)
                         st.write(max_ctr)
                         st.write(min_ctr)
