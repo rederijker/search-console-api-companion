@@ -296,6 +296,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         col3.metric(label="No Change", value=5000, delta=0)
                     
                         style_metric_cards()
+                    example()
                     st.dataframe(df, width=2000)
             
                     st.subheader("QUERIES ANALYSIS")
