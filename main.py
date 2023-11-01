@@ -307,13 +307,13 @@ if CLIENT_ID and CLIENT_SECRET:
     
                         # Calcola la media per la posizione media e il CTR
                         df = pd.DataFrame(data_list)
-                        min_ctr = df['CTR'].min()*100
-                        max_ctr = df['CTR'].max()*100
+                        min_ctr = df['CTR'].min()
+                        max_ctr = df['CTR'].max()
                         min_position = df['Position'].min()
                         max_position = df['Position'].max()
                         
                         # Calcolare i valori medi di CTR e Posizione
-                        average_ctr = df['CTR'].mean()*100
+                        average_ctr = df['CTR'].mean()
                         st.write(average_ctr)
                         st.write(max_ctr)
                         st.write(min_ctr)
@@ -322,14 +322,14 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Crea il grafico a bolle con Plotly
                         fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                         fig.update_yaxes(autorange="reversed")
-                        fig.update_yaxes(range=[min_position, max_position], type="log")
-                        fig.update_xaxes(range=[min_ctr, max_ctr], type="log")
+                        fig.update_yaxes(range=[min_position, max_position])
+                        fig.update_xaxes(range=[min_ctr, max_ctr])
                         
 
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
-                        fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='red', dash='dash'))
-                        fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='red', dash='dash'))
+                        fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='blue', dash='dash'))
+                        fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='blue', dash='dash'))
 
                 
                         # Mostra il grafico interattivo
