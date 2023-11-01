@@ -322,9 +322,12 @@ if CLIENT_ID and CLIENT_SECRET:
                                                 
                         # Crea il grafico a bolle con Plotly
                         fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                        
                         fig.update_yaxes(autorange="reversed")
                         fig.update_yaxes(range=[min_position, max_position])
                         fig.update_xaxes(range=[min_ctr*100, max_ctr*100])
+                        fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
+
                         
 
                         
