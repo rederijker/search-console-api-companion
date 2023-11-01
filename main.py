@@ -262,7 +262,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.text(f"Scaricati {start_row} righe su {row_limit} (progresso: {int(start_row/row_limit*100)}%)")
 
             
-                     st.spinner.empty()
+                    st.spinner.empty()
 
                     # Alla fine del processo, mostra un messaggio di completamento
                     st.success("Dati scaricati con successo!")
