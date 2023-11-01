@@ -354,7 +354,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         date_list = df['Date']
                         impressions_list = df['Impressions']
                         ctr_list = df['CTR']
-                        st.line_chart(chart_data, x="Impression", y="Date", color="col3")
+                        st.line_chart(impressions_list, use_container_width=True)
+
+                        st.line_chart(x=impressions_list, y=date_list, color="black")
 
                         
                         
