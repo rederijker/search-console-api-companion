@@ -272,8 +272,8 @@ if CLIENT_ID and CLIENT_SECRET:
             
 
 
-                    col1, col2 = st.columns(2)
-                    with col1:
+                    tab1, tab2 = st.tabs(["QUERY INSIGHT", "TRAFFIC REPORT"])
+                    with tab1:
         
                         
                         # Crea il DataFrame con i dati delle query
@@ -346,7 +346,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             """)
                             st.write(df_upper_low_ctr)
 
-                    with col2:
+                    with tab2:
                        
                         
                         # Supponiamo che tu abbia un DataFrame 'df' con le colonne 'CTR', 'Position', 'Clicks', 'Query'
@@ -369,34 +369,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             'Query': df['Query'].tolist()
                         }
                         
-                        # Crea il DataFrame
-                        df = pd.DataFrame(data_list)
-                        
-                        # Crea il grafico a dispersione con Matplotlib
-                        fig, ax = plt.subplots()
-                        scatter = ax.scatter(df['CTR'], df['Position'], c=df['Clicks'], cmap='viridis', alpha=0.7)
-                        ax.set_xlabel('CTR')
-                        ax.set_ylabel('Position')
-                        ax.set_title('Grafico a dispersione')
-                        
-                        # Aggiungi una legenda per i punti
-                        ax.legend(*scatter.legend_elements(), title='Clicks')
-                        
-                        # Aggiungi linee di riferimento per la media di CTR e posizione
-                        ctr_mean = df['CTR'].mean()
-                        position_mean = df['Position'].mean()
-                        ax.axvline(x=ctr_mean, color='red', linestyle='--', label=f'CTR Medio: {ctr_mean}')
-                        ax.axhline(y=position_mean, color='green', linestyle='--', label=f'Posizione Media: {position_mean}')
-                        
-                        # Mostra il grafico in Streamlit
-                        st.pyplot(fig)
-                        
-                        # Aggiungi una legenda per i punti
-                        st.write("Legenda:")
-                        st.write("- Il colore dei punti rappresenta il numero di Clicks.")
-
-
-
+                      
                         
                         
                         
