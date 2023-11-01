@@ -198,7 +198,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     
                     with st.spinner("Downloading data..."):
                                  
-                        while True:                       
+                        while True:                     
                             
                             request_body = {
                                 "startDate": start_date.strftime('%Y-%m-%d'),
@@ -260,8 +260,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
-                                prog_mess=(f"Progresso: {int((start_row / row_limit) * 100)}%" if row_limit is not None else "Progresso: Calcolo...")
-                                st.text(prog_mess)
+                                
 
                     # Alla fine del processo, mostra un messaggio di completamento
 
