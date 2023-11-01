@@ -288,7 +288,14 @@ if CLIENT_ID and CLIENT_SECRET:
                     with col5:
                         st.metric(label="Average CTR", value=formatted_ctr_m)
                         
-
+                    def example():
+                        col1, col2, col3 = st.columns(3)
+                    
+                        col1.metric(label="Gain", value=5000, delta=1000)
+                        col2.metric(label="Loss", value=5000, delta=-1000)
+                        col3.metric(label="No Change", value=5000, delta=0)
+                    
+                        style_metric_cards()
                     st.dataframe(df, width=2000)
             
                     st.subheader("QUERIES ANALYSIS")
