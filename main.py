@@ -375,7 +375,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 """)
                                 st.write(df_upper_low_ctr)
                         except KeyError as e:
-                            st.alert("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
+                            st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
 
                     with tab2:
                         st.text("")
