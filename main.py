@@ -269,15 +269,20 @@ if CLIENT_ID and CLIENT_SECRET:
                     formatted_average = "{:.2f}".format(average_position)
 
                     total_clicks = df['Clicks'].sum()
-                    col1, col2, col3 = st.columns(3)
+                    average_ctr = df['CTR'].mean()
+                    formatted_ctr = "{:.2f}".format( verage_ctr)
+                    total_impressions = df['Impressions'].sum()
+                    col1, col2, col3, col4 = st.columns(4)
+
                     with col1:
+                        st.metric(label="Total Clicks", value=total_clicks)
                         st.text("")
                     with col2:
-                        st.metric(label="Average Position", value=formatted_average)
-
+                        st.metric(label="Total Impressions", value=total_impressions)         
                     with col3:
-                        st.metric(label="Total Clicks", value=total_clicks)
-
+                        st.metric(label="Average Position", value=formatted_average)
+                    with col4:
+                        st.metric(label="Average Position", value=formatted_ctr)
                         
 
                     st.dataframe(df, width=2000)
