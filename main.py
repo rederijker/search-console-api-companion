@@ -299,7 +299,7 @@ if CLIENT_ID and CLIENT_SECRET:
             
 
 
-                    tab1, tab2 = st.tabs(["QUERY INSIGHT", "TRAFFIC REPORT"])
+                    tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "TRAFFIC REPORT"])
                     with tab1:
         
                         
@@ -475,8 +475,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             }
                         
                             # Mostra il grafico ECharts utilizzando st_echarts
-                            st_echarts(options=options, theme='chalk', height=400, width='100%')
-                            components.html(st_echarts(options=option, theme='chalk', height=400, width='100%'))
-
-                            
+                            st_echarts(options=options, theme='chalk', height=400, width='100%')                            
                         criar_grafico_echarts(df)
+                    with tab3:
+                        st.write("tab")
