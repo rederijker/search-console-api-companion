@@ -314,28 +314,29 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         
                         df = pd.DataFrame(data_list)
+                        def filter_df(filter_type, query_filter):
+                            if filter_type == "Contiene":
+                                return df[df['Query'].str.contains(query_filter, case=False, na=False)]
+                            elif filter_type == "Non Contiene":
+                                return df[~df['Query'].str.contains(query_filter, case=False, na=False)]
+                            elif filter_type == "Uguale a":
+                                return df[df['Query'] == query_filter]
+                            elif filter_type == "Espressione Regolare":
+                                try:
+                                    pattern = re.compile(query_filter, re.IGNORECASE)
+                                    return df[df['Query'].str.contains(pattern, na=False)]
+                                except re.error:
+                                    st.error("Espressione regolare non valida. Riprova.")
+                            return df
+                        
                         if 'filter_type' not in st.session_state:
                             st.session_state.filter_type = "Contiene"
                         
-                        # Aggiungi una casella di testo per il filtro di query
-                        query_filter = st.text_input("Filtro Query", key="query_filter")
+                        filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"], key='select')
                         
-                        # Aggiungi una scelta per il tipo di filtro
-                        filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"], index=["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"].index(st.session_state.filter_type))
+                        query_filter = st.text_input("Filtro Query", key="query_input")
                         
-                        # Filtra il DataFrame in base ai filtri inseriti
-                        if filter_type == "Contiene":
-                            filtered_df = df[df['Query'].str.contains(query_filter, case=False, na=False)]
-                        elif filter_type == "Non Contiene":
-                            filtered_df = df[~df['Query'].str.contains(query_filter, case=False, na=False)]
-                        elif filter_type == "Uguale a":
-                            filtered_df = df[df['Query'] == query_filter]
-                        elif filter_type == "Espressione Regolare":
-                            try:
-                                pattern = re.compile(query_filter, re.IGNORECASE)
-                                filtered_df = df[df['Query'].str.contains(pattern, na=False)]
-                            except re.error:
-                                st.error("Espressione regolare non valida. Riprova.")
+                        filtered_df = filter_df(filter_type, query_filter)
                         
                         # Calcola i valori minimi e massimi per il grafico
                         min_ctr = filtered_df['CTR'].min()
@@ -362,6 +363,10 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Mostra il grafico interattivo
                         st.subheader("Bubble Charts")
                         st.plotly_chart(fig, use_container_width=True)
+
+
+
+                        
                             
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
