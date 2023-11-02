@@ -157,7 +157,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         dec_31,
                         format="MM.DD.YYYY",
                     )
-                    d
+                    
                
                 
             with col2:
