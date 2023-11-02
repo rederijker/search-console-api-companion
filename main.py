@@ -314,29 +314,34 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         
                         df = pd.DataFrame(data_list)
-                        st.subheader("Filtri")
+                        @st.cache
+                        def filter_data(query_filter, filter_type):
+                            if filter_type == "Contiene":
+                                return df[df['Query'].str.contains(query_filter, case=False, na=False)]
+                            elif filter_type == "Non Contiene":
+                                return df[~df['Query'].str.contains(query_filter, case=False, na=False)]
+                            elif filter_type == "Uguale a":
+                                return df[df['Query'] == query_filter]
+                            elif filter_type == "Espressione Regolare":
+                                try:
+                                    pattern = re.compile(query_filter, re.IGNORECASE)
+                                    return df[df['Query'].str.contains(pattern, na=False)]
+                                except re.error:
+                                    st.error("Espressione regolare non valida. Riprova.")
                         
-                        # Aggiungi una casella di testo per il filtro di query
-                        query_filter = st.text_input("Filtro Query")
-                    
-                        # Aggiungi una scelta per il tipo di filtro
-                        filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"])
-                    
-                    # Filtra il DataFrame in base al filtro inserito
-                        if filter_type == "Contiene":
-                            filtered_df = df[df['Query'].str.contains(query_filter, case=False, na=False)]
-                        elif filter_type == "Non Contiene":
-                            filtered_df = df[~df['Query'].str.contains(query_filter, case=False, na=False)]
-                        elif filter_type == "Uguale a":
-                            filtered_df = df[df['Query'] == query_filter]
-                        elif filter_type == "Espressione Regolare":
-                            try:
-                                pattern = re.compile(query_filter, re.IGNORECASE)
-                                filtered_df = df[df['Query'].str.contains(pattern, na=False)]
-                            except re.error:
-                                st.error("Espressione regolare non valida. Riprova.")
-                    
-                    # Calcola i valori minimi e massimi per il grafico
+                        with st.sidebar:
+                            st.subheader("Filtri")
+                            
+                            # Aggiungi una casella di testo per il filtro di query
+                            query_filter = st.text_input("Filtro Query")
+                        
+                            # Aggiungi una scelta per il tipo di filtro
+                            filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"])
+                        
+                        # Filtra il DataFrame in base al filtro inserito
+                        filtered_df = filter_data(query_filter, filter_type)
+                        
+                        # Calcola i valori minimi e massimi per il grafico
                         min_ctr = filtered_df['CTR'].min()
                         max_ctr = filtered_df['CTR'].max()
                         min_position = filtered_df['Position'].min()
@@ -359,7 +364,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                         
                         # Mostra il grafico interattivo
-                       
+                        st.subheader("Bubble Charts")
                         st.plotly_chart(fig, use_container_width=True)
 
                         
