@@ -410,12 +410,12 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             # Calcola la media dei clic solo tra le pagine distinte
                             average_clic_df_popular = df_popular_page_1['Clicks'].mean()
-                            
+                            st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
+
                             # Filtra le pagine con clic maggiori o uguali alla media
-                            popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > 50]
+                            popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
                             
                             # Calcola la nuova media solo per le pagine popolari
-                            average_clic_df_popular = popular_pages['Clicks'].mean()
                             
                             # Visualizza la media
                             st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
