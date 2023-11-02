@@ -405,18 +405,19 @@ if CLIENT_ID and CLIENT_SECRET:
                       
                         best_page = df[(df['Position'] >= 10) & (df['CTR'] >= average_ctr)]
                         try:
+                            # Calcola la somma di "Impressions", "Clicks", "CTR", e "Position" per ogni pagina
                             df_popular_page_1 = df.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
-
-                            # Calcola la media dei clic per tutte le pagine
+                            
+                            # Calcola la media dei clic solo tra le pagine distinte
                             average_clic_df_popular = df_popular_page_1['Clicks'].mean()
                             
-                            # Filtra le pagine popolari (con clic maggiori della media)
-                            popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
+                            # Filtra le pagine con clic maggiori o uguali alla media
+                            popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] >= average_clic_df_popular]
                             
                             # Calcola la nuova media solo per le pagine popolari
                             average_clic_df_popular = popular_pages['Clicks'].mean()
                             
-                            # Visualizza la nuova media
+                            # Visualizza la media
                             st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
                             
                             # Visualizza le pagine popolari
