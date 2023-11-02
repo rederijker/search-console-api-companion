@@ -323,10 +323,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Aggiungi una scelta per il tipo di filtro
                         filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"], index=["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"].index(st.session_state.filter_type))
                         
-                        # Aggiorna la session state con il valore corrente del filtro
-                        st.session_state.filter_type = filter_type
-                        
-                        # Filtra il DataFrame in base al filtro inserito
+                        # Filtra il DataFrame in base ai filtri inseriti
                         if filter_type == "Contiene":
                             filtered_df = df[df['Query'].str.contains(query_filter, case=False, na=False)]
                         elif filter_type == "Non Contiene":
