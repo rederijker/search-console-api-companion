@@ -33,8 +33,7 @@ if 'selected_site' not in st.session_state:
 if 'available_sites' not in st.session_state:
     st.session_state.available_sites = []
 
-if 'dimension_filters' not in st.session_state:
-    st.session_state.dimension_filters = {}
+
 
 
 # Definizione dello scope OAuth per l'autorizzazione
