@@ -410,7 +410,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             average_clic_df_popular = df_popular_page_1['Clicks'].mean()
 
-                            n_popular_df = adf_popular_page_1[(df['Clicks'] > average_clic_df_popular]
+                            n_popular_df = adf_popular_page_1[(df['Clicks'] > average_clic_df_popular)]
 
                             with st.expander("1. Popular page"):
                                 st.write(average_clic)
