@@ -314,7 +314,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         
                         df = pd.DataFrame(data_list)
-                        # Inizializza la session state
                         if 'filter_type' not in st.session_state:
                             st.session_state.filter_type = "Contiene"
                         
