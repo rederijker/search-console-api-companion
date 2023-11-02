@@ -413,7 +413,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             n_popular_df = df_popular_page_1[(df['Clicks'] > average_clic_df_popular)]
 
                             with st.expander("1. Popular page"):
-                                st.write(average_clic)
+                                
                                 st.write("Page with high clicks and high impression")
                                 st.write(n_popular_df)
                         except KeyError as e:
