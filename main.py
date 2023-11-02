@@ -404,7 +404,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
-                        popular_page = df[(df['Clicks'] > average_clic) & (df['Impressions'] > average_impression)]
+                        popular_page = df[(df['Clicks'] > average_clic)]
                         best_page = df[(df['Position'] >= 10) & (df['CTR'] >= average_ctr)]
                         try:
                             df_popular_page = popular_page.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
