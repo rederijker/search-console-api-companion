@@ -35,9 +35,7 @@ if 'available_sites' not in st.session_state:
 
 if 'dimension_filters' not in st.session_state:
     st.session_state.dimension_filters = {}
-    
-if 'filter_type' not in st.session_state:
-    st.session_state.filter_type = "Contiene"
+
 
 # Definizione dello scope OAuth per l'autorizzazione
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
@@ -316,55 +314,64 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Estrai le colonne rilevanti dal DataFrame    
                         # Calcola la media per la posizione media e il CTR
                         
-                        df = pd.DataFrame(data_list)
-                        def filter_df(filter_type, query_filter):
-                            if filter_type == "Contiene":
-                                return df[df['Query'].str.contains(query_filter, case=False, na=False)]
-                            elif filter_type == "Non Contiene":
-                                return df[~df['Query'].str.contains(query_filter, case=False, na=False)]
-                            elif filter_type == "Uguale a":
-                                return df[df['Query'] == query_filter]
-                            elif filter_type == "Espressione Regolare":
-                                try:
-                                    pattern = re.compile(query_filter, re.IGNORECASE)
-                                    return df[df['Query'].str.contains(pattern, na=False)]
-                                except re.error:
-                                    st.error("Espressione regolare non valida. Riprova.")
-                            return df
+                        df = pd.DataFrame(data_list)                        
                         
-                       
+
+                        if 'query_filters' not in st.session_state:
+                            st.session_state.query_filters = {}
                         
-                        filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"], key='select')
+                        # Crea i tab
+                        tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "TRAFFIC REPORT"])
+                        with tab1:
+                            # Aggiungi un pannello di espansione per i filtri delle query
+                            with st.expander("Filters for Queries"):
+                                unique_key = 0
+                                operator_options = ['equals', 'contains', 'notEquals', 'notContains', 'includingRegex', 'excludingRegex']
+                                for query in df['Query'].unique():
+                                    col1, col2 = st.columns(2)
+                                    with col1:
+                                        operator = st.selectbox(f'Query: {query}', operator_options, key=unique_key)
+                                    with col2:
+                                        filter_value = st.text_input(label="", placeholder="Value", key=unique_key)
+                                    unique_key += 1
+                                    st.session_state.query_filters[query] = {'operator': operator, 'filter_value': filter_value}
+                            
+                            # Creazione del DataFrame filtrato in base ai filtri delle query
+                            filtered_df = df.copy()
+                            for query, filter_data in st.session_state.query_filters.items():
+                                operator = filter_data['operator']
+                                filter_value = filter_data['filter_value']
+                                if operator == 'equals':
+                                    filtered_df = filtered_df[filtered_df['Query'] == query]
+                                elif operator == 'contains':
+                                    filtered_df = filtered_df[filtered_df['Query'].str.contains(filter_value, case=False, na=False)]
+                                elif operator == 'notEquals':
+                                    filtered_df = filtered_df[filtered_df['Query'] != query]
+                                elif operator == 'notContains':
+                                    filtered_df = filtered_df[~filtered_df['Query'].str.contains(filter_value, case=False, na=False)]
+                                elif operator == 'includingRegex':
+                                    filtered_df = filtered_df[filtered_df['Query'].str.contains(filter_value, case=False, na=False, regex=True)]
+                                elif operator == 'excludingRegex':
+                                    filtered_df = filtered_df[~filtered_df['Query'].str.contains(filter_value, case=False, na=False, regex=True]
                         
-                        query_filter = st.text_input("Filtro Query", key="query_input")
+                            # Crea il grafico a bolle utilizzando il DataFrame filtrato
+                            fig = px.scatter(filtered_df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                         
-                        filtered_df = filter_df(filter_type, query_filter)
+                            fig.update_yaxes(autorange="reversed")
+                            fig.update_yaxes(range=[filtered_df['Position'].min(), filtered_df['Position'].max()])
+                            fig.update_xaxes(range=[filtered_df['CTR'].min() * 100, filtered_df['CTR'].max() * 100])
+                            fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
                         
-                        # Calcola i valori minimi e massimi per il grafico
-                        min_ctr = filtered_df['CTR'].min()
-                        max_ctr = filtered_df['CTR'].max()
-                        min_position = filtered_df['Position'].min()
-                        max_position = filtered_df['Position'].max()
+                            average_ctr = filtered_df['CTR'].mean()
+                            average_position = filtered_df['Position'].mean()
                         
-                        # Calcola i valori medi di CTR e Posizione solo per le query selezionate
-                        average_ctr = filtered_df['CTR'].mean()
-                        average_position = filtered_df['Position'].mean()
+                            fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=filtered_df['Position'].min(),
+                                          y1=filtered_df['Position'].max(), line=dict(color='green', dash='dash'))
+                            fig.add_shape(type='line', x0=filtered_df['CTR'].min() * 100, x1=filtered_df['CTR'].max() * 100,
+                                          y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                         
-                        # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-                        fig = px.scatter(filtered_df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
-                        
-                        fig.update_yaxes(autorange="reversed")
-                        fig.update_yaxes(range=[min_position, max_position])
-                        fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
-                        fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
-                        
-                        # Aggiungi linee di riferimento per la media di CTR e posizione
-                        fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                        fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
-                        
-                        # Mostra il grafico interattivo
-                        st.subheader("Bubble Charts")
-                        st.plotly_chart(fig, use_container_width=True)
+                            st.subheader("Bubble Charts")
+                            st.plotly_chart(fig, use_container_width=True)
 
 
 
