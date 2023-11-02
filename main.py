@@ -409,7 +409,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         try:
                             df_popular_page = popular_page.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
                             with st.expander("1. Popular page"):
-                                st.writer("Page with high clicks and high impression"
+                                st.write("Page with high clicks and high impression"
                                 st.write(df_popular_page)
                         except KeyError as e:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
