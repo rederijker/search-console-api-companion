@@ -407,16 +407,22 @@ if CLIENT_ID and CLIENT_SECRET:
                         try:
                             df_popular_page_1 = df.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
 
-                            
+                            # Calcola la media dei clic per tutte le pagine
                             average_clic_df_popular = df_popular_page_1['Clicks'].mean()
-                            st.write(average_clic_df_popular)
-
-                            n_popular_df = df_popular_page_1[(df['Clicks'] > average_clic_df_popular)]
-
-                            with st.expander("1. Popular page"):
-                                
-                                st.write("Page with high clicks and high impression")
-                                st.write(n_popular_df)
+                            
+                            # Filtra le pagine popolari (con clic maggiori della media)
+                            popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
+                            
+                            # Calcola la nuova media solo per le pagine popolari
+                            average_clic_df_popular = popular_pages['Clicks'].mean()
+                            
+                            # Visualizza la nuova media
+                            st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
+                            
+                            # Visualizza le pagine popolari
+                            with st.expander("1. Pagine popolari"):
+                                st.write("Pagine con clic elevati e alta impressione")
+                                st.write(popular_pages)
                         except KeyError as e:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
                         
