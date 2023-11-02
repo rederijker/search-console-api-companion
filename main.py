@@ -407,7 +407,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         popular_page = df[(df['Clicks'] > average_clic)]
                         best_page = df[(df['Position'] >= 10) & (df['CTR'] >= average_ctr)]
                         try:
-                            df_popular_page = popular_page.groupby('Page')['Impressions', 'Clicks', 'CTR', 'Position'].sum().reset_index()
+                            df_popular_page = popular_page.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
                             df_best_page = popular_page[['Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                             st.write(df_popular_page)
                         except KeyError as e:
