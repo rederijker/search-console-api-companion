@@ -145,6 +145,19 @@ if CLIENT_ID and CLIENT_SECRET:
                 with st.container():                   
                          start_date = st.date_input('Start date', pd.to_datetime(three_months_ago))                   
                          end_date = st.date_input('End date', pd.to_datetime(today))
+                    today = datetime.datetime.now()
+                    next_year = today.year + 1
+                    jan_1 = datetime.date(next_year, 1, 1)
+                    dec_31 = datetime.date(next_year, 12, 31)
+                    
+                    d = st.date_input(
+                        "Select your vacation for next year",
+                        (jan_1, datetime.date(next_year, 1, 7)),
+                        jan_1,
+                        dec_31,
+                        format="MM.DD.YYYY",
+                    )
+                    d
                
                 
             with col2:
@@ -399,6 +412,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
 
                     with tab2:
+                        st_echarts(options=options, theme='chalk', height=400, width='100%')                            
+                        criar_grafico_echarts(df)
                         def criar_grafico_echarts(df):
                             # Formatta la colonna 'CTR' del DataFrame
                             df['CTR'] = df['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
@@ -479,7 +494,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             }
                         
                             # Mostra il grafico ECharts utilizzando st_echarts
-                            st_echarts(options=options, theme='chalk', height=400, width='100%')                            
                         criar_grafico_echarts(df)
                     with tab3:
                         st.write("tab")
