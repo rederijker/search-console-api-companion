@@ -314,19 +314,17 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         
                         df = pd.DataFrame(data_list)
-                        if 'query_filter' not in st.session_state:
-                            st.session_state.query_filter = ""
+                        # Inizializza la session state
                         if 'filter_type' not in st.session_state:
                             st.session_state.filter_type = "Contiene"
                         
                         # Aggiungi una casella di testo per il filtro di query
-                        query_filter = st.text_input("Filtro Query", st.session_state.query_filter)
+                        query_filter = st.text_input("Filtro Query", key="query_filter")
                         
                         # Aggiungi una scelta per il tipo di filtro
                         filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"], index=["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"].index(st.session_state.filter_type))
                         
-                        # Aggiorna la session state con i valori correnti dei filtri
-                        st.session_state.query_filter = query_filter
+                        # Aggiorna la session state con il valore corrente del filtro
                         st.session_state.filter_type = filter_type
                         
                         # Filtra il DataFrame in base al filtro inserito
@@ -368,7 +366,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Mostra il grafico interattivo
                         st.subheader("Bubble Charts")
                         st.plotly_chart(fig, use_container_width=True)
-                        
                             
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
