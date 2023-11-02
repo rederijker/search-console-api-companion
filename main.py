@@ -400,16 +400,17 @@ if CLIENT_ID and CLIENT_SECRET:
 
 
                         average_clic = df['Clicks'].mean()
-                        average_impression_df= df['Impressions'].mean()
+                        average_impression = df['Impressions'].mean()
                         
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
-                        popular_page = df[(df['Clicks'] > average_clic)]
+                        popular_page = df[(df['Clicks'] > average_clic) & (df['Impressions'] > average_impression)]
                         best_page = df[(df['Position'] >= 10) & (df['CTR'] >= average_ctr)]
                         try:
                             df_popular_page = popular_page.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
-                            df_best_page = popular_page[['Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                            st.write(df_popular_page)
+                            with st.expander("1. Popular page"):
+                                st.writer("Page with high clicks and high impression"
+                                st.write(df_popular_page)
                         except KeyError as e:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
                         
