@@ -400,7 +400,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
 
                         average_clic = df['Clicks'].mean()
-                        average_impression df['Impressions'].mean()
+                        average_impression_df['Impressions'].mean()
                         
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
