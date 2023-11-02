@@ -352,7 +352,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 elif operator == 'includingRegex':
                                     filtered_df = filtered_df[filtered_df['Query'].str.contains(filter_value, case=False, na=False, regex=True)]
                                 elif operator == 'excludingRegex':
-                                    filtered_df = filtered_df[~filtered_df['Query'].str.contains(filter_value, case=False, na=False, regex=True]
+                                    filtered_df = filtered_df[~filtered_df['Query'].str.contains(filter_value, case=False, na=False, regex=True)]
                         
                             # Crea il grafico a bolle utilizzando il DataFrame filtrato
                             fig = px.scatter(filtered_df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
