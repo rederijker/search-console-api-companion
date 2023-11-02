@@ -11,6 +11,7 @@ import plotly.graph_objects as go  # Importa il modulo go da Plotly
 import time
 from streamlit_extras.metric_cards import style_metric_cards 
 from streamlit_echarts import st_echarts
+from datetime import datetime, timedelta
 
 
 
@@ -136,11 +137,14 @@ if CLIENT_ID and CLIENT_SECRET:
                     'Image': 'image',
                     'Video': 'video'
                 }
-              
+                today = datetime.now()
+                # Calcola la data di 3 mesi fa
+                three_months_ago = today - timedelta(days=90)
+
                 selected_type = st.selectbox('CHANNEL', list(options_type.keys()))
                 with st.container():                   
-                         start_date = st.date_input('Start date', pd.to_datetime('2023-01-01'))                   
-                         end_date = st.date_input('End date', pd.to_datetime('2023-10-28'))
+                         start_date = st.date_input('Start date', pd.to_datetime(three_months_ago))                   
+                         end_date = st.date_input('End date', pd.to_datetime(today))
                
                 
             with col2:
