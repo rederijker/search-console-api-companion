@@ -145,18 +145,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 with st.container():                   
                     start_date = st.date_input('Start date', pd.to_datetime(three_months_ago))                   
                     end_date = st.date_input('End date', pd.to_datetime(today))
-                    today = datetime.datetime.now()
-                    next_year = today.year + 1
-                    jan_1 = datetime.date(next_year, 1, 1)
-                    dec_31 = datetime.date(next_year, 12, 31)
-                    
-                    d = st.date_input(
-                        "Select your vacation for next year",
-                        (jan_1, datetime.date(next_year, 1, 7)),
-                        jan_1,
-                        dec_31,
-                        format="MM.DD.YYYY",
-                    )
+                
                     
                
                 
