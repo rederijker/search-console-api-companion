@@ -401,8 +401,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
 
                     with tab2:
-                        st_echarts(options=options, theme='chalk', height=400, width='100%')                            
-                        criar_grafico_echarts(df)
+                        
                         def criar_grafico_echarts(df):
                             # Formatta la colonna 'CTR' del DataFrame
                             df['CTR'] = df['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
