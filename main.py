@@ -35,6 +35,9 @@ if 'available_sites' not in st.session_state:
 
 if 'dimension_filters' not in st.session_state:
     st.session_state.dimension_filters = {}
+    
+if 'filter_type' not in st.session_state:
+    st.session_state.filter_type = "Contiene"
 
 # Definizione dello scope OAuth per l'autorizzazione
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
@@ -329,8 +332,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                     st.error("Espressione regolare non valida. Riprova.")
                             return df
                         
-                        if 'filter_type' not in st.session_state:
-                            st.session_state.filter_type = "Contiene"
+                       
                         
                         filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"], key='select')
                         
