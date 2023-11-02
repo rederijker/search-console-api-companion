@@ -396,7 +396,21 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
 
                     with tab2:
-                        st.write("tab2")                       
+                        st.write("tab2")           
+
+
+                        average_clic = df['Clicks'].mean()
+                        average_impression df['Impressions'].mean()
+                        
+                        #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
+                      
+                        popular_page = df[(df['Clicks'] > average_clic)]
+                        best_page = df[(df['Position'] >= 10) & (df['CTR'] >= average_ctr)]
+                        try:
+                            df_popular_page = popular_page[['Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                            df_best_page = popular_page[['Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                            st.write(df_popular_page)
+                            
                         
                     with tab3:
                         st.write("tab")
