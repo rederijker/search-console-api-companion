@@ -314,39 +314,55 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         
                         df = pd.DataFrame(data_list)
-
-                        min_ctr = df['CTR'].min()
-                        max_ctr = df['CTR'].max()
-                        min_position = df['Position'].min()
-                        max_position = df['Position'].max()
+                        st.subheader("Filtri")
                         
-                        # Calcolare i valori medi di CTR e Posizione
-                        average_ctr = df['CTR'].mean()
-                        st.write(average_ctr)
-                        st.write(max_ctr)
-                        st.write(min_ctr)
-                        average_position = df['Position'].mean()
-                                                
-                        # Crea il grafico a bolle con Plotly
-                        fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                        # Aggiungi una casella di testo per il filtro di query
+                        query_filter = st.text_input("Filtro Query")
+                    
+                        # Aggiungi una scelta per il tipo di filtro
+                        filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"])
+                    
+                    # Filtra il DataFrame in base al filtro inserito
+                        if filter_type == "Contiene":
+                            filtered_df = df[df['Query'].str.contains(query_filter, case=False, na=False)]
+                        elif filter_type == "Non Contiene":
+                            filtered_df = df[~df['Query'].str.contains(query_filter, case=False, na=False)]
+                        elif filter_type == "Uguale a":
+                            filtered_df = df[df['Query'] == query_filter]
+                        elif filter_type == "Espressione Regolare":
+                            try:
+                                pattern = re.compile(query_filter, re.IGNORECASE)
+                                filtered_df = df[df['Query'].str.contains(pattern, na=False)]
+                            except re.error:
+                                st.error("Espressione regolare non valida. Riprova.")
+                    
+                    # Calcola i valori minimi e massimi per il grafico
+                        min_ctr = filtered_df['CTR'].min()
+                        max_ctr = filtered_df['CTR'].max()
+                        min_position = filtered_df['Position'].min()
+                        max_position = filtered_df['Position'].max()
+                        
+                        # Calcola i valori medi di CTR e Posizione solo per le query selezionate
+                        average_ctr = filtered_df['CTR'].mean()
+                        average_position = filtered_df['Position'].mean()
+                        
+                        # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
+                        fig = px.scatter(filtered_df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                         
                         fig.update_yaxes(autorange="reversed")
                         fig.update_yaxes(range=[min_position, max_position])
-                        fig.update_xaxes(range=[min_ctr*100, max_ctr*100])
-                        fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X                       
-
+                        fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
+                        fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
                         
                         # Aggiungi linee di riferimento per la media di CTR e posizione
                         fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
                         fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                         
-                                             
-                        
-                        
-                        #QUERY INSIGHT             
                         # Mostra il grafico interattivo
-                        with st.container():
-                            st.plotly_chart(fig, use_container_width=True)
+                       
+                        st.plotly_chart(fig, use_container_width=True)
+
+                        
                             
                         average_position = df['Position'].mean()
                         average_ctr = df['CTR'].mean()
