@@ -410,7 +410,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_popular_page = popular_page[['Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                             df_best_page = popular_page[['Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                             st.write(df_popular_page)
-                            
+                         except KeyError as e:
+                            st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
                         
                     with tab3:
                         st.write("tab")
