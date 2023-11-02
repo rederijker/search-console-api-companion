@@ -314,32 +314,34 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Calcola la media per la posizione media e il CTR
                         
                         df = pd.DataFrame(data_list)
-                        @st.cache
-                        def filter_data(query_filter, filter_type):
-                            if filter_type == "Contiene":
-                                return df[df['Query'].str.contains(query_filter, case=False, na=False)]
-                            elif filter_type == "Non Contiene":
-                                return df[~df['Query'].str.contains(query_filter, case=False, na=False)]
-                            elif filter_type == "Uguale a":
-                                return df[df['Query'] == query_filter]
-                            elif filter_type == "Espressione Regolare":
-                                try:
-                                    pattern = re.compile(query_filter, re.IGNORECASE)
-                                    return df[df['Query'].str.contains(pattern, na=False)]
-                                except re.error:
-                                    st.error("Espressione regolare non valida. Riprova.")
+                        if 'query_filter' not in st.session_state:
+                            st.session_state.query_filter = ""
+                        if 'filter_type' not in st.session_state:
+                            st.session_state.filter_type = "Contiene"
                         
-                        with st.sidebar:
-                            st.subheader("Filtri")
-                            
-                            # Aggiungi una casella di testo per il filtro di query
-                            query_filter = st.text_input("Filtro Query")
+                        # Aggiungi una casella di testo per il filtro di query
+                        query_filter = st.text_input("Filtro Query", st.session_state.query_filter)
                         
-                            # Aggiungi una scelta per il tipo di filtro
-                            filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"])
+                        # Aggiungi una scelta per il tipo di filtro
+                        filter_type = st.selectbox("Tipo di filtro", ["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"], index=["Contiene", "Non Contiene", "Uguale a", "Espressione Regolare"].index(st.session_state.filter_type))
+                        
+                        # Aggiorna la session state con i valori correnti dei filtri
+                        st.session_state.query_filter = query_filter
+                        st.session_state.filter_type = filter_type
                         
                         # Filtra il DataFrame in base al filtro inserito
-                        filtered_df = filter_data(query_filter, filter_type)
+                        if filter_type == "Contiene":
+                            filtered_df = df[df['Query'].str.contains(query_filter, case=False, na=False)]
+                        elif filter_type == "Non Contiene":
+                            filtered_df = df[~df['Query'].str.contains(query_filter, case=False, na=False)]
+                        elif filter_type == "Uguale a":
+                            filtered_df = df[df['Query'] == query_filter]
+                        elif filter_type == "Espressione Regolare":
+                            try:
+                                pattern = re.compile(query_filter, re.IGNORECASE)
+                                filtered_df = df[df['Query'].str.contains(pattern, na=False)]
+                            except re.error:
+                                st.error("Espressione regolare non valida. Riprova.")
                         
                         # Calcola i valori minimi e massimi per il grafico
                         min_ctr = filtered_df['CTR'].min()
@@ -366,7 +368,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Mostra il grafico interattivo
                         st.subheader("Bubble Charts")
                         st.plotly_chart(fig, use_container_width=True)
-
                         
                             
                         average_position = df['Position'].mean()
