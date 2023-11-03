@@ -404,11 +404,11 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
-                        best_page = df[(df['Position'] >= 10) & (df['CTR'] >= average_ctr)]
                         try:
                             # Calcola la somma di "Impressions", "Clicks", "CTR", e "Position" per ogni pagina
                             df_popular_page_1 = df.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
-                            
+
+                                                       
                             # Calcola la media dei clic solo tra le pagine distinte
                             average_clic_df_popular = df_popular_page_1['Clicks'].mean()
                             # Calcola impression solo tra le pagine distinte
@@ -418,6 +418,10 @@ if CLIENT_ID and CLIENT_SECRET:
 
                             # Filtra le pagine con clic maggiori o uguali alla media
                             popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
+                            popular_pages['CTR'] = popular_pages['CTR'].apply(lambda x: f"{x:.4f}")
+                            popular_pages['Position'] = popular_pages['Position'] / 1000  # Dividi per 1000 per ottenere il formato "8,5"
+                            popular_pages['Position'] = popular_pages['Position'].apply(lambda x: f"{x:.1f}")
+
                             
                             # Calcola la nuova media solo per le pagine popolari
                             
@@ -426,7 +430,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Visualizza le pagine popolari
                             with st.expander("1. Pagine popolari"):
                                 st.write("Pagine con clic elevati e alta impressione")
-                                st.write( df_popular_page_1 )
+                                st.write(popular_pages)
                         except KeyError as e:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
                         
