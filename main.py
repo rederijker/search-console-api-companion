@@ -416,7 +416,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
                             #Calcoliamo il CTR dividendo click per impression
                             df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
-                            #presentiamo il CTR come %
+                            # calcoliamo ctr medio e presentiamo il CTR come %
                             average_ctr_popular = df_aggregated_popular_page['CTR'].mean()
                             format_average_ctr_popular = "{:.2%}".format(average_ctr_popular)
                             df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
@@ -424,6 +424,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
                             df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
+                            average_position_popular =  df_aggregated_popular_page['Position'].mean()
                             #cambia nome alla colonna
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})                         
                             # Calcola la media dei clic solo tra le pagine distinte
@@ -436,7 +437,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
 
-                            col1, col2, col3, col4 = st.columns(4)
+                            col1, col2, col3, col4, col5 = st.columns(5)
                             
                             format_average_clicks_popular = "{:.2f}".format(average_clic_df_popular)
                             format_average_impression_popular = "{:.2f}".format(average_impression_df_pupular)
@@ -448,7 +449,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col3:
                                 st.metric("Pages Average Impressions", value=format_average_impression_popular)
                             with col4:
-                                st.metric("Page Average Position", value=format_average_ctr_popular)
+                                st.metric("Pages Average CTR", value=format_average_ctr_popular)
+                            with col5:
+                                st.metric("Pages Average Position", value=average_position_popular)
 
 
 
