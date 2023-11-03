@@ -413,7 +413,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_clic_df_popular = df_popular_page_1['Clicks'].mean()
                             # Calcola impression solo tra le pagine distinte
 
-                            average_impression_df_popular = df_popular_page_1['Impressions'].mean()
                             
                             st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
 
@@ -427,7 +426,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Visualizza le pagine popolari
                             with st.expander("1. Pagine popolari"):
                                 st.write("Pagine con clic elevati e alta impressione")
-                                st.write(popular_pages)
+                                st.write( df_popular_page_1 )
                         except KeyError as e:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
                         
