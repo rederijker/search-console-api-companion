@@ -418,7 +418,8 @@ if CLIENT_ID and CLIENT_SECRET:
 
                             # Filtra le pagine con clic maggiori o uguali alla media
                             popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
-                         
+                            popular_pages['Impression'] = popular_pages['Impression'].str.replace(',', '').astype(int)
+
 
                             popular_pages['CTR'] = popular_pages['CTR'] 
 
