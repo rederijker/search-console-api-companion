@@ -442,7 +442,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col2:
                                 st.metric("Average Clicks for Page", value=format_average_clicks_popular)
                             with col3:
-                                st.write("Average Impressions for Page:", value=format_average_impression_popular)
+                                st.metric("Average Impressions for Page:", value=format_average_impression_popular)
 
 
 
