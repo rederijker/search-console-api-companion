@@ -418,6 +418,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
                             #presentiamo il CTR come %
                             average_ctr_popular = df_aggregated_popular_page['CTR'].mean()
+                            format_average_ctr_popular = "{:.2%}".format(format_average_ctr_popular)
                             df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
                             #Cambiano nome alle colonne
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
@@ -436,6 +437,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
 
                             col1, col2, col3, col4 = st.columns(4)
+                            
                             format_average_clicks_popular = "{:.2f}".format(average_clic_df_popular)
                             format_average_impression_popular = "{:.2f}".format(average_impression_df_pupular)
 
@@ -446,7 +448,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col3:
                                 st.metric("Pages Average Impressions", value=format_average_impression_popular)
                             with col4:
-                                st.metric("Page Average Position", value=average_ctr_popular)
+                                st.metric("Page Average Position", value=format_average_ctr_popular)
 
 
 
