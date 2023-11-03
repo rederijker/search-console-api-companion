@@ -460,7 +460,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 st.write("Pagine con clic elevati e alta impressione")
                                 st.write(popular_pages)
                         except KeyError as e:
-                            st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
+                            st.warning(e)
                         
                     with tab3:
                         st.write("tab")
