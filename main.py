@@ -186,7 +186,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 
         
             # Aggiungi un bottone per ottenere i dati in batch
-            if st.button('GET DATA'):
+            if st.button('⬇️ GET DATA'):
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
