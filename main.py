@@ -405,19 +405,28 @@ if CLIENT_ID and CLIENT_SECRET:
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
                         try:
+                            def aggregate_data(df):
+                                agg_funcs = {
+                                    'Impressions': 'sum',
+                                    'Clicks': 'sum',
+                                    'CTR': 'sum',
+                                    'Position': 'mean'
+                                }
+                            
+                            df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
                             # Calcola la somma di "Impressions", "Clicks", "CTR", e "Position" per ogni pagina
                             df_popular_page_1 = df.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
 
                                                        
                             # Calcola la media dei clic solo tra le pagine distinte
-                            average_clic_df_popular = df_popular_page_1['Clicks'].mean()
+                            average_clic_df_popular = df_aggregated_popular_page['Clicks'].mean()
                             # Calcola impression solo tra le pagine distinte
 
                             
                             st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
 
                             # Filtra le pagine con clic maggiori o uguali alla media
-                            popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
+                            popular_pages = df_aggregated_popular_page[df_aggregated_popular_page['Clicks'] > average_clic_df_popular]
 
 
 
