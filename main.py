@@ -444,7 +444,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 st.metric("Pages Average Clicks", value=format_average_clicks_popular)
                             with col3:
                                 st.metric("Pages Average Impressions", value=format_average_impression_popular)
-                             with col4:
+                            with col4:
                                 st.metric("Page Average Position", value=df_aggregated_popular_page['CTR'].mean())
 
 
