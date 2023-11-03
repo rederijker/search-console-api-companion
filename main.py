@@ -418,9 +418,14 @@ if CLIENT_ID and CLIENT_SECRET:
 
                             # Filtra le pagine con clic maggiori o uguali alla media
                             popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
+                         
+
                             popular_pages['CTR'] = popular_pages['CTR'].apply(lambda x: f"{x:.4f}")
-                            popular_pages['Position'] = popular_pages['Position'] / 1000  # Dividi per 1000 per ottenere il formato "8,5"
+
+                            # Formatta la colonna Position
+                            popular_pages['Position'] = popular_pages['Position'] / 1000  # Dividi per 1000 per ottenere il formato "5.2"
                             popular_pages['Position'] = popular_pages['Position'].apply(lambda x: f"{x:.1f}")
+
 
                             
                             # Calcola la nuova media solo per le pagine popolari
