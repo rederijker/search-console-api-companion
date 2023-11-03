@@ -416,6 +416,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
                             # Calcola la somma di "Impressions", "Clicks", "CTR", e "Position" per ogni pagina
                             df_popular_page_1 = df.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
+                            df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions']
+
 
                                                        
                             # Calcola la media dei clic solo tra le pagine distinte
