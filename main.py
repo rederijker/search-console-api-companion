@@ -172,7 +172,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     col1, col2 = st.columns(2)
                     with col1:
                          aggregation_type = ['No', 'Auto', 'by Page']
-                         check_box_aggregation = st.radio('AGGREGATION TYPE', aggregation_type)
+                         #check_box_aggregation = st.radio('AGGREGATION TYPE', aggregation_type)
 
                     with col2:                                       
                
@@ -238,10 +238,10 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 request_body["rowLimit"] = 5000  # Imposta un limite predefinito a 25.000
                 
-                            if check_box_aggregation == 'by Page':
-                                request_body["aggregationType"] = "byPage"
-                            elif check_box_aggregation == 'Auto':
-                                request_body["aggregationType"] = "auto"
+                            #if check_box_aggregation == 'by Page':
+                                #request_body["aggregationType"] = "byPage"
+                            #elif check_box_aggregation == 'Auto':
+                                #request_body["aggregationType"] = "auto"
                 
                             response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
                 
