@@ -274,7 +274,6 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     # Alla fine del processo, mostra un messaggio di completamento
                     
-                    st.subheader("Your data")
                     df = pd.DataFrame(data_list)
                     average_position = df['Position'].mean()
                     formatted_average_m= "{:.2f}".format(average_position)
@@ -287,8 +286,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     col1, col2, col3, col4, col5 = st.columns(5)
 
                     with col1:
-                        st.text("")
-
+                        st.subheader("Your data")
                     with col2:
                         st.metric(label="Total Clicks", value=total_clicks_m)
                         st.text("")
