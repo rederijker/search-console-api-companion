@@ -422,7 +422,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
                             df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
-                            average_position_popular =  df_aggregated_popular_page['Position'].mean()
+                            average_position_popular = df_aggregated_popular_page['Position'].mean()
                             #cambia nome alla colonna
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})                         
                             # Calcola la media dei clic solo tra le pagine distinte
@@ -431,7 +431,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_impression_df_pupular = df_aggregated_popular_page['Impressions'].mean()
                             # Calcola impression solo tra le pagine distinte                            
                             # Filtra le pagine con clic maggiori o uguali alla media
-                            popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular) & (df_aggregated_popular_page['Position'] > average_position_popular)]
+                            popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Position'] > average_position_popular)]
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
 
