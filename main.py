@@ -409,7 +409,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             agg_funcs = {
                                 'Impressions': 'sum',
                                 'Clicks': 'sum',
-                                'CTR': 'sum',
+                                'CTR': 'mean',
                                 'Position': 'mean'
                             }
                             
