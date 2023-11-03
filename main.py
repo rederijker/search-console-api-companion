@@ -423,7 +423,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             popular_pages['CTR'] = popular_pages['CTR'] *100
 
                             # Formatta la colonna Position
-                            popular_pages['Position'] = popular_pages['Position'].apply(lambda x: f"{x:.1f}".replace(',', '.'))
+                            popular_pages['Impressions'] = popular_pages['Position'].apply(lambda x: f"{x:.1f}".replace(',', '.'))
   # Dividi per 1000 per ottenere il formato "5.2"
                         
 
