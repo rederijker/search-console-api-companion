@@ -418,8 +418,15 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
                             #presentiamo il CTR come %
                             df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
+                            #Cambiano nome alle colonne
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
-                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})
+                            #Formatta la posizione media
+                            df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
+                            #cambia nome alla colonna
+                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position#'})
+
+
+                            
 
                             # Calcola la media dei clic solo tra le pagine distinte
                             average_clic_df_popular = df_aggregated_popular_page['Clicks'].mean()
