@@ -439,7 +439,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             format_average_clicks_popular = "{:.2f}".format(average_clic_df_popular)
                             format_average_impression_popular = "{:.2f}".format(average_impression_df_pupular)
-                            #format_average_position_popular = "{:.2f}".format(average_position_popular)
+                            format_average_position_popular = "{:.2f}".format(average_position_popular)
 
                             with col1:
                                 st.subheader("📄 Pages Performance")
@@ -450,7 +450,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col4:
                                 st.metric("Pages Average CTR", value=format_average_ctr_popular)
                             with col5:
-                                #st.metric("Pages Average Position", value=format_average_position_popular)
+                                st.metric("Pages Average Position", value=format_average_position_popular)
                                 st.text("")
 
 
