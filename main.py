@@ -424,7 +424,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
                             # Formatta la colonna Position
                             popular_pages['Position'] = popular_pages['Position'] / 1000  # Dividi per 1000 per ottenere il formato "5.2"
-                            popular_pages['Position'] = popular_pages['Position'].apply(lambda x: f"{x:.1f}")
+                        
 
 
                             
