@@ -421,7 +421,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
                             average_ctr_popular = df_aggregated_popular_page['Average CTR'].mean()
-                            format_average_ctr_popular = "{:.2%}".format(average_ctr_popular)
                             df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
                             average_position_popular = df_aggregated_popular_page['Position'].mean()
                             #cambia nome alla colonna
@@ -451,7 +450,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col4:
                                 st.metric("Pages Average CTR", value=format_average_ctr_popular)
                             with col5:
-                                st.metric("Pages Average Position", value=format_average_position_popular)
+                                st.metric("Pages Average Position", value=average_ctr_popular)
                                 st.text("")
 
 
