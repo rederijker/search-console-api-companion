@@ -397,7 +397,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
 
                     with tab2:
-                        st.write("tab2")           
+                            
 
 
                         
@@ -423,20 +423,20 @@ if CLIENT_ID and CLIENT_SECRET:
                             #Formatta la posizione media
                             df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
                             #cambia nome alla colonna
-                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position#'})
-
-
-                            
-
+                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position#'})                         
                             # Calcola la media dei clic solo tra le pagine distinte
                             average_clic_df_popular = df_aggregated_popular_page['Clicks'].mean()
                             average_impression_df_pupular = df_aggregated_popular_page['Impressions'].mean()
                             # Calcola impression solo tra le pagine distinte                            
-                            st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
                             # Filtra le pagine con clic maggiori o uguali alla media
                             popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular)]
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
+                            
+                            st.write("Average Clicks for Page:", average_clic_df_popular)
+                            st.write("Average Impressions for Page:", average_impression_df_pupular)
+
+
 
                             with st.expander("1. Pagine popolari"):
                                 st.write("Pagine con clic elevati e alta impressione")
