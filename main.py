@@ -405,13 +405,13 @@ if CLIENT_ID and CLIENT_SECRET:
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
                         try:
-                            def aggregate_data(df):
-                                agg_funcs = {
-                                    'Impressions': 'sum',
-                                    'Clicks': 'sum',
-                                    'CTR': 'sum',
-                                    'Position': 'mean'
-                                }
+                            
+                            agg_funcs = {
+                                'Impressions': 'sum',
+                                'Clicks': 'sum',
+                                'CTR': 'sum',
+                                'Position': 'mean'
+                            }
                             
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
                             # Calcola la somma di "Impressions", "Clicks", "CTR", e "Position" per ogni pagina
