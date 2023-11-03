@@ -420,10 +420,10 @@ if CLIENT_ID and CLIENT_SECRET:
                             popular_pages = df_popular_page_1[df_popular_page_1['Clicks'] > average_clic_df_popular]
                          
 
-                            popular_pages['CTR'] = popular_pages['CTR'] *100
+                            popular_pages['CTR'] = popular_pages['CTR'] 
 
                             # Formatta la colonna Position
-                            popular_pages['Impressions'] = popular_pages['Position'].apply(lambda x: f"{x:.1f}".replace(',', '.'))
+                            popular_pages['Impressions'] = popular_pages['Position']
   # Dividi per 1000 per ottenere il formato "5.2"
                         
 
