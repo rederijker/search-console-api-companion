@@ -405,46 +405,29 @@ if CLIENT_ID and CLIENT_SECRET:
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
                         try:
-                            
+                            #questa funzione serve a raggruppare il df per pagina, scegliendo come calcolare ogni singola colonna
                             agg_funcs = {
                                 'Impressions': 'sum',
                                 'Clicks': 'sum',
                                 'CTR': 'mean',
                                 'Position': 'mean'
                             }
-                            
+                            #Raggruppiamo df
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
-                            # Calcola la somma di "Impressions", "Clicks", "CTR", e "Position" per ogni pagina
-                            df_popular_page_1 = df.groupby('Page')[['Impressions', 'Clicks', 'CTR', 'Position']].sum().reset_index()
+                            #Calcoliamo il CTR dividendo click per impression
                             df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
+                            #presentiamo il CTR come %
                             df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
+                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
+                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})
 
-
-
-                                                       
                             # Calcola la media dei clic solo tra le pagine distinte
                             average_clic_df_popular = df_aggregated_popular_page['Clicks'].mean()
-                            # Calcola impression solo tra le pagine distinte
-
-                            
+                            # Calcola impression solo tra le pagine distinte                            
                             st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
-
                             # Filtra le pagine con clic maggiori o uguali alla media
                             popular_pages = df_aggregated_popular_page[df_aggregated_popular_page['Clicks'] > average_clic_df_popular]
 
-
-
-                            # Formatta la colonna Position
-  # Dividi per 1000 per ottenere il formato "5.2"
-                        
-
-
-                            
-                            # Calcola la nuova media solo per le pagine popolari
-                            
-                            # Visualizza la media
-                            
-                            # Visualizza le pagine popolari
                             with st.expander("1. Pagine popolari"):
                                 st.write("Pagine con clic elevati e alta impressione")
                                 st.write(popular_pages)
