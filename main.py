@@ -434,7 +434,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Calcola impression solo tra le pagine distinte                            
                             st.write("Media dei clic per le pagine popolari:", average_clic_df_popular)
                             # Filtra le pagine con clic maggiori o uguali alla media
-                            popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular]
+                            popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular)]
 
                             with st.expander("1. Pagine popolari"):
                                 st.write("Pagine con clic elevati e alta impressione")
