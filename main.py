@@ -418,7 +418,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
                             #presentiamo il CTR come %
                             average_ctr_popular = df_aggregated_popular_page['CTR'].mean()
-                            format_average_ctr_popular = "{:.2%}".format(format_average_ctr_popular)
+                            format_average_ctr_popular = "{:.2%}".format(average_ctr_popular)
                             df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
                             #Cambiano nome alle colonne
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
