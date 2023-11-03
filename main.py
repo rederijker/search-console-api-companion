@@ -302,7 +302,7 @@ if CLIENT_ID and CLIENT_SECRET:
                  
                     st.dataframe(df, width=2000)
             
-                    st.subheader("QUERIES ANALYSIS")
+                    st.subheader("Analysis")
             
 
 
