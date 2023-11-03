@@ -179,7 +179,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         row_limit_options = ['No', 'Yes']
                         check_box_row = st.radio('SET ROW LIMIT?', row_limit_options)
                         if check_box_row == 'Yes':
-                            row_limit = st.number_input('Row limit', min_value=1, max_value=5000, value=5000)
+                            row_limit = st.number_input('Row limit', min_value=1, max_value=25000, value=25000)
                         else:
                             row_limit = None  # Nessun limite
                 
@@ -234,9 +234,9 @@ if CLIENT_ID and CLIENT_SECRET:
                                         })
                 
                             if row_limit is not None:
-                                request_body["rowLimit"] = min(row_limit, 5000)  # Imposta il limite massimo a 25.000
+                                request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
                             else:
-                                request_body["rowLimit"] = 5000  # Imposta un limite predefinito a 25.000
+                                request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.000
                 
                             #if check_box_aggregation == 'by Page':
                                 #request_body["aggregationType"] = "byPage"
@@ -264,12 +264,12 @@ if CLIENT_ID and CLIENT_SECRET:
                                 data_list.append(data_entry)
                             
                             
-                            if len(response_data.get('rows', [])) < 5000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
+                            if len(response_data.get('rows', [])) < 25000 and (row_limit is None or start_row + len(response_data.get('rows', [])) >= row_limit):
                                 # Se abbiamo meno di 25.000 righe o abbiamo superato il limite specificato, abbiamo ottenuto tutti i dati
                                 break
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
-                                start_row += 5000
+                                start_row += 25000
                                 
 
                     # Alla fine del processo, mostra un messaggio di completamento
