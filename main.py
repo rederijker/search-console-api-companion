@@ -432,9 +432,14 @@ if CLIENT_ID and CLIENT_SECRET:
                             popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular)]
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
-                            
-                            st.write("Average Clicks for Page:", average_clic_df_popular)
-                            st.write("Average Impressions for Page:", average_impression_df_pupular)
+
+                            col1, col2, col3 = st.columns(3)
+                            with col1:
+                                st.subheader("Page Performance")
+                            with col2:
+                                st.metric("Average Clicks for Page", average_clic_df_popular)
+                            with col3:
+                                st.write("Average Impressions for Page:", average_impression_df_pupular)
 
 
 
