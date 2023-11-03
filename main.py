@@ -415,12 +415,13 @@ if CLIENT_ID and CLIENT_SECRET:
                             #Calcoliamo il CTR dividendo click per impression
                             df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
                             # calcoliamo ctr medio e presentiamo il CTR come %
-                            average_ctr_popular = df_aggregated_popular_page['CTR'].mean()
-                            format_average_ctr_popular = "{:.2%}".format(average_ctr_popular)
+                            
                             df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
                             #Cambiano nome alle colonne
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
+                            average_ctr_popular = df_aggregated_popular_page['Average CTR'].mean()
+                            format_average_ctr_popular = "{:.2%}".format(average_ctr_popular)
                             df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
                             average_position_popular = df_aggregated_popular_page['Position'].mean()
                             #cambia nome alla colonna
@@ -431,7 +432,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_impression_df_pupular = df_aggregated_popular_page['Impressions'].mean()
                             # Calcola impression solo tra le pagine distinte                            
                             # Filtra le pagine con clic maggiori o uguali alla media
-                            popular_pages = df_aggregated_popular_page[df_aggregated_popular_page['CTR'] > average_ctr_popular]
+                            popular_pages = df_aggregated_popular_page[df_aggregated_popular_page['Average CTR'] > average_ctr_popular]
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
 
