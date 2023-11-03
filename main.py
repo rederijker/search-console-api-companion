@@ -434,7 +434,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
 
-                            col1, col2, col3 = st.columns(3)
+                            col1, col2, col3 = st.columns(4)
                             format_average_clicks_popular = "{:.2f}".format(average_clic_df_popular)
                             format_average_impression_popular = "{:.2f}".format(average_impression_df_pupular)
 
