@@ -432,7 +432,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_impression_df_pupular = df_aggregated_popular_page['Impressions'].mean()
                             # Calcola impression solo tra le pagine distinte                            
                             # Filtra le pagine con clic maggiori o uguali alla media
-                            popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Average CTR'] > formatted_ctr_m) & (df_aggregated_popular_page['Clicks'] > average_clic_df_popular))]
+                            popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Average CTR'] > formatted_ctr_m) & (df_aggregated_popular_page['Clicks'] > average_clic_df_popular)]
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
 
