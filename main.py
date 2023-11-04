@@ -463,7 +463,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with st.expander("Best Pages"):
                                 st.write("Page with High CTR, High Clicks and High impression (above the average)")
                                 st.write(popular_pages)
-                            with st.expander("Less Effective Pages")
+                            with st.expander("Less Effective Pages"):
                                 st.write("Page with High Clicks, High Impressions but low CTR")
                                 st.write(less_pages)
                         except KeyError as e:
