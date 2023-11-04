@@ -306,7 +306,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 
 
                     
-                    tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE"])
+                    tab1, tab2 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
 
