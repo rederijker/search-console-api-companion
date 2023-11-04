@@ -455,6 +455,12 @@ if CLIENT_ID and CLIENT_SECRET:
                                 (df_aggregated_popular_page['Average Position'] <= 20 )
                                 
                             ]
+                            worst_pages=df_aggregated_popular_page[
+                                (df_aggregated_popular_page['Clicks'] < average_clic_df_popular) &
+                                (df_aggregated_popular_page['Impressions'] < average_impression_df_pupular) &
+                                (df_aggregated_popular_page['Average CTR'] < formatted_ctr_m)  &
+                                (df_aggregated_popular_page['Average Position'] < df_aggregated_popular_page)
+                             ]
 
                             col1, col2, col3, col4, col5 = st.columns(5)
                             
@@ -484,8 +490,12 @@ if CLIENT_ID and CLIENT_SECRET:
                                 st.write(less_pages)
                             with st.expander("Page with ranking opportunities"):
                                 st.write("Page with High Clicks, High Impressions but average position beetwen 10-20 in SERP")
-
                                 st.write(opp_pages)
+                            with st.expaneder("Worst Page):
+                                st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
+                                st.write(worst_pages)
+
+                                
                             
                         except KeyError as e:
                             st.warning(e)
