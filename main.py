@@ -299,8 +299,8 @@ if CLIENT_ID and CLIENT_SECRET:
                     st.dataframe(df, width=2000)
 
 
-
-                                        df_graf = df.groupby('Date').agg({
+                    #TRAFFIC REPORT GRAF SETUP
+                    df_graf = df.groupby('Date').agg({
                         'Clicks': 'sum',
                         'Impressions': 'sum',
                         'CTR': 'mean',
