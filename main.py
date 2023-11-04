@@ -506,11 +506,11 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Crea un dizionario per i dati da visualizzare nel grafico a barre
                             chart_data = {
                                 "Set": ["Worst Pages", "Opportunity Pages", "Less Pages", "Popular Pages"],
-                                "Row Count": [worst_pages_count, opp_pages_count, less_pages_count, popular_pages_count]
+                                "N°Pages": [worst_pages_count, opp_pages_count, less_pages_count, popular_pages_count]
                             }
                             
                             # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="Row Count", labels={"Set": "horizontal"})
+                            st.bar_chart(chart_data, x="Set", y="N°Pages")
 
                                 
                             
