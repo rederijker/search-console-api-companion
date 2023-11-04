@@ -614,6 +614,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 }
                                 
                                 st_echarts(option=options, theme='chalk', height=400, width='100%')
-                            criar_grafico_echarts(df_grouped)
+                            st.container():
+                                criar_grafico_echarts(df_grouped)
                         else:
                             st.write("tab")
