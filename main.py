@@ -552,7 +552,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.title('Grafico Temporale con Clics e Impressions')
 
                             # Crea il grafico con Plotly Express
-                            fig = px.scatter(df, x='Date', y='Clicks', labels={'Clicks': 'Clicks'}, color_discrete_sequence=['blue'])
+                            fig = px.scatter(df, x='Date', y='Clicks', labels={'Clicks': 'Clicks'}, color_discrete_sequence=['blue'], log_y=True)
                             
                             # Aggiungi le etichette degli assi
                             fig.update_layout(xaxis_title='Date', yaxis_title='Clicks')
