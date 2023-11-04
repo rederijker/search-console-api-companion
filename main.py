@@ -12,6 +12,7 @@ import time
 from streamlit_extras.metric_cards import style_metric_cards 
 from streamlit_echarts import st_echarts
 from datetime import datetime, timedelta
+import altair as alt
 
 
 
