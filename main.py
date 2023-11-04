@@ -459,7 +459,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 (df_aggregated_popular_page['Clicks'] < average_clic_df_popular) &
                                 (df_aggregated_popular_page['Impressions'] < average_impression_df_pupular) &
                                 (df_aggregated_popular_page['Average CTR'] < formatted_ctr_m)  &
-                                (df_aggregated_popular_page['Average Position'] < df_aggregated_popular_page)
+                                (df_aggregated_popular_page['Average Position'] < average_position_popular)
                              ]
 
                             col1, col2, col3, col4, col5 = st.columns(5)
