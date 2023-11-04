@@ -521,6 +521,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     #with tab3:
                         if all(dim in selected_dimensions for dim in ['Date', 'Page']):
+                            st.text("")
                             
                             
                            
