@@ -305,7 +305,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 
 
                     
-                    tab1, tab2 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE"])
+                    tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "Test"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
 
@@ -518,10 +518,9 @@ if CLIENT_ID and CLIENT_SECRET:
                         except KeyError as e:
                             st.warning(e)
                         
-                    #with tab3:
-                        #if all(dim in selected_dimensions for dim in ['Date', 'Page']):
-                            #st.text("")
-                            
+                    with tab3:
+                        if all(dim in selected_dimensions for dim in ['Date', 'Page']):
+                            st.text(""                          
                             
                            
                       
@@ -613,7 +612,8 @@ if CLIENT_ID and CLIENT_SECRET:
                                 }
                                 
                                 st_echarts(option=options, theme='chalk', height=400, width='100%')
+                        else:
+                            st.write("tab")
                             
                     criar_grafico_echarts(df_grouped)
-                        #else:
-                            #st.write("tab")
+                        
