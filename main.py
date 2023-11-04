@@ -527,16 +527,22 @@ if CLIENT_ID and CLIENT_SECRET:
                            
                         else:
                             st.write("tab")
+                df_grouped = df.groupby('Date').agg({
+                        'Clicks': 'sum',
+                        'Impressions': 'sum',
+                        'CTR': 'mean',
+                        'Position': 'mean'
+                    }).reset_index()
                 def criar_grafico_echarts(df):
                 # Formate a coluna 'CTR' do DataFrame
-                    df['CTR'] = df['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
-                    df['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
+                    df['CTR'] = df_grouped['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
+                    df['Position'] = df_grouped['Position'].apply(lambda pos: round(pos, 2))
                 
                     # Translated ECharts options
                     options = {
                         "xAxis": {
                             "type": "category",
-                            "data": df['Date'].tolist(),
+                            "data": df_grouped['Date'].tolist(),
                             "axisLabel": {
                                 "formatter": "{value}"
                             }
@@ -564,7 +570,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             {
                                 "type": "line",
                                 "name": "Clicks",
-                                "data": df['Clicks'].tolist(),
+                                "data": df_grouped['Clicks'].tolist(),
                                 "smooth": True,
                                 "lineStyle": {"width": 2.4, "color": "#8be9fd"},
                                 "showSymbol": False,  # Remova os marcadores de dados para esta série
@@ -572,7 +578,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             {
                                 "type": "line",
                                 "name": "Impressions",
-                                "data": df['Impressions'].tolist(),
+                                "data": df_grouped['Impressions'].tolist(),
                                 "smooth": True,
                                 "lineStyle": {"width": 2.4, "color": "#ffb86c"},
                                 "showSymbol": False,  # Remova os marcadores de dados para esta série
@@ -580,7 +586,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             {
                                 "type": "line",
                                 "name": "CTR",
-                                "data": df['CTR'].tolist(),
+                                "data": df_grouped['CTR'].tolist(),
                                 "smooth": True,
                                 "lineStyle": {"width": 2.4, "color": "#50fa7b"},
                                 "showSymbol": False,  # Remova os marcadores de dados para esta série
@@ -588,7 +594,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 {
                     "type": "line",
                     "name": "Position",
-                    "data": df['Position'].tolist(),
+                    "data": df_grouped['Position'].tolist(),
                     "smooth": True,
                     "lineStyle": {"width": 2.4, "color": "#ff79c6"},
                     "showSymbol": False,  # Remova os marcadores de dados para esta série
