@@ -491,7 +491,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with st.expander("Pages with ranking opportunities"):
                                 st.write("Page with High Clicks, High Impressions but average position beetwen 10-20 in SERP")
                                 st.write(opp_pages)
-                            with st.expander("Worst Page"):
+                            with st.expander("Pages that require attention"):
                                 st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
                                 st.write(worst_pages)
 
@@ -505,7 +505,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             # Crea un dizionario per i dati da visualizzare nel grafico a barre
                             chart_data = {
-                                "Set": ["Best Pages", "Less Effective Pages", "Pages with ranking opportunities", "Worst Pages"],
+                                "Set": ["Best Pages", "Less Effective Pages", "Pages with ranking opportunities", "Pages that require attention"],
                                 "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
                             }
                             
