@@ -512,7 +512,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             colors = ["green", "yellow", "blue", "red"]
 
                             # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="N°Pages", colors)
+                            st.bar_chart(chart_data, x="Set", y="N°Pages", color=colors)
 
                                 
                             
