@@ -525,21 +525,29 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.title('Grafico temporale di Clicks e Impressions')
                             df['Date'] = pd.to_datetime(df['Date'])
 
-                            chart = alt.Chart(df).mark_line().encode(
-                                x='Date:T',
-                                y='Clicks:Q',
-                                color=alt.value('blue'),
-                                tooltip=['Date:T', 'Clicks:Q']
-                            ) + alt.Chart(df).mark_line().encode(
-                                x='Date:T',
-                                y='Impressions:Q',
-                                color=alt.value('orange'),
-                                tooltip=['Date:T', 'Impressions:Q']
+                       
+                            
+                            # Titolo dell'app
+                            st.title('Grafico Temporale con Clics e Impressions')
+                            
+                            # Crea il grafico con Plotly Express
+                            fig = px.line(df, x='Clicks', y='Date', text='Impressions')
+                            
+                            # Aggiungi le etichette degli assi
+                            fig.update_layout(xaxis_title='Clicks', yaxis_title='Date')
+                            
+                            # Aggiungi un terzo asse (impressions)
+                            fig.update_yaxes(
+                                overlaying='y',
+                                side='right',
+                                title='Impressions'
                             )
                             
-                            # Visualizza il grafico utilizzando st.altair_chart
-                            st.altair_chart(chart, use_container_width=True)
-
+                            # Personalizza il layout del grafico
+                            fig.update_traces(textposition='top right')
+                            
+                            # Visualizza il grafico
+                            st.plotly_chart(fig, use_container_width=True)
                         else:
                             st.write("tab")
                         
