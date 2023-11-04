@@ -152,7 +152,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 
             with col2:
                 # Aggiungi una selectbox per le dimensioni
-                selected_dimensions = st.multiselect('DIMENSIONS', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page'] )
+                selected_dimensions = st.multiselect('DIMENSIONS', ['Date', 'Page', 'Query', 'Device', 'Country'], default=['Query', 'Page', 'Date'] )
                 with st.expander(f"Filters for Dimensions"):
                  unique_key = 0
                  for dimension in selected_dimensions:                    
