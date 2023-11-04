@@ -10,7 +10,7 @@ import plotly.express as px
 import plotly.graph_objects as go  # Importa il modulo go da Plotly
 import time
 from streamlit_extras.metric_cards import style_metric_cards 
-from streamlit_echarts import st_echarts
+from streamlit_raw_echarts import st_echarts, JsCode
 from datetime import datetime, timedelta
 import altair as alt
 
@@ -606,6 +606,5 @@ if CLIENT_ID and CLIENT_SECRET:
                         "backgroundColor": "#282a36",
                         "color": ["#8be9fd", "#ffb86c", "#50fa7b", "#ff79c6"],
                     }
-                
-                    # Exibir o gráfico de linha do ECharts usando st_echarts
+                    
                     st_echarts(option=options, theme='chalk', height=400, width='100%')
