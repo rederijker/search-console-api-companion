@@ -449,9 +449,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col3:
                                 st.metric("Pages Average Impressions", value=format_average_impression_popular)
                             with col4:
-                                st.metric("Pages Average CTR", value=format_average_ctr_popular)
+                                st.metric("Pages Average CTR", value=formatted_ctr_m)
                             with col5:
-                                st.metric("Pages Average Position", value=formatted_ctr_m)
+                                st.metric("Pages Average Position", value=format_average_position_popular)
                                 st.text("")
 
 
