@@ -488,7 +488,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with st.expander("Less Effective Pages"):
                                 st.write("Page with High Clicks, High Impressions and Average position within the top 10 search engine result positions, but low CTR")
                                 st.write(less_pages)
-                            with st.expander("Page with ranking opportunities"):
+                            with st.expander("Pages with ranking opportunities"):
                                 st.write("Page with High Clicks, High Impressions but average position beetwen 10-20 in SERP")
                                 st.write(opp_pages)
                             with st.expander("Worst Page"):
@@ -505,8 +505,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             # Crea un dizionario per i dati da visualizzare nel grafico a barre
                             chart_data = {
-                                "Set": ["Worst Pages", "Opportunity Pages", "Less Pages", "Popular Pages"],
-                                "N°Pages": [worst_pages_count, opp_pages_count, less_pages_count, popular_pages_count]
+                                "Set": ["Worst Pages", "Pages with ranking opportunities", "Less Effective Pages", "Best Pages"],
+                                "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
                             }
                             
                             # Crea il grafico a barre utilizzando st.bar_chart
