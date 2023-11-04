@@ -438,6 +438,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             popular_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Average CTR'] > formatted_ctr_m) & (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular)]
                             #ordiniamo per clicks
                             popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
+                            less_pages = df_aggregated_popular_page[(df_aggregated_popular_page['Average CTR'] < formatted_ctr_m) & (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) & (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular)]
 
                             col1, col2, col3, col4, col5 = st.columns(5)
                             
@@ -459,9 +460,12 @@ if CLIENT_ID and CLIENT_SECRET:
 
 
 
-                            with st.expander("1. Pagine popolari"):
-                                st.write("Pagine con clic elevati e alta impressione")
+                            with st.expander("Best Pages"):
+                                st.write("Page with High CTR, High Clicks and High impression (above the average)")
                                 st.write(popular_pages)
+                            with st.expander("Less Effective Pages")
+                                st.write("Page with High Clicks, High Impressions but low CTR")
+                                st.write(less_pages)
                         except KeyError as e:
                             st.warning(e)
                         
