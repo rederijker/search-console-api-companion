@@ -507,12 +507,10 @@ if CLIENT_ID and CLIENT_SECRET:
                             chart_data = {
                                 "Set": ["Best Pages", "Less Effective Pages", "Ranking opportunities", "Require attention"],
                                 "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
-                            }
-
-                            
+                            }                           
 
                             # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="N°Pages", color=["#FF0000", "#0000FF"])
+                            st.bar_chart(chart_data, x="Set", y="N°Pages", color=["#FF0000"])
 
                                 
                             
