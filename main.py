@@ -219,8 +219,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 "startDate": start_date.strftime('%Y-%m-%d'),
                                 "endDate": end_date.strftime('%Y-%m-%d'),
                                 "dimensions": dimensions,  # Utilizza le dimensioni selezionate dall'utente
-                                "startRow": start_row,
-                               # "dataState": "final",
+                                "startRow": start_row,                               
                                 "type": selected_type,
                             }
                             
@@ -250,7 +249,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 #request_body["aggregationType"] = "auto"
                 
                             response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-                            st.write(response_data)
+                            #st.write(response_data)
                 
                             for row in response_data.get('rows', []):
                                 data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
@@ -277,6 +276,12 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
+                                progress_percent = min((startRow / row_limit) * 100, 100)
+                                progress_value = progress_percent / 100.0
+                                load.progress(progress_value, text=progress_text)
+
+
+
                                 
 
                     # Alla fine del processo, mostra un messaggio di completamento
