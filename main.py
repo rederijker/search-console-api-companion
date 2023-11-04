@@ -190,12 +190,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
-                    data_list = []  # Inizializza una lista per i dati
-                    progress_text = "Pleas wait"
-                    load = st.progress(0, text=progress_text)
-
-
-                    
+                    data_list = []  # Inizializza una lista per i dat                   
             
                     # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
                     dimensions = []
@@ -212,9 +207,11 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     
                     with st.spinner("Downloading data..."):
+                        mess = "Please Wait"
+
+                        
                                  
-                        while True:                     
-                            
+                        while True:                                                 
                             request_body = {
                                 "startDate": start_date.strftime('%Y-%m-%d'),
                                 "endDate": end_date.strftime('%Y-%m-%d'),
@@ -249,8 +246,8 @@ if CLIENT_ID and CLIENT_SECRET:
                                 #request_body["aggregationType"] = "auto"
                 
                             response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-                            #st.write(response_data)
-                
+                            mess = "Receving data"
+
                             for row in response_data.get('rows', []):
                                 data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
                                 if 'Date' in selected_dimensions:
@@ -276,9 +273,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
-                                progress_percent = min((start_row / row_limit) * 100, 100)
-                                progress_value = progress_percent / 100.0
-                                load.progress(progress_value, text=progress_text)
+                            st.write(mess)
+                                
 
 
 
