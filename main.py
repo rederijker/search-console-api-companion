@@ -206,10 +206,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         dimensions.append('COUNTRY')
 
                     
-                    with st.spinner("Downloading data..."):
-                        mess = "Please Wait"
-
-                        
+                    with st.spinner("Downloading data..."):                       
                                  
                         while True:                                                 
                             request_body = {
@@ -238,15 +235,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             if row_limit is not None:
                                 request_body["rowLimit"] = min(row_limit, 25000)  # Imposta il limite massimo a 25.000
                             else:
-                                request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.000
-                
-                            #if check_box_aggregation == 'by Page':
-                                #request_body["aggregationType"] = "byPage"
-                            #elif check_box_aggregation == 'Auto':
-                                #request_body["aggregationType"] = "auto"
+                                request_body["rowLimit"] = 25000  # Imposta un limite predefinito a 25.00'
                 
                             response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
-                            mess = "Receving data"
 
                             for row in response_data.get('rows', []):
                                 data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
@@ -273,7 +264,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
-                            st.write(mess)
                                 
 
 
@@ -528,7 +518,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     with tab3:
                         if all(dim in selected_dimensions for dim in ['Date', 'Page']):
-                            st.text("")                          
+                            st.text("")                        
                             
                            
                       
@@ -615,7 +605,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                         {"type": "value", "name": ""},
                                         {"type": "value", "inverse": True, "show": False},  # Segundo eixo Y com a opção "inverse"
                                     ],
-                                    "backgroundColor": "#282a36",
+                                    "backgroundColor": "#0E1117",
                                     "color": ["#8be9fd", "#ffb86c", "#50fa7b", "#ff79c6"],
                                 }
                                 
