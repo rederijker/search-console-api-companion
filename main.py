@@ -526,7 +526,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Crea un grafico Altair
                             chart = alt.Chart(df).mark_line().encode(
                                 x='Date:T',
-                                y='clicks:Q',
+                                y='Clicks:Q',
                                 color=alt.value('blue')
                             ) + alt.Chart(df).mark_line().encode(
                                 x='date:T',
