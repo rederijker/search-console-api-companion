@@ -510,7 +510,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             }
                             
                             # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="Row Count")
+                            st.bar_chart(chart_data, x="Set", y="Row Count", labels={"Set": "horizontal"})
 
                                 
                             
