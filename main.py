@@ -276,7 +276,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             else:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
-                                progress_percent = min((startRow / row_limit) * 100, 100)
+                                progress_percent = min((start_row / row_limit) * 100, 100)
                                 progress_value = progress_percent / 100.0
                                 load.progress(progress_value, text=progress_text)
 
