@@ -523,7 +523,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         if all(dim in selected_dimensions for dim in ['Date', 'Page']):
                             
                             st.title('Grafico temporale di Clicks e Impressions')
-                            @st.cache_data(experimental_allow_widgets=True, show_spinner=False)
                             def criar_grafico_echarts(df_grouped):
                                 # Formate a coluna 'CTR' do DataFrame
                                 df['CTR'] = df['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
