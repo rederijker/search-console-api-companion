@@ -295,7 +295,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     with col5:
                         st.metric(label="Average CTR", value=formatted_ctr_m)
                         
-                    col1, col2 = st.columns(4, 1.2)
+                    col1, col2 = st.columns(2)
                     with col1:
                         st.dataframe(df, width=2000)
 
