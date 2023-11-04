@@ -482,16 +482,16 @@ if CLIENT_ID and CLIENT_SECRET:
 
 
 
-                            with st.expander("Best Pages"):
+                            with st.expander("🟢 Best Pages"):
                                 st.write("Pages with an elevated Click-Through Rate (CTR), a significant volume of Clicks, and a substantial number of Impressions (exceeding the average), with Average position within the top 10 search engine result positions.")
                                 st.write(popular_pages)
-                            with st.expander("Less Effective Pages"):
+                            with st.expander("🟡 Less Effective Pages"):
                                 st.write("Page with High Clicks, High Impressions and Average position within the top 10 search engine result positions, but low CTR")
                                 st.write(less_pages)
-                            with st.expander("Pages with ranking opportunities"):
+                            with st.expander("🔵 Pages with ranking opportunities"):
                                 st.write("Page with High Clicks, High Impressions but average position beetwen 10-20 in SERP")
                                 st.write(opp_pages)
-                            with st.expander("Pages that require attention"):
+                            with st.expander("🔴 Pages that require attention"):
                                 st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
                                 st.write(worst_pages)
 
