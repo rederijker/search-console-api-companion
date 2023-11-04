@@ -306,7 +306,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 
 
                     
-                    tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "TRAFFIC REPORT"])
+                    tab1, tab2 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
 
@@ -519,7 +519,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         except KeyError as e:
                             st.warning(e)
                         
-                    with tab3:
+                    #with tab3:
                         if all(dim in selected_dimensions for dim in ['Date', 'Page']):
                             
                             st.title('Grafico temporale di Clicks e Impressions')
