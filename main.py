@@ -549,7 +549,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Visualizza il grafico
                             st.plotly_chart(fig, use_container_width=True)
 
-                            t.title('Grafico Temporale con Clics e Impressions')
+                            st.title('Grafico Temporale con Clics e Impressions')
 
                             # Crea il grafico con Plotly Express
                             fig = px.scatter(df, x='Date', y='Clicks', labels={'Clicks': 'Clicks'}, color_discrete_sequence=['blue'])
