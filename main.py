@@ -415,12 +415,12 @@ if CLIENT_ID and CLIENT_SECRET:
                             #Calcoliamo il CTR dividendo click per impression
                             df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
                             # calcoliamo ctr medio e presentiamo il CTR come %
-                            
+                            average_ctr_popular = df_aggregated_popular_page['CTR'].mean()
+
                             df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
                             #Cambiano nome alle colonne
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
-                            average_ctr_popular = df_aggregated_popular_page['CTR'].mean()
                             
                             df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
                             average_position_popular = df_aggregated_popular_page['Position'].mean()
