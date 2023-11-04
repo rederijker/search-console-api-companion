@@ -306,7 +306,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "TRAFFIC REPORT"])
                     with tab1:
-                        if all(dim in selected_dimensions for dim in ['Date', 'Query', 'Page']):
+                        if all(dim in selected_dimensions for dim in ['Query', 'Page']):
 
                             # BUBBLECHARTS                                           
                             # Estrai le colonne rilevanti dal DataFrame    
