@@ -306,93 +306,96 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "TRAFFIC REPORT"])
                     with tab1:
-        
-                        
-                        # BUBBLECHARTS                                           
-                        # Estrai le colonne rilevanti dal DataFrame    
-                        # Calcola la media per la posizione media e il CTR
-                        
-                        df = pd.DataFrame(data_list)                        
-                        
-                        # Calcola i valori minimi e massimi per il grafico
-                        min_ctr = df['CTR'].min()
-                        max_ctr = df['CTR'].max()
-                        min_position = df['Position'].min()
-                        max_position = df['Position'].max()
-                        
-                        # Calcola i valori medi di CTR e Posizione solo per le query selezionate
-                        average_ctr = df['CTR'].mean()
-                        average_position = df['Position'].mean()
-                        
-                        # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-                        fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
-                        
-                        fig.update_yaxes(autorange="reversed")
-                        fig.update_yaxes(range=[min_position, max_position])
-                        fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
-                        fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
-                        
-                        # Aggiungi linee di riferimento per la media di CTR e posizione
-                        fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                        fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
-                        
-                        # Mostra il grafico interattivo
-                        st.subheader("Bubble Charts")
-                        st.plotly_chart(fig, use_container_width=True)
+                        if all(dim in selected_dimensions for dim in ['Date', 'Query', 'Page']):
 
-                        
+                            # BUBBLECHARTS                                           
+                            # Estrai le colonne rilevanti dal DataFrame    
+                            # Calcola la media per la posizione media e il CTR
                             
-                        average_position = df['Position'].mean()
-                        average_ctr = df['CTR'].mean()
-                        #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
-                        upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
-                        lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
-                        lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
-                        upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
-                        try:
-                            df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                            #Per ciascun quadrante, creare un DataFrame separato
-                            df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                            df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                            df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                            #mostrare df
-                     
-
-
-                            with st.expander("Top position and high CTR Queries"):           
-                                st.write("For these queries, there's not much you need to do; you're already doing a great job.")
-                                st.write(df_upper_high_ctr)
-                            with st.expander("Low position and high CTR Queries"):
-                                st.write("""
-                                Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
+                            df = pd.DataFrame(data_list)                        
+                            
+                            # Calcola i valori minimi e massimi per il grafico
+                            min_ctr = df['CTR'].min()
+                            max_ctr = df['CTR'].max()
+                            min_position = df['Position'].min()
+                            max_position = df['Position'].max()
+                            
+                            # Calcola i valori medi di CTR e Posizione solo per le query selezionate
+                            average_ctr = df['CTR'].mean()
+                            average_position = df['Position'].mean()
+                            
+                            # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
+                            fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                            
+                            fig.update_yaxes(autorange="reversed")
+                            fig.update_yaxes(range=[min_position, max_position])
+                            fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
+                            fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
+                            
+                            # Aggiungi linee di riferimento per la media di CTR e posizione
+                            fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
+                            fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
+                            
+                            # Mostra il grafico interattivo
+                            st.subheader("Bubble Charts")
+                            st.plotly_chart(fig, use_container_width=True)
     
-                                -If you don't have a dedicated page, think about creating one to consolidate all the information on your website related to this subject.
-    
-                                -If you already have a page, contemplate adding more content to better address the needs of users searching for this query.
-                                """)
-                                st.write(df_lower_high_ctr)
-                            with st.expander("Low position and low CTR Queries"):
-                                st.write("""
-                                When looking at queries with low CTR (both with low and top position), it's especially interesting to look at the bubble sizes to understand which queries have a low CTR but are still driving significant traffic. While the queries in this quadrant might seem unworthy of your effort, they can be divided into two main groups:
+                            
                                 
-                                **Related queries**: If the query in question is important to you, it's a good start to have it appearing in Search already. Prioritize these queries over queries that are not appearing in Search results at all, as they'll be easier to optimize.
-                                
-                                **Unrelated queries**: If your site doesn't cover content related to this query, maybe it's a good opportunity to fine tune your content or focus on queries that will bring relevant traffic.
-                                """)
-                                st.write(df_lower_low_ctr)
-                            with st.expander("Top position and low CTR Queries"):
-                                st.write("""
-                                These queries might have a low click-through rate (CTR) for various reasons. Check the largest bubbles to find signs of the following:
+                            average_position = df['Position'].mean()
+                            average_ctr = df['CTR'].mean()
+                            #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
+                            upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
+                            lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
+                            lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
+                            upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
+                            
+                            try:
+                                df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                #Per ciascun quadrante, creare un DataFrame separato
+                                df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                #mostrare df
+                         
     
-                                Your competitors may be using structured data markup and appearing with rich results, attracting users to click on their results instead of yours. Consider optimizing for the most common visual elements in Google Search.
     
-                                You may have optimized, or be "accidentally" ranking for a query that users are not interested in relation to your site. This might not be an issue for you, in which case you can ignore those queries. If you prefer people not to find you through those queries (for example, they contain offensive words), try to fine-tune your content to remove mentions that could be seen as synonyms or related queries to the one bringing traffic.
-    
-                                People may have already found the information they needed, for example, your company's opening hours, address, or phone number. Check the queries that were used and the URLs that contained the information. If one of your website goals is to drive people to your stores, this is working as intended; if you believe that people should visit your website for extra information, you could try to optimize your titles and descriptions to make that clear. See the next section for more details.
-                                """)
-                                st.write(df_upper_low_ctr)
-                        except KeyError as e:
-                            st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
+                                with st.expander("Top position and high CTR Queries"):           
+                                    st.write("For these queries, there's not much you need to do; you're already doing a great job.")
+                                    st.write(df_upper_high_ctr)
+                                with st.expander("Low position and high CTR Queries"):
+                                    st.write("""
+                                    Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
+        
+                                    -If you don't have a dedicated page, think about creating one to consolidate all the information on your website related to this subject.
+        
+                                    -If you already have a page, contemplate adding more content to better address the needs of users searching for this query.
+                                    """)
+                                    st.write(df_lower_high_ctr)
+                                with st.expander("Low position and low CTR Queries"):
+                                    st.write("""
+                                    When looking at queries with low CTR (both with low and top position), it's especially interesting to look at the bubble sizes to understand which queries have a low CTR but are still driving significant traffic. While the queries in this quadrant might seem unworthy of your effort, they can be divided into two main groups:
+                                    
+                                    **Related queries**: If the query in question is important to you, it's a good start to have it appearing in Search already. Prioritize these queries over queries that are not appearing in Search results at all, as they'll be easier to optimize.
+                                    
+                                    **Unrelated queries**: If your site doesn't cover content related to this query, maybe it's a good opportunity to fine tune your content or focus on queries that will bring relevant traffic.
+                                    """)
+                                    st.write(df_lower_low_ctr)
+                                with st.expander("Top position and low CTR Queries"):
+                                    st.write("""
+                                    These queries might have a low click-through rate (CTR) for various reasons. Check the largest bubbles to find signs of the following:
+        
+                                    Your competitors may be using structured data markup and appearing with rich results, attracting users to click on their results instead of yours. Consider optimizing for the most common visual elements in Google Search.
+        
+                                    You may have optimized, or be "accidentally" ranking for a query that users are not interested in relation to your site. This might not be an issue for you, in which case you can ignore those queries. If you prefer people not to find you through those queries (for example, they contain offensive words), try to fine-tune your content to remove mentions that could be seen as synonyms or related queries to the one bringing traffic.
+        
+                                    People may have already found the information they needed, for example, your company's opening hours, address, or phone number. Check the queries that were used and the URLs that contained the information. If one of your website goals is to drive people to your stores, this is working as intended; if you believe that people should visit your website for extra information, you could try to optimize your titles and descriptions to make that clear. See the next section for more details.
+                                    """)
+                                    st.write(df_upper_low_ctr)
+                            except KeyError as e:
+                                st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
+                        else:
+                            st.write("Nessun dato da mostrare")
 
                     with tab2:
                             
