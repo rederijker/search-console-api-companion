@@ -505,14 +505,14 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             # Crea un dizionario per i dati da visualizzare nel grafico a barre
                             chart_data = {
-                                "Set": ["Best Pages", "Less Effective Pages", "Pages with ranking opportunities", "Pages that require attention"],
+                                "Set": ["Best Pages", "Less Effective Pages", "Ranking opportunities", "Require attention"],
                                 "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
                             }
 
-                            colors = ["green", "yellow", "blue", "red"]
+                            
 
                             # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="N°Pages", color=colors)
+                            st.bar_chart(chart_data, x="Set", y="N°Pages", color=["#FF0000", "#0000FF"])
 
                                 
                             
