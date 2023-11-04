@@ -548,6 +548,26 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             # Visualizza il grafico
                             st.plotly_chart(fig, use_container_width=True)
+
+                            t.title('Grafico Temporale con Clics e Impressions')
+
+                            # Crea il grafico con Plotly Express
+                            fig = px.scatter(df, x='Date', y='Clicks', labels={'Clicks': 'Clicks'}, color_discrete_sequence=['blue'])
+                            
+                            # Aggiungi le etichette degli assi
+                            fig.update_layout(xaxis_title='Date', yaxis_title='Clicks')
+                            
+                            # Aggiungi il secondo asse Y per le impressions
+                            fig.add_trace(
+                                px.scatter(df, x='Date', y='Impressions', labels={'Impressions': 'Impressions'}, color_discrete_sequence=['red']).data[0]
+                            )
+                            
+                            # Personalizza il layout del grafico
+                            fig.update_yaxes(secondary_y=True)
+                            
+                            # Visualizza il grafico
+                            st.plotly_chart(fig, use_container_width=True)
+
                         else:
                             st.write("tab")
                         
