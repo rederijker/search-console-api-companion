@@ -527,7 +527,7 @@ if CLIENT_ID and CLIENT_SECRET:
                            
                         else:
                             st.write("tab")
-                def criar_grafico_echarts(df_grouped):
+                def criar_grafico_echarts(df):
                 # Formate a coluna 'CTR' do DataFrame
                     df['CTR'] = df['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
                     df['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
