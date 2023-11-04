@@ -533,7 +533,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         'CTR': 'mean',
                         'Position': 'mean'
                     }).reset_index()
-                def criar_grafico_echarts(df):
+                def criar_grafico_echarts(df_grouped):
                 # Formate a coluna 'CTR' do DataFrame
                     df['CTR'] = df_grouped['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
                     df['Position'] = df_grouped['Position'].apply(lambda pos: round(pos, 2))
@@ -614,4 +614,4 @@ if CLIENT_ID and CLIENT_SECRET:
                     }
                     
                     st_echarts(option=options, theme='chalk', height=400, width='100%')
-                criar_grafico_echarts(df)
+                criar_grafico_echarts(df_grouped)
