@@ -575,7 +575,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                     "data": df_graf['Clicks'].tolist(),
                                     "smooth": True,
                                     "lineStyle": {"width": 2.4, "color": "#8be9fd"},
-                                    "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
+                                    "showSymbol": True,  # Rimuovi i marcatori dei dati per questa serie
                                 },
                                 {
                                     "type": "line",
