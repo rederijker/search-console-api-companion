@@ -491,7 +491,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with st.expander("Page with ranking opportunities"):
                                 st.write("Page with High Clicks, High Impressions but average position beetwen 10-20 in SERP")
                                 st.write(opp_pages)
-                            with st.expaneder("Worst Page):
+                            with st.expaneder("Worst Page"):
                                 st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
                                 st.write(worst_pages)
 
