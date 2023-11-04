@@ -523,18 +523,16 @@ if CLIENT_ID and CLIENT_SECRET:
                         if all(dim in selected_dimensions for dim in ['Date', 'Page']):
                             
                             st.title('Grafico temporale di Clicks e Impressions')
-                            df['Date'] = pd.to_datetime(df['Date'])
-
-    
-                            # Crea un grafico Altair
                             chart = alt.Chart(df).mark_line().encode(
                                 x='Date:T',
-                                y='Clicks:Q',
-                                color=alt.value('blue')
+                                y='clicks:Q',
+                                color=alt.value('blue'),
+                                tooltip=['date:T', 'Clicks:Q']
                             ) + alt.Chart(df).mark_line().encode(
                                 x='date:T',
                                 y='Impressions:Q',
-                                color=alt.value('orange')
+                                color=alt.value('orange'),
+                                tooltip=['Date:T', 'Impressions:Q']
                             )
                             
                             # Visualizza il grafico utilizzando st.altair_chart
