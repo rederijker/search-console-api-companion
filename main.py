@@ -500,11 +500,14 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Calcola il numero di righe nei due insiemi di dati
                             worst_pages_count = worst_pages.shape[0]
                             opp_pages_count = opp_pages.shape[0]
+                            less_pages_count = less_pages.shape[0]
+                            popular_pages_count = popular_pages.shape[0]
+                            
                             
                             # Crea un dizionario per i dati da visualizzare nel grafico a barre
                             chart_data = {
                                 "Set": ["Worst Pages", "Opportunity Pages"],
-                                "Row Count": [worst_pages_count, opp_pages_count]
+                                "Row Count": [worst_pages_count, opp_pages_count, less_pages_count, popular_pages_count]
                             }
                             
                             # Crea il grafico a barre utilizzando st.bar_chart
