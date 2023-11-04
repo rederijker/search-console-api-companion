@@ -523,51 +523,90 @@ if CLIENT_ID and CLIENT_SECRET:
                         if all(dim in selected_dimensions for dim in ['Date', 'Page']):
                             
                             st.title('Grafico temporale di Clicks e Impressions')
-                            df['Date'] = pd.to_datetime(df['Date'])
-
-                       
+                            @st.cache_data(experimental_allow_widgets=True, show_spinner=False)
+                            def criar_grafico_echarts(df_grouped):
+                                # Formate a coluna 'CTR' do DataFrame
+                                df['CTR'] = df['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
+                                df['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
                             
-                            # Titolo dell'app
-                            st.title('Grafico Temporale con Clics e Impressions')
+                                # Translated ECharts options
+                                options = {
+                                    "xAxis": {
+                                        "type": "category",
+                                        "data": df_grouped['Date'].tolist(),
+                                        "axisLabel": {
+                                            "formatter": "{value}"
+                                        }
+                                    },
+                                    "yAxis": {"type": "value", "name": ""},
+                                    "grid": {
+                                        "right": 20,
+                                        "left": 65,
+                                        "top": 45,
+                                        "bottom": 50,
+                                    },
+                                    "legend": {
+                                        "show": True,
+                                        "top": "top",
+                                        "align": "auto",
+                                        "selected": {  # Definindo a seleção inicial das séries
+                                            "Clicks": True,         # A série "Clicks" está selecionada
+                                            "Impressions": True,    # A série "Impressions" está selecionada
+                                            "CTR": False,           # A série "CTR" não está selecionada
+                                            "Position": False       # A série "Position" não está selecionada
+                                        }
+                                    },
+                                    "tooltip": {"trigger": "axis", },
+                                    "series": [
+                                        {
+                                            "type": "line",
+                                            "name": "Clicks",
+                                            "data": df['Clicks'].tolist(),
+                                            "smooth": True,
+                                            "lineStyle": {"width": 2.4, "color": "#8be9fd"},
+                                            "showSymbol": False,  # Remova os marcadores de dados para esta série
+                                        },
+                                        {
+                                            "type": "line",
+                                            "name": "Impressions",
+                                            "data": df['Impressions'].tolist(),
+                                            "smooth": True,
+                                            "lineStyle": {"width": 2.4, "color": "#ffb86c"},
+                                            "showSymbol": False,  # Remova os marcadores de dados para esta série
+                                        },
+                                        {
+                                            "type": "line",
+                                            "name": "CTR",
+                                            "data": df['CTR'].tolist(),
+                                            "smooth": True,
+                                            "lineStyle": {"width": 2.4, "color": "#50fa7b"},
+                                            "showSymbol": False,  # Remova os marcadores de dados para esta série
+                                        },
+                            {
+                                "type": "line",
+                                "name": "Position",
+                                "data": df['Position'].tolist(),
+                                "smooth": True,
+                                "lineStyle": {"width": 2.4, "color": "#ff79c6"},
+                                "showSymbol": False,  # Remova os marcadores de dados para esta série
+                                "yAxisIndex": 1,  # Indica que esta série usará o segundo eixo Y
+                                "axisLabel": {
+                                    "show": False  # Oculta os rótulos do eixo Y para esta série
+                                }
+                            },
+                                    ],
                             
-                            # Crea il grafico con Plotly Express
-                            fig = px.line(df, x='Clicks', y='Date', text='Impressions')
+                                    "yAxis": [
+                                        {"type": "value", "name": ""},
+                                        {"type": "value", "inverse": True, "show": False},  # Segundo eixo Y com a opção "inverse"
+                                    ],
+                                    "backgroundColor": "#282a36",
+                                    "color": ["#8be9fd", "#ffb86c", "#50fa7b", "#ff79c6"],
+                                }
                             
-                            # Aggiungi le etichette degli assi
-                            fig.update_layout(xaxis_title='Clicks', yaxis_title='Date')
-                            
-                            # Aggiungi un terzo asse (impressions)
-                            fig.update_yaxes(
-                                overlaying='y',
-                                side='right',
-                                title='Impressions'
-                            )
-                            
-                            # Personalizza il layout del grafico
-                            fig.update_traces(textposition='top right')
-                            
-                            # Visualizza il grafico
-                            st.plotly_chart(fig, use_container_width=True)
-
-                            st.title('Grafico Temporale con Clics e Impressions')
-
-                            # Crea il grafico con Plotly Express
-                            fig = px.scatter(df, x='Date', y='Clicks', labels={'Clicks': 'Clicks'}, color_discrete_sequence=['blue'], log_y=True)
-                            
-                            # Aggiungi le etichette degli assi
-                            fig.update_layout(xaxis_title='Date', yaxis_title='Clicks')
-                            
-                            # Aggiungi il secondo asse Y per le impressions
-                            fig.add_trace(
-                                px.scatter(df, x='Date', y='Impressions', labels={'Impressions': 'Impressions'}, color_discrete_sequence=['red']).data[0]
-                            )
-                            
-                            # Personalizza il layout del grafico
-                            fig.update_yaxes(secondary_y=True)
-                            
-                            # Visualizza il grafico
-                            st.plotly_chart(fig, use_container_width=True)
-
+                                # Exibir o gráfico de linha do ECharts usando st_echarts
+                                st_echarts(option=options, theme='chalk', height=400, width='100%')
+                           
                         else:
                             st.write("tab")
                         
