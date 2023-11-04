@@ -505,7 +505,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                             # Crea un dizionario per i dati da visualizzare nel grafico a barre
                             chart_data = {
-                                "Set": ["Worst Pages", "Pages with ranking opportunities", "Less Effective Pages", "Best Pages"],
+                                "Set": ["Best Pages", "Less Effective Pages", "Pages with ranking opportunities", "Worst Pages"],
                                 "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
                             }
                             
