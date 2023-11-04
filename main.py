@@ -538,7 +538,9 @@ if CLIENT_ID and CLIENT_SECRET:
                     def traffic_report(df_graf):
                         # Formattazione della colonna 'CTR' del DataFrame
                         #df['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
-                        df['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}".replace('.', ','))
+                        #df['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}".replace('.', ','))
+                        df['CTR'] = (df_graf['CTR'] * 100).apply('{:.2f}'.format).str.replace('.', ',')
+
 
                         df['Position'] = df_graf['Position'].apply(lambda pos: round(pos, 2))
                     
