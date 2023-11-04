@@ -508,7 +508,6 @@ if CLIENT_ID and CLIENT_SECRET:
                                 "Set": ["Best Pages", "Less Effective Pages", "Pages with ranking opportunities", "Pages that require attention"],
                                 "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
                             }
-                            chart_data.set_index("Set", inplace=True)
 
                             
                             # Crea il grafico a barre utilizzando st.bar_chart
