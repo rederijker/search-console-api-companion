@@ -187,9 +187,14 @@ if CLIENT_ID and CLIENT_SECRET:
         
             # Aggiungi un bottone per ottenere i dati in batch
             if st.button('⬇️ GET DATA'):
+                
                 if st.session_state.selected_site is not None:
                     start_row = 0  # Inizia dalla prima riga
                     data_list = []  # Inizializza una lista per i dati
+                    progress_text = "Pleas wait"
+                    load = st.progress(0, text=progress_text)
+
+
                     
             
                     # Costruisci il parametro "dimensions" in base alle selezioni dell'utente
@@ -218,6 +223,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                # "dataState": "final",
                                 "type": selected_type,
                             }
+                            
                             for dimension in selected_dimensions:
                                 if dimension in st.session_state.dimension_filters:
                                     filter_operator = st.session_state.dimension_filters[dimension]['operator']
@@ -244,6 +250,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 #request_body["aggregationType"] = "auto"
                 
                             response_data = webmasters_service.searchanalytics().query(siteUrl=st.session_state.selected_site, body=request_body).execute()
+                            st.write(response_data)
                 
                             for row in response_data.get('rows', []):
                                 data_entry = {}  # Crea un dizionario vuoto per i dati di questa riga
