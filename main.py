@@ -215,7 +215,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 "endDate": end_date.strftime('%Y-%m-%d'),
                                 "dimensions": dimensions,  # Utilizza le dimensioni selezionate dall'utente
                                 "startRow": start_row,
-                                "dataState": "final",
+                               # "dataState": "final",
                                 "type": selected_type,
                             }
                             for dimension in selected_dimensions:
