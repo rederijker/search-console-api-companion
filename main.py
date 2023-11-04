@@ -533,7 +533,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 options = {
                                     "xAxis": {
                                         "type": "category",
-                                        "data": df_grouped['Date'].tolist(),
+                                        "data": df['Date'].tolist(),
                                         "axisLabel": {
                                             "formatter": "{value}"
                                         }
