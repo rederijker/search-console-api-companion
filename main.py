@@ -527,7 +527,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
                             chart = alt.Chart(df).mark_line().encode(
                                 x='Date:T',
-                                y='clicks:Q',
+                                y='Clicks:Q',
                                 color=alt.value('blue'),
                                 tooltip=['Date:T', 'Clicks:Q']
                             ) + alt.Chart(df).mark_line().encode(
