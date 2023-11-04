@@ -618,5 +618,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         st_echarts(option=options, theme='chalk', height=500, width='100%')                    
                     
                     traffic_report(df_graf)
+                    st.write(df_graf)
 
                         
