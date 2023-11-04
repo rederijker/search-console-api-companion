@@ -509,9 +509,10 @@ if CLIENT_ID and CLIENT_SECRET:
                                 "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
                             }
 
-                            
+                            colors = ["green", "yellow", "blue", "red"]
+
                             # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="N°Pages")
+                            st.bar_chart(chart_data, x="Set", y="N°Pages", colors)
 
                                 
                             
