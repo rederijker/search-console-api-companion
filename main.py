@@ -297,7 +297,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.dataframe(df, width=2000, height=800)
+                        st.dataframe(df, width=2000, height=500)
 
                     with col2:
                         #TRAFFIC REPORT GRAF SETUP
