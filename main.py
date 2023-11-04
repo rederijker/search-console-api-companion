@@ -523,7 +523,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         if all(dim in selected_dimensions for dim in ['Date', 'Page']):
                             
                             st.title('Grafico temporale di Clicks e Impressions')
-                            df['date'] = pd.to_datetime(df['date'])
+                            df['Date'] = pd.to_datetime(df['Date'])
 
                             chart = alt.Chart(df).mark_line().encode(
                                 x='Date:T',
