@@ -353,7 +353,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                         "name": "Clicks",
                                         "data": df_graf['Clicks'].tolist(),
                                         "smooth": True,
-                                        "lineStyle": {"width": 2.2, "color": "#8be9fd"},
+                                        "lineStyle": {"width": 2, "color": "#8be9fd"},
                                         "showSymbol": True,  # Rimuovi i marcatori dei dati per questa serie
                                     },
                                     {
@@ -361,7 +361,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                         "name": "Impressions",
                                         "data": df_graf['Impressions'].tolist(),
                                         "smooth": True,
-                                        "lineStyle": {"width": 2.2, "color": "#ffb86c"},
+                                        "lineStyle": {"width": 2, "color": "#ffb86c"},
                                         "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
                                     },
                                     {
@@ -369,7 +369,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                         "name": "CTR",
                                         "data": df_graf['CTR'].tolist(),
                                         "smooth": True,
-                                        "lineStyle": {"width": 2.2, "color": "#50fa7b"},
+                                        "lineStyle": {"width": 2, "color": "#50fa7b"},
                                         "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
                                     },
                                     {
@@ -377,7 +377,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                         "name": "Position",
                                         "data": df_graf['Position'].tolist(),
                                         "smooth": True,
-                                        "lineStyle": {"width": 2.2, "color": "#ff79c6"},
+                                        "lineStyle": {"width": 2, "color": "#ff79c6"},
                                         "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
                                         "yAxisIndex": 1,  # Indica che questa serie utilizzerà il secondo asse Y
                                         "axisLabel": {
