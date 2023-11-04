@@ -302,8 +302,9 @@ if CLIENT_ID and CLIENT_SECRET:
             
                     st.subheader("Analysis")
             
+                
 
-
+                    
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "TRAFFIC REPORT"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
@@ -510,7 +511,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             }                           
 
                             # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="N°Pages", color=["#FF0000", "#FF3000", "#FF0300", "#FF2000"])
+                            st.bar_chart(chart_data, x="Set", y="N°Pages")
 
                                 
                             
@@ -518,4 +519,23 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
                         
                     with tab3:
-                        st.write("tab")
+                        if all(dim in selected_dimensions for dim in ['Date', 'Page']):
+                            st.title('Grafico temporale di Clicks e Impressions')
+    
+                            # Crea un grafico Altair
+                            chart = alt.Chart(df).mark_line().encode(
+                                x='Date:T',
+                                y='clicks:Q',
+                                color=alt.value('blue')
+                            ) + alt.Chart(df).mark_line().encode(
+                                x='date:T',
+                                y='Impressions:Q',
+                                color=alt.value('orange')
+                            )
+                            
+                            # Visualizza il grafico utilizzando st.altair_chart
+                            st.altair_chart(chart, use_container_width=True)
+
+                        else:
+                            st.write("tab")
+                        
