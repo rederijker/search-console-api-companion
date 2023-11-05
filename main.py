@@ -403,7 +403,7 @@ if CLIENT_ID and CLIENT_SECRET:
                 
 
                     
-                    tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "Test"])
+                    tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CONTENT OPTIMIZER"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
 
@@ -430,8 +430,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             fig.update_yaxes(range=[min_position, max_position])
                             fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
                             fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
-                            fig.update_xaxes(type='log')
-                            fig.update_yaxes(type='log')
+                          
 
 
                             
@@ -502,12 +501,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         else:
                             st.write("Nessun dato da mostrare")
 
-                    with tab2:
-                            
-
-
-                        
-                        
+                    with tab2:                          
+                       
                         #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
                       
                         try:
