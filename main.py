@@ -392,7 +392,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                     {"type": "value", "inverse": True, "show": False},  # Secondo asse Y con opzione "inverse"
                                 ],
                                 "backgroundColor": "#0E1117",
-                                "color": ["#8be9fd", "#ffb86c", "#50fa7b", "#ff79c6"],
+                                "color": ["#D5A021", "#F06449", "#91C499", "#5BC3EB"],
                             }
                         
                             st_echarts(option=options, theme='chalk', height=500, width='100%')                    
@@ -430,11 +430,17 @@ if CLIENT_ID and CLIENT_SECRET:
                             fig.update_yaxes(range=[min_position, max_position])
                             fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
                             fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
+                            fig.update_xaxes(type='log')
+                            fig.update_yaxes(type='log')
+
+
                             
                             # Aggiungi linee di riferimento per la media di CTR e posizione
                             fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
                             fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
+                            fig.update_xaxes(type='log')
                             
+
                             # Mostra il grafico interattivo
                             st.subheader("Bubble Charts")
                             st.plotly_chart(fig, use_container_width=True)
