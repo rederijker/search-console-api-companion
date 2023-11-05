@@ -14,7 +14,6 @@ from streamlit_raw_echarts import st_echarts, JsCode
 from datetime import datetime, timedelta
 import altair as alt
 
-
 st.set_page_config(
     page_title="Search Console API Companion",
     page_icon="🔍",
