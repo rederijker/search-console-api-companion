@@ -273,6 +273,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     # Alla fine del processo, mostra un messaggio di completamento
                     
                     df = pd.DataFrame(data_list)
+                    
                     average_position = df['Position'].mean()
                     formatted_average_m= "{:.2f}".format(average_position)
 
@@ -297,7 +298,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     col1, col2 = st.columns(2)
                     with col1:
-                        st.dataframe(df, width=2000, height=500)
+                        st.dataframe(df, width=2000)
 
                     with col2:
                         #TRAFFIC REPORT GRAF SETUP
