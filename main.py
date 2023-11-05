@@ -435,7 +435,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Aggiungi linee di riferimento per la media di CTR e posizione
                             fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
                             fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
-                            fig.update_xaxes(type='log')
                             
 
                             # Mostra il grafico interattivo
