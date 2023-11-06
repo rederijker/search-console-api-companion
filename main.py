@@ -433,7 +433,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.subheader("Bubble Charts")
                             st.plotly_chart(fig, use_container_width=True)        
 
-                            st.scatter_chart(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                            st.scatter_chart(df, x='CTR', y='Position', size='Clicks')
 
 			
                                 
