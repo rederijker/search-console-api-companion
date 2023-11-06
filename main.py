@@ -417,8 +417,6 @@ if CLIENT_ID and CLIENT_SECRET:
                             max_position = df['Position'].max()
                             
                             # Calcolo dei valori medi di CTR e Posizione solo per le query selezionate
-                            average_ctr = df['CTR'].mean()
-                            average_position = df['Position'].mean()
                             
                             # Creazione di una nuova colonna per distinguere le query con zero click
                             df['Zero_Clicks'] = df['Clicks'].apply(lambda x: 'Yes' if x == 0 else 'No')
@@ -429,7 +427,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 ax.scatter(data['CTR'], data['Position'], s=data['Clicks']*10, label=group)
                             
                             # Configurazione delle linee di riferimento per i valori medi
-                            ax.axvline(x=average_ctr, color='green', linestyle='--')
+                            ax.axvline(x=average_ctr_m, color='green', linestyle='--')
                             ax.axhline(y=average_position, color='green', linestyle='--')
                             
                             # Configurazione dei limiti degli assi
