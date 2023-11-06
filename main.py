@@ -405,7 +405,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CONTENT OPTIMIZER"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
-							df = pd.DataFrame(data_list)                        
+				df = pd.DataFrame(data_list)                        
                         
 	                        # Calcola i valori minimi e massimi per il grafico
 	                        min_ctr = df['CTR'].min()
