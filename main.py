@@ -405,35 +405,45 @@ if CLIENT_ID and CLIENT_SECRET:
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CONTENT OPTIMIZER"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
-                            df = pd.DataFrame(data_list)                        
-                        
-	                        # Calcola i valori minimi e massimi per il grafico
-                            min_ctr = df['CTR'].min()
-                            max_ctr = df['CTR'].max()
-                            min_position = df['Position'].min()
-                            max_position = df['Position'].max()
-	                        
-	                        # Calcola i valori medi di CTR e Posizione solo per le query selezionate
-                            average_ctr = df['CTR'].mean()
-                            average_position = df['Position'].mean()
-	                        
-	                        # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-                            fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
-	                        
-                            fig.update_yaxes(autorange="reversed")
-                            fig.update_yaxes(range=[min_position, max_position])
-                            fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
-                            fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
-	                        
-	                        # Aggiungi linee di riferimento per la media di CTR e posizione
-                            fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                            fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
-	                        
-	                        # Mostra il grafico interattivo
-                            st.subheader("Bubble Charts")
-                            st.plotly_chart(fig, use_container_width=True)        
-
-                            st.scatter_chart(df, x='CTR', y='Position', size='Clicks')
+			df = pd.DataFrame(data_list)
+			
+			# Calcola i valori minimi e massimi per il grafico
+			min_ctr = df['CTR'].min()
+			max_ctr = df['CTR'].max()
+			min_position = df['Position'].min()
+			max_position = df['Position'].max()
+			
+			# Calcola i valori medi di CTR e Posizione solo per le query selezionate
+			average_ctr = df['CTR'].mean()
+			average_position = df['Position'].mean()
+			
+			# Crea il grafico a bolle con Plotly utilizzando il DataFrame
+			fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+			
+			# Colora le bolle a 0 click di rosso
+			for i, row in df.iterrows():
+			    if row['Clicks'] == 0:
+			        fig.add_trace(go.Scatter(
+			            x=[row['CTR']],
+			            y=[row['Position']],
+			            mode='markers',
+			            marker=dict(size=row['Clicks'], color='red'),
+			            hoverinfo='text',
+			            hovertext=row['Query']
+			        ))
+			
+			# Imposta il range degli assi e le linee di riferimento
+			fig.update_yaxes(autorange="reversed")
+			fig.update_yaxes(range=[min_position, max_position])
+			fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
+			fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
+			fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
+			fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
+			
+			# Mostra il grafico interattivo
+			st.subheader("Bubble Charts")
+			st.plotly_chart(fig, use_container_width=True)     
+                            
 
 			
                                 
