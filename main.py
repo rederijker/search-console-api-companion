@@ -411,7 +411,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Calcola la media per la posizione media e il CTR
                             
                             df = pd.DataFrame(data_list)                        
-                            
+
                             # Calcola i valori minimi e massimi per il grafico
                             min_ctr = df['CTR'].min()
                             max_ctr = df['CTR'].max()
@@ -422,21 +422,22 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_ctr = df['CTR'].mean()
                             average_position = df['Position'].mean()
                             
-                            # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-                            fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                            # Creare una nuova colonna per distinguere le query con zero click
+                            df['Zero_Clicks'] = df['Clicks'].apply(lambda x: 'Yes' if x == 0 else 'No')
                             
+                            # Aggiungere colori al grafico per le query con zero click
+                            fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'], color='Zero_Clicks', opacity=0.8)
+                            
+                            # Cambiare la dimensione minima delle bolle per rendere visibili le query a zero click
+                            fig.update_traces(marker=dict(sizemin=5))
+                            
+                            # Conservare le altre modifiche esistenti
                             fig.update_yaxes(autorange="reversed")
-                    
-                            fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
-                          
-
-
+                            fig.update_xaxes(autorange=True)
                             
-                            # Aggiungi linee di riferimento per la media di CTR e posizione
                             fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
                             fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                             
-
                             # Mostra il grafico interattivo
                             st.subheader("Bubble Charts")
                             st.plotly_chart(fig, use_container_width=True)
