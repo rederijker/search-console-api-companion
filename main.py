@@ -405,25 +405,25 @@ if CLIENT_ID and CLIENT_SECRET:
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CONTENT OPTIMIZER"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
-							df = pd.DataFrame(data_list)                        
+                            df = pd.DataFrame(data_list)                        
                         
 	                        # Calcola i valori minimi e massimi per il grafico
-	                        min_ctr = df['CTR'].min()
-	                        max_ctr = df['CTR'].max()
-	                        min_position = df['Position'].min()
-	                        max_position = df['Position'].max()
+                            min_ctr = df['CTR'].min()
+                            max_ctr = df['CTR'].max()
+                            min_position = df['Position'].min()
+                            max_position = df['Position'].max()
 	                        
 	                        # Calcola i valori medi di CTR e Posizione solo per le query selezionate
-	                        average_ctr = df['CTR'].mean()
-	                        average_position = df['Position'].mean()
+                            average_ctr = df['CTR'].mean()
+                            average_position = df['Position'].mean()
 	                        
 	                        # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-	                        fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                            fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
 	                        
-	                        fig.update_yaxes(autorange="reversed")
-	                        fig.update_yaxes(range=[min_position, max_position])
-	                        fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
-	                        fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
+                            fig.update_yaxes(autorange="reversed")
+                            fig.update_yaxes(range=[min_position, max_position])
+                            fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
+                            fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
 	                        
 	                        # Aggiungi linee di riferimento per la media di CTR e posizione
 	                        fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
