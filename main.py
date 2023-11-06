@@ -408,42 +408,42 @@ if CLIENT_ID and CLIENT_SECRET:
 
                             # BUBBLECHARTS                                           
                             # Estrai le colonne rilevanti dal DataFrame    
-                            # Calcola la media per la posizione media e il CTR
+                            # Calcola la media per la posizione me
+                            df = pd.DataFrame(data_list)
+                            # Calcolo dei valori minimi e massimi per il grafico
+                            min_ctr = df['CTR'].min()
+                            max_ctr = df['CTR'].max()
+                            min_position = df['Position'].min()
+                            max_position = df['Position'].max()
                             
-
-	                        df = pd.DataFrame(data_list)
+                            # Calcolo dei valori medi di CTR e Posizione solo per le query selezionate
+                            average_ctr = df['CTR'].mean()
+                            average_position = df['Position'].mean()
+                            
+                            # Creazione di una nuova colonna per distinguere le query con zero click
+                            df['Zero_Clicks'] = df['Clicks'].apply(lambda x: 'Yes' if x == 0 else 'No')
+                            
+                            # Configurazione del grafico
+                            fig, ax = plt.subplots()
+                            for group, data in df.groupby('Zero_Clicks'):
+                                ax.scatter(data['CTR'], data['Position'], s=data['Clicks']*10, label=group)
+                            
+                            # Configurazione delle linee di riferimento per i valori medi
+                            ax.axvline(x=average_ctr, color='green', linestyle='--')
+                            ax.axhline(y=average_position, color='green', linestyle='--')
+                            
+                            # Configurazione dei limiti degli assi
+                            ax.set_ylim(bottom=min_position, top=max_position)
+                            ax.invert_yaxis()
+                            ax.set_xlabel('CTR')
+                            ax.set_ylabel('Position')
+                            
+                            # Mostra il grafico
+                            st.subheader("Bubble Charts")
+                            st.pyplot(fig)
+                                
 	
-				            # Calcolo dei valori minimi e massimi per il grafico
-				            min_ctr = df['CTR'].min()
-				            max_ctr = df['CTR'].max()
-				            min_position = df['Position'].min()
-				            max_position = df['Position'].max()
-				            
-				            # Calcolo dei valori medi di CTR e Posizione solo per le query selezionate
-				            average_ctr = df['CTR'].mean()
-				            average_position = df['Position'].mean()
-				            
-				            # Creazione di una nuova colonna per distinguere le query con zero click
-				            df['Zero_Clicks'] = df['Clicks'].apply(lambda x: 'Yes' if x == 0 else 'No')
-				            
-				            # Configurazione del grafico
-				            fig, ax = plt.subplots()
-				            for group, data in df.groupby('Zero_Clicks'):
-				                ax.scatter(data['CTR'], data['Position'], s=data['Clicks']*10, label=group)
-				            
-				            # Configurazione delle linee di riferimento per i valori medi
-				            ax.axvline(x=average_ctr, color='green', linestyle='--')
-				            ax.axhline(y=average_position, color='green', linestyle='--')
-				            
-				            # Configurazione dei limiti degli assi
-				            ax.set_ylim(bottom=min_position, top=max_position)
-				            ax.invert_yaxis()
-				            ax.set_xlabel('CTR')
-				            ax.set_ylabel('Position')
-				            
-				            # Mostra il grafico
-				            st.subheader("Bubble Charts")
-				            st.pyplot(fig)
+				    
                             
                                 
                             average_position = df['Position'].mean()
