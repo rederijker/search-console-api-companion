@@ -492,7 +492,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
 
-                            df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
+                           # df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
                             average_position_popular = df_aggregated_popular_page['Position'].mean()
                             #cambia nome alla colonna
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})                         
