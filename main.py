@@ -478,11 +478,13 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'Impressions': 'sum',
                                 'Clicks': 'sum',
                                 'CTR': 'mean',
-                                'Position': 'mean'
+                                'Position': 'sum'
                             }
                             #Raggruppiamo df
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
+			               #test aggregazione per position average errata 
                             st.write(df_aggregated_popular_page['Position'])
+                            
 			
 
                             #Calcoliamo il CTR dividendo click per impression
