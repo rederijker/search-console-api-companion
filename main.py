@@ -404,7 +404,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CONTENT OPTIMIZER"])
                     with tab1:
-                        if all(dim in selected_dimensions for dim in ['Query', 'Page']):
+                        if all(dim in selected_dimensions for dim in ['Query']):
                             # BUBBLECHARTS                                           
                         # Estrai le colonne rilevanti dal DataFrame    
                         # Calcola la media per la posizione media e il CTR
