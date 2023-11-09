@@ -482,8 +482,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             }
                             #Raggruppiamo df
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
-                            df_aggregated = df.groupby('Page').agg(agg_funcs).reset_index()
-                            print(df_aggregated['Position'].isna().sum())
+                            st.write(df_aggregated_popular_page['Position'])
 			
 
                             #Calcoliamo il CTR dividendo click per impression
