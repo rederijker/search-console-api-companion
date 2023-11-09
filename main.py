@@ -317,7 +317,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             #df_graf['CTR'] = (df_graf['CTR'] * 100).apply('{:.2f}'.format).str.replace('.', ',')
     
     
-                            df['Position'] = df_graf['Position'].apply(lambda pos: round(pos, 2))
+                            df_graf['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
                         
                             # Opzioni tradotte di ECharts
                             options = {
