@@ -487,7 +487,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             unique_pages_count = df['Page'].nunique()
                             st.write(unique_pages_count)
 
-                            st.write(df_aggregated_popular_page['CTR'])
+                            st.write(df_aggregated_popular_page['Page'])
 
 			
                             
