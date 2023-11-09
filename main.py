@@ -478,16 +478,12 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'Impressions': 'sum',
                                 'Clicks': 'sum',
                                 'CTR': 'mean',
-                                'Position': 'sum'
+                                'Position': 'mean'
                             }
                             #Raggruppiamo df
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
 			               #test aggregazione per position average errata 
-                            st.write(df_aggregated_popular_page['Position'])
-                            unique_pages_count = df['Page'].nunique()
-                            st.write(unique_pages_count)
-
-                            st.write(df_aggregated_popular_page['Page'])
+                            st.write(df_aggregated_popular_page['Position', 'Page'])
 
 			
                             
