@@ -562,7 +562,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
                                 st.write(worst_pages)
 
-                            
+                            st.write(df_aggregated_popular_page)
                             
                             # Calcola il numero di righe nei quattro insiemi di dati
                             worst_pages_count = worst_pages.shape[0]
