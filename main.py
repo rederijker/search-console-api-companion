@@ -405,13 +405,11 @@ if CLIENT_ID and CLIENT_SECRET:
                     tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CONTENT OPTIMIZER"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
-				df = pd.DataFrame(data_list)
-                			
-                			# Calcola i valori minimi e massimi per il grafico
-                			min_ctr = df['CTR'].min()
-                			max_ctr = df['CTR'].max()
+                            df = pd.DataFrame(data_list)
+				            min_ctr = df['CTR'].min()
+                		    max_ctr = df['CTR'].max()
                 			min_position = df['Position'].min()
-                			max_position = df['Position'].max()
+                		    max_position = df['Position'].max()
                 			
                 			# Calcola i valori medi di CTR e Posizione solo per le query selezionate
                 			average_ctr = df['CTR'].mean()
