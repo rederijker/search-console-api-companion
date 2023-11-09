@@ -492,7 +492,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
 
-                           # df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
+                            df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position']
                             average_position_popular = df_aggregated_popular_page['Position'].mean()
                             #cambia nome alla colonna
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})                         
@@ -561,7 +561,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             with st.expander("🔴 Pages that require attention"):
                                 st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
                                 st.write(worst_pages)
-
+                            st.write(df_aggregated_popular_page)
+                        
+				    
                             st.write(df_aggregated_popular_page)
                             
                             # Calcola il numero di righe nei quattro insiemi di dati
