@@ -486,7 +486,7 @@ if CLIENT_ID and CLIENT_SECRET:
 				
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
 			                #test aggregazione per position average errata 
-                            st.write(df_aggregated_popular_page['Position'])
+                            st.write(df_aggregated_popular_page['CTR'])
 
 			
                             
