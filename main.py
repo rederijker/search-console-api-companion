@@ -481,9 +481,8 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'Position': 'mean'
                             }
                             #Raggruppiamo df
-                            df['Position'] = df['Position'].astype(str).str.replace(',', '.').astype(float)
-
-				
+                            st.write(df)
+			
                             df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
 			                #test aggregazione per position average errata 
                             st.write(df_aggregated_popular_page['CTR'])
