@@ -423,18 +423,15 @@ if CLIENT_ID and CLIENT_SECRET:
                                         hoverinfo='text',
                                         hovertext=row['Query']
                       			        ))
-                      			
-                      			# Imposta il range degli assi e le linee di riferimento
-                      			fig.update_yaxes(autorange="reversed")
-                      			fig.update_yaxes(range=[min_position, max_position])
-                      			fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
-                      			fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
-                      			fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                      			fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
-                      			
-                      			# Mostra il grafico interattivo
-                      			st.subheader("Bubble Charts")
-                      			st.plotly_chart(fig, use_container_width=True)     
+                                fig.update_yaxes(autorange="reversed")
+                                fig.update_yaxes(range=[min_position, max_position])
+                                fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
+                                fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
+                                fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
+                                fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
+                                # Mostra il grafico interattivo
+                                st.subheader("Bubble Charts")
+                            st.plotly_chart(fig, use_container_width=True)     
                                             
 
 			
