@@ -481,13 +481,8 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'Position': 'mean'
                             }
                             #Raggruppiamo df
-                            st.write(df)
 			
-                            df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
-			                #test aggregazione per position average errata 
-                            st.write(df_aggregated_popular_page['CTR'])
-
-			
+                            df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()	
                             
 			
 
@@ -499,8 +494,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             #Cambiano nome alle colonne
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
                             #Formatta la posizione media
-
-                            df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position']
+                            df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
                             average_position_popular = df_aggregated_popular_page['Position'].mean()
                             #cambia nome alla colonna
                             df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})                         
@@ -569,10 +563,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with st.expander("🔴 Pages that require attention"):
                                 st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
                                 st.write(worst_pages)
-                            st.write(df_aggregated_popular_page)
-                            print(df['Position'].isnull().sum())
-                            print(df['Position'].isnull().sum())
-                        
+                            
 				    
                             
                             # Calcola il numero di righe nei quattro insiemi di dati
