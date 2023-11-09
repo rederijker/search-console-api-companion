@@ -406,28 +406,22 @@ if CLIENT_ID and CLIENT_SECRET:
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query', 'Page']):
                             df = pd.DataFrame(data_list)
-							              min_ctr = df['CTR'].min()
-                    		    max_ctr = df['CTR'].max()
-                    			  min_position = df['Position'].min()
-                    		    max_position = df['Position'].max()
-                    			
-                      			# Calcola i valori medi di CTR e Posizione solo per le query selezionate
-                      			average_ctr = df['CTR'].mean()
-                      			average_position = df['Position'].mean()
-                      			
-                      			# Crea il grafico a bolle con Plotly utilizzando il DataFrame
-                      			fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
-                      			
-                      			# Colora le bolle a 0 click di rosso
-                      			for i, row in df.iterrows():
-                      			    if row['Clicks'] == 0:
-                      			        fig.add_trace(go.Scatter(
-                      			            x=[row['CTR']],
-                      			            y=[row['Position']],
-                      			            mode='markers',
-                      			            marker=dict(size=row['Clicks'], color='red'),
-                      			            hoverinfo='text',
-                      			            hovertext=row['Query']
+                            min_ctr = df['CTR'].min()
+                            max_ctr = df['CTR'].max()
+                            min_position = df['Position'].min()
+                            max_position = df['Position'].max()
+                            average_ctr = df['CTR'].mean()
+                            average_position = df['Position'].mean()
+                            fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                            for i, row in df.iterrows():
+                                if row['Clicks'] == 0:
+                                    fig.add_trace(go.Scatter(
+                                        x=[row['CTR']],
+                                        y=[row['Position']],
+                                        mode='markers',
+                                        marker=dict(size=row['Clicks'], color='red'),
+                                        hoverinfo='text',
+                                        hovertext=row['Query']
                       			        ))
                       			
                       			# Imposta il range degli assi e le linee di riferimento
