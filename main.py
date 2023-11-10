@@ -617,42 +617,44 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
 
 
-                    if 'input_url' not in st.session_state:
-                        st.session_state['input_url'] = None
-                    if 'df_filtered' not in st.session_state:
-                        st.session_state['df_filtered'] = pd.DataFrame()
+                    
 		
                         
                     with tab3:
-                        st.header("Content Optimizer")
-                        st.write("Enter a URL to see the associated performance data.")
-                    
-             
+                        def get_queries(df, page=None, url=None):
+                            if url:  # Se è stato inserito un URL, usa quello per il filtro
+                                filtered_df = df[df['page'] == url]
+                            else:  # Altrimenti usa la pagina selezionata dal selettore
+                                filtered_df = df[df['page'] == page]
+                            return filtered_df[['query', 'clicks', 'impression', 'position', 'ctr']]
+                        
+                        # Se session_state non ha già 'page' e 'url', inizializzali con None
+                        if 'page' not in st.session_state:
+                            st.session_state['page'] = None
+                        if 'url' not in st.session_state:
+                            st.session_state['url'] = None
+                        st.sidebar.header('Seleziona la Pagina o Inserisci URL')
 
-                        # Utilizzo di un form per evitare il ricaricamento immediato alla pressione di ogni tasto
-                        with st.form(key='content_optimizer_form'):
-                            input_url = st.text_input("URL:", value=st.session_state.get('input_url', ''))
-                            submit_button = st.form_submit_button(label='Analyze URL')
+                        # Selettore della pagina
+                        selected_page = st.sidebar.selectbox('Scegli una pagina:', [''] + list(df['page'].unique()))
                         
-                        # Controlla se l'utente ha premuto il bottone submit
-                        if submit_button:
-                            st.session_state.input_url = input_url  # Aggiorna l'URL nella sessione
+                        # Input per l'URL
+                        input_url = st.sidebar.text_input('...o inserisci un URL:')
                         
-                            if st.session_state.input_url is not None:
-                                # Filtro il DataFrame per l'URL inserito dall'utente
-                                st.session_state.df_filtered = df[df['page'].str.contains(input_url, na=False)]
+                        # Aggiorna lo session_state quando l'utente fa una selezione o inserisce un URL
+                        if selected_page:
+                            st.session_state['page'] = selected_page
+                        if input_url:
+                            st.session_state['url'] = input_url
                         
-                                if not st.session_state.df_filtered.empty:
-                                    st.subheader("Query Performance for URL")
-                                    st.write(f"Performance data for: {input_url}")
-                                    st.dataframe(st.session_state.df_filtered[['query', 'clicks', 'impression', 'position']])
-                                else:
-                                    st.warning("No performance data found for this URL.")
-                            else:
-                                st.error("Please enter a URL.")
+                        # Mostra i risultati basati sullo session_state corrente
+                        if st.session_state['url']:
+                            result = get_queries(df, url=st.session_state['url'])
+                        elif st.session_state['page']:
+                            result = get_queries(df, page=st.session_state['page'])
+                        else:
+                            result = pd.DataFrame()
                         
-                        # Al di fuori del form, verificare se esistono dati filtrati e mostrarli
-                        if 'df_filtered' in st.session_state and not st.session_state.df_filtered.empty:
-                            st.subheader("Query Performance for URL")
-                            st.write(f"Performance data for: {st.session_state.input_url}")
-                            st.dataframe(st.session_state.df_filtered[['query', 'clicks', 'impression', 'position']])
+                        # Mostra il dataframe filtrato
+                        st.write('Risultati per la selezione:', result)
+                        
