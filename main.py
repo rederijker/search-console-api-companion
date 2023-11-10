@@ -633,13 +633,13 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.session_state['page'] = None
                         if 'url' not in st.session_state:
                             st.session_state['url'] = None
-                        st.sidebar.header('Seleziona la Pagina o Inserisci URL')
+                        st.header('Seleziona la Pagina o Inserisci URL')
 
                         # Selettore della pagina
-                        selected_page = st.sidebar.selectbox('Scegli una pagina:', [''] + list(df['page'].unique()))
+                        selected_page = st.selectbox('Scegli una pagina:', [''] + list(df['page'].unique()))
                         
                         # Input per l'URL
-                        input_url = st.sidebar.text_input('...o inserisci un URL:')
+                        input_url = st.text_input('...o inserisci un URL:')
                         
                         # Aggiorna lo session_state quando l'utente fa una selezione o inserisce un URL
                         if selected_page:
