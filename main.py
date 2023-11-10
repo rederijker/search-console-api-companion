@@ -628,13 +628,14 @@ if CLIENT_ID and CLIENT_SECRET:
                                 filtered_df = df[df['Page'] == page]
                             return filtered_df[['Query', 'Clicks', 'Impressions', 'Positions', 'CTR']]
                         
-                        # Se session_state non ha già 'page' e 'url', inizializzali con None
-                        if 'page' not in st.session_state:
+                        # Assicurati di inizializzare lo session_state con le chiavi corrette
+                        if 'Page' not in st.session_state:
                             st.session_state['Page'] = None
                         if 'url' not in st.session_state:
                             st.session_state['url'] = None
+                        
                         st.header('Seleziona la Pagina o Inserisci URL')
-
+                        
                         # Selettore della pagina
                         selected_page = st.selectbox('Scegli una pagina:', [''] + list(df['Page'].unique()))
                         
@@ -657,4 +658,3 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Mostra il dataframe filtrato
                         st.write('Risultati per la selezione:', result)
-                        
