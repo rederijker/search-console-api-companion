@@ -649,4 +649,4 @@ if CLIENT_ID and CLIENT_SECRET:
                     if not st.session_state.df_filtered.empty:
                         st.subheader("Query Performance for URL")
                         st.write(f"Performance data for: {st.session_state.input_url}")
-                        st.dataframe(st.session_state.filtered_df[['query', 'clicks', 'impression', 'position']])
+                        st.dataframe(st.session_state.df_filtered[['query', 'clicks', 'impression', 'position']])
