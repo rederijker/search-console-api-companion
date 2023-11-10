@@ -618,7 +618,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
 
                     if 'input_url' not in st.session_state:
-                        st.session_state['input_url'] = ''
+                        st.session_state['input_url'] = None
                     if 'df_filtered' not in st.session_state:
                         st.session_state['df_filtered'] = pd.DataFrame()
 		
@@ -638,7 +638,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         if submit_button:
                             st.session_state.input_url = input_url  # Aggiorna l'URL nella sessione
                         
-                            if input_url:
+                            if st.session_state.input_url is not None:
                                 # Filtro il DataFrame per l'URL inserito dall'utente
                                 st.session_state.df_filtered = df[df['page'].str.contains(input_url, na=False)]
                         
