@@ -630,40 +630,41 @@ if CLIENT_ID and CLIENT_SECRET:
                             return filtered_df[['Query', 'Clicks', 'Impressions', 'Positions', 'CTR']]
                         
                         # Inizializzazione dello session_state se necessario
-                        if 'Page' not in st.session_state:
-                            st.session_state['Page'] = None
+                        if 'page' not in st.session_state:
+                            st.session_state['page'] = None
                         if 'url' not in st.session_state:
-                            st.session_state['url'] = None
+                            st.session_state['url'] = ''
                         
                         # Definizione della callback che aggiorna lo session_state
-                        def update_state(page=None, url=None):
-                            st.session_state['Page'] = page
-                            st.session_state['url'] = url
+                        def update_state():
+                            st.session_state['page'] = st.session_state.selected_page
+                            st.session_state['url'] = st.session_state.input_url
                         
                         st.header('Seleziona la Pagina o Inserisci URL')
                         
                         # Selettore della pagina con callback
-                        selected_page = st.selectbox(
+                        st.session_state.selected_page = st.selectbox(
                             'Scegli una pagina:',
                             [''] + list(df['Page'].unique()),
-                            on_change=update_state,
-                            args=(st.session_state['Page'], st.session_state['url'])
+                            index=0 if st.session_state['page'] is None else list(df['Page'].unique()).index(st.session_state['page']),
+                            key='selected_page',  # Utilizza il parametro 'key' per identificare univocamente il widget
+                            on_change=update_state
                         )
                         
                         # Input per l'URL con callback
-                        input_url = st.text_input(
+                        st.session_state.input_url = st.text_input(
                             '...o inserisci un URL:',
-                            on_change=update_state,
-                            args=(st.session_state['Page'], st.session_state['url'])
+                            value=st.session_state['url'],
+                            key='input_url',  # Utilizza il parametro 'key' per identificare univocamente il widget
+                            on_change=update_state
                         )
                         
                         # Mostra i risultati basati sullo session_state corrente
+                        result = pd.DataFrame()
                         if st.session_state['url']:
                             result = get_queries(df, url=st.session_state['url'])
-                        elif st.session_state['Page']:
-                            result = get_queries(df, page=st.session_state['Page'])
-                        else:
-                            result = pd.DataFrame()
+                        elif st.session_state['page']:
+                            result = get_queries(df, page=st.session_state['page'])
                         
                         # Mostra il dataframe filtrato
                         st.write('Risultati per la selezione:', result)
