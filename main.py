@@ -637,19 +637,12 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                         # Definizione della callback che aggiorna lo session_state
                         def update_state():
-                            st.session_state['page'] = st.session_state.selected_page
                             st.session_state['url'] = st.session_state.input_url
                         
                         st.header('Seleziona la Pagina o Inserisci URL')
                         
                         # Selettore della pagina con callback
-                        st.session_state.selected_page = st.selectbox(
-                            'Scegli una pagina:',
-                            [''] + list(df['Page'].unique()),
-                            index=0 if st.session_state['page'] is None else list(df['Page'].unique()).index(st.session_state['page']),
-                            key='selected_page',  # Utilizza il parametro 'key' per identificare univocamente il widget
-                            on_change=update_state
-                        )
+                      
                         
                         # Input per l'URL con callback
                         st.session_state.input_url = st.text_input(
