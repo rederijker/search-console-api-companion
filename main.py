@@ -20,7 +20,6 @@ st.set_page_config(
     layout="wide"
 )
 
-# RICORDARSI DI FARE L'AUTENTICAZIONE ENTRO 40 SEC
 
 # Inizializza le variabili di sessione per la gestione dei dati utente
 if 'credentials' not in st.session_state:
