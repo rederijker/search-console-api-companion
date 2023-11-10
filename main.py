@@ -612,13 +612,24 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
                         
                     with tab3:
-                      
-                            st.text("")
-
-                    #CREAZIONE GRAFICO REPORT
-
-                    
-                       # Raggruppa il DataFrame df per la colonna 'Date' e calcola le somme di 'Clicks' e 'Impressions' e la media di 'CTR' e 'Position'
-
-
+                        st.header("Content Optimizer")
+                        st.write("Enter a URL to see the associated performance data.")
                         
+                        # Input per l'URL da analizzare
+                        input_url = st.text_input("URL:", "")
+                    
+                        # Bottone per avviare l'analisi
+                        if st.button('Analyze URL'):
+                            if input_url:
+                                # Filtro il DataFrame per l'URL inserito dall'utente
+                                filtered_df = df[df['Page'].str.contains(input_url)]
+                                
+                                # Se ci sono dati, li mostro
+                                if not filtered_df.empty:
+                                    st.subheader("Query Performance for URL")
+                                    st.write(f"Performance data for: {input_url}")
+                                    st.dataframe(filtered_df[['query', 'clicks', 'impression', 'position']])
+                                else:
+                                    st.warning("No performance data found for this URL.")
+                            else:
+                                st.error("Please enter a URL.")
