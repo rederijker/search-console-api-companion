@@ -625,28 +625,29 @@ if CLIENT_ID and CLIENT_SECRET:
                         st.write("Enter a URL to see the associated performance data.")
                     
                         # Utilizzo di un form per evitare il ricaricamento immediato alla pressione di ogni tasto
-                        with st.form(key='my_form'):
-                            input_url = st.text_input("URL:", value=st.session_state.input_url)
+                        with st.form(key='content_optimizer_form'):
+                            input_url = st.text_input("URL:", value=st.session_state.get('input_url', ''))
                             submit_button = st.form_submit_button(label='Analyze URL')
                     
+                        # Controlla se l'utente ha premuto il bottone submit
                         if submit_button:
                             st.session_state.input_url = input_url  # Aggiorna l'URL nella sessione
+                    
                             if input_url:
                                 # Filtro il DataFrame per l'URL inserito dall'utente
-                                st.session_state.df_filtered = df[df['page'].str.contains(input_url)]
-                            
-                                # Se ci sono dati, li mostro
+                                st.session_state.df_filtered = df[df['page'].str.contains(input_url, na=False)]
+                    
                                 if not st.session_state.df_filtered.empty:
                                     st.subheader("Query Performance for URL")
                                     st.write(f"Performance data for: {input_url}")
-                                    st.dataframe(st.session_state.df_filtered[['Query', 'Clicks', 'Impressions', 'Position']])
+                                    st.dataframe(st.session_state.df_filtered[['query', 'clicks', 'impression', 'position']])
                                 else:
                                     st.warning("No performance data found for this URL.")
                             else:
                                 st.error("Please enter a URL.")
                     
                     # Al di fuori del form, verificare se esistono dati filtrati e mostrarli
-                    if not st.session_state.df_filtered.empty:
+                    if 'df_filtered' in st.session_state and not st.session_state.df_filtered.empty:
                         st.subheader("Query Performance for URL")
                         st.write(f"Performance data for: {st.session_state.input_url}")
                         st.dataframe(st.session_state.df_filtered[['query', 'clicks', 'impression', 'position']])
