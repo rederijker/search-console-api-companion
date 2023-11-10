@@ -623,35 +623,35 @@ if CLIENT_ID and CLIENT_SECRET:
                     with tab3:
                         def get_queries(df, page=None, url=None):
                             if url:  # Se è stato inserito un URL, usa quello per il filtro
-                                filtered_df = df[df['page'] == url]
+                                filtered_df = df[df['Page'] == url]
                             else:  # Altrimenti usa la pagina selezionata dal selettore
-                                filtered_df = df[df['page'] == page]
-                            return filtered_df[['query', 'clicks', 'impression', 'position', 'ctr']]
+                                filtered_df = df[df['Page'] == page]
+                            return filtered_df[['Query', 'Clicks', 'Impressions', 'Positions', 'CTR']]
                         
                         # Se session_state non ha già 'page' e 'url', inizializzali con None
                         if 'page' not in st.session_state:
-                            st.session_state['page'] = None
+                            st.session_state['Page'] = None
                         if 'url' not in st.session_state:
                             st.session_state['url'] = None
                         st.header('Seleziona la Pagina o Inserisci URL')
 
                         # Selettore della pagina
-                        selected_page = st.selectbox('Scegli una pagina:', [''] + list(df['page'].unique()))
+                        selected_page = st.selectbox('Scegli una pagina:', [''] + list(df['Page'].unique()))
                         
                         # Input per l'URL
                         input_url = st.text_input('...o inserisci un URL:')
                         
                         # Aggiorna lo session_state quando l'utente fa una selezione o inserisce un URL
                         if selected_page:
-                            st.session_state['page'] = selected_page
+                            st.session_state['Page'] = selected_page
                         if input_url:
                             st.session_state['url'] = input_url
                         
                         # Mostra i risultati basati sullo session_state corrente
                         if st.session_state['url']:
                             result = get_queries(df, url=st.session_state['url'])
-                        elif st.session_state['page']:
-                            result = get_queries(df, page=st.session_state['page'])
+                        elif st.session_state['Page']:
+                            result = get_queries(df, page=st.session_state['Page'])
                         else:
                             result = pd.DataFrame()
                         
