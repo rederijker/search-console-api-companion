@@ -37,11 +37,7 @@ if 'dimension_filters' not in st.session_state:
 
 #variabili content optimizer
 
-if 'input_url' not in st.session_state:
-    st.session_state.input_url = ""
 
-if 'df_filtered' not in st.session_state:
-    st.session_state.df_filter = pd.DataFrame()
 
 
 
@@ -619,6 +615,13 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                         except KeyError as e:
                             st.warning(e)
+
+
+                    if 'input_url' not in st.session_state:
+                        st.session_state['input_url'] = ''
+                    if 'df_filtered' not in st.session_state:
+                        st.session_state['df_filtered'] = pd.DataFrame()
+		
                         
                     with tab3:
                         st.header("Content Optimizer")
