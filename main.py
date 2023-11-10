@@ -622,48 +622,48 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     with tab3:
                         # Funzione per ottenere le query in base alla selezione dell'utente
-            			def get_queries(df, page=None, url=None):
-            			    if url:  # Se è stato inserito un URL, usa quello per il filtro
-            			        filtered_df = df[df['Page'] == url]
-            			    else:  # Altrimenti usa la pagina selezionata dal selettore
-            			        filtered_df = df[df['Page'] == page]
-            			    return filtered_df[['Query', 'Clicks', 'Impressions', 'Positions', 'CTR']]
-            			
-            			# Inizializzazione dello session_state se necessario
-            			if 'Page' not in st.session_state:
-            			    st.session_state['Page'] = None
-            			if 'url' not in st.session_state:
-            			    st.session_state['url'] = None
-            			
-            			# Definizione della callback che aggiorna lo session_state
-            			def update_state(page=None, url=None):
-            			    st.session_state['Page'] = page
-            			    st.session_state['url'] = url
-            			
-            			st.header('Seleziona la Pagina o Inserisci URL')
-            			
-            			# Selettore della pagina con callback
-            			selected_page = st.selectbox(
-            			    'Scegli una pagina:',
-            			    [''] + list(df['Page'].unique()),
-            			    on_change=update_state,
-            			    args=(st.session_state['Page'], st.session_state['url'])
-            			)
-            			
-            			# Input per l'URL con callback
-            			input_url = st.text_input(
-            			    '...o inserisci un URL:',
-            			    on_change=update_state,
-            			    args=(st.session_state['Page'], st.session_state['url'])
-            			)
-            			
-            			# Mostra i risultati basati sullo session_state corrente
-            			if st.session_state['url']:
-            			    result = get_queries(df, url=st.session_state['url'])
-            			elif st.session_state['Page']:
-            			    result = get_queries(df, page=st.session_state['Page'])
-            			else:
-            			    result = pd.DataFrame()
-            			
-            			# Mostra il dataframe filtrato
-            			st.write('Risultati per la selezione:', result)
+                        def get_queries(df, page=None, url=None):
+                            if url:  # Se è stato inserito un URL, usa quello per il filtro
+                                filtered_df = df[df['Page'] == url]
+                            else:  # Altrimenti usa la pagina selezionata dal selettore
+                                filtered_df = df[df['Page'] == page]
+                            return filtered_df[['Query', 'Clicks', 'Impressions', 'Positions', 'CTR']]
+                        
+                        # Inizializzazione dello session_state se necessario
+                        if 'Page' not in st.session_state:
+                            st.session_state['Page'] = None
+                        if 'url' not in st.session_state:
+                            st.session_state['url'] = None
+                        
+                        # Definizione della callback che aggiorna lo session_state
+                        def update_state(page=None, url=None):
+                            st.session_state['Page'] = page
+                            st.session_state['url'] = url
+                        
+                        st.header('Seleziona la Pagina o Inserisci URL')
+                        
+                        # Selettore della pagina con callback
+                        selected_page = st.selectbox(
+                            'Scegli una pagina:',
+                            [''] + list(df['Page'].unique()),
+                            on_change=update_state,
+                            args=(st.session_state['Page'], st.session_state['url'])
+                        )
+                        
+                        # Input per l'URL con callback
+                        input_url = st.text_input(
+                            '...o inserisci un URL:',
+                            on_change=update_state,
+                            args=(st.session_state['Page'], st.session_state['url'])
+                        )
+                        
+                        # Mostra i risultati basati sullo session_state corrente
+                        if st.session_state['url']:
+                            result = get_queries(df, url=st.session_state['url'])
+                        elif st.session_state['Page']:
+                            result = get_queries(df, page=st.session_state['Page'])
+                        else:
+                            result = pd.DataFrame()
+                        
+                        # Mostra il dataframe filtrato
+                        st.write('Risultati per la selezione:', result)
