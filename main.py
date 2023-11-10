@@ -646,7 +646,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 st.error("Please enter a URL.")
                     
                     # Al di fuori del form, verificare se esistono dati filtrati e mostrarli
-                    if not st.session_state.filtered_df.empty:
+                    if not st.session_state.df_filtered.empty:
                         st.subheader("Query Performance for URL")
                         st.write(f"Performance data for: {st.session_state.input_url}")
                         st.dataframe(st.session_state.filtered_df[['query', 'clicks', 'impression', 'position']])
