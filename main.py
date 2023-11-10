@@ -612,9 +612,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
                         
                     with tab3:
-                        if all(dim in selected_dimensions for dim in ['Date']):
-                            st.text("")   
-                        else:
+                      
                             st.text("")
 
                     #CREAZIONE GRAFICO REPORT
