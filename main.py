@@ -35,6 +35,15 @@ if 'available_sites' not in st.session_state:
 if 'dimension_filters' not in st.session_state:
     st.session_state.dimension_filters = {}
 
+#variabili content optimizer
+
+if 'input_url' not in st.session_state:
+    st.session_state.input_url = ""
+
+if 'df_filtered' not in st.session_state:
+    st.session_state.df_filter = pd.DataFrame()
+
+
 
 # Definizione dello scope OAuth per l'autorizzazione
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
