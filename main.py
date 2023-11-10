@@ -623,6 +623,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     with tab3:
                         # Funzione per ottenere le query in base alla selezione dell'utente
+                        unique_pages = df['Page'].unique().tolist()
+
                         st.session_state['selected_page_temp'] = st.selectbox(
                         'Scegli una pagina:',
                         [''] + unique_pages,  # Utilizza la lista delle pagine uniche
