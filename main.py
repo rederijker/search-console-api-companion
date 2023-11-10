@@ -37,7 +37,8 @@ if 'dimension_filters' not in st.session_state:
 
 #variabili content optimizer
 
-
+if 'selected_page' not in st.session_state:
+    st.session_state['selected_page'] = None
 
 
 
