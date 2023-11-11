@@ -622,11 +622,10 @@ if CLIENT_ID and CLIENT_SECRET:
                        
                         # Crea un input di testo che salva automaticamente il valore inserito nello stato della sessione
                         text_input = st.text_input('Inserisci l\'URL della pagina:')
-                        
-                        # Quando il bottone viene cliccato, controlla se c'è un URL e in tal caso mostra un messaggio
-                        if st.button('⬇Get Queries'):
-                            if st.session_state.text_input:  # Utilizza il valore da st.session_state
-                                st.write("Ciao")
+            			if text_input == "0"
+            			    st.text("ciao")
+                        else:
+                            st.text("")
 
     
 
