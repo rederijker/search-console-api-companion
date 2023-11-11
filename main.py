@@ -449,8 +449,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
                             
                             # Aggiungi linee di riferimento per la media di CTR e posizione
-                            fig.add_shape(type='line', x0=average_ctr_bubble, x1=average_ctr_bubble, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                            fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position_bubble, y1=average_position_bubble, line=dict(color='green', dash='dash'))
+                            fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
+                            fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                             
                             # Mostra il grafico interattivo
                             st.subheader("Bubble Charts")
