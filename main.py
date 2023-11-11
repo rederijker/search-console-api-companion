@@ -112,7 +112,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
         # Crea due tab per la selezione delle funzionalità
         
-        tab1, tab2 = st.tabs(["URL INSPECTION", "SEARCH ANALYTICS"])
+        tab1, tab2 = st.tabs(["SEARCH ANALYTICS", "URL INSPECTION"])
 
         with tab2:
             # Inserisci l'URL da ispezionare
