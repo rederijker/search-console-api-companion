@@ -619,13 +619,12 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                       
-                        # Crea un input di testo che salva automaticamente il valore inserito nello stato della sessione
                         text_input = st.text_input('Inserisci l\'URL della pagina:')
-            			if text_input == "0"
-            			    st.text("ciao")
+                        if text_input == "0":
+                            st.text("ciao")
                         else:
-                            st.text("")
+                            st.text("ei")
+            		
 
     
 
