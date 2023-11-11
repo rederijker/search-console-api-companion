@@ -624,6 +624,6 @@ if CLIENT_ID and CLIENT_SECRET:
                         st.text_input('Inserisci l\'URL della pagina:')
                         if st.button('⬇Get Queries'):              
                             if st.session_state.text_input is not None:
-                            st.write("Ciao")
+                                st.write("Ciao")
 
                         
