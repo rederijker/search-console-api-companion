@@ -427,11 +427,11 @@ if CLIENT_ID and CLIENT_SECRET:
                             
                         
                             
-                            # Calcola i valori minimi e massimi per il le tabelle
-                            min_ctr = df['CTR'].min()
-                            max_ctr = df['CTR'].max()
-                            min_position = df['Position'].min()
-                            max_position = df['Position'].max()
+                            # Calcola i valori minimi e massimi per il il grafico
+                            min_ctr = df_query_performance['CTR'].min()
+                            max_ctr = df_query_performance['CTR'].max()
+                            min_position = df_query_performance['Position'].min()
+                            max_position = df_query_performance['Position'].max()
                             
                             # Calcola i valori medi di CTR e Posizione solo per le query selezionate
                             average_ctr = df['CTR'].mean()
