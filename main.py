@@ -36,7 +36,7 @@ if 'dimension_filters' not in st.session_state:
 
 #variabili content optimizer
 if 'text_input' not in st.session_state:
-    st.session_state.text_input = None
+    st.session_state.text_input = {}
 
 
 
