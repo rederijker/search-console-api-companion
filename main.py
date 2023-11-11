@@ -620,24 +620,39 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                        # Funzione per ottenere le query in base alla selezione dell'utente
-                        if 'url' not in st.session_state:
-                            st.session_state['url'] = ''
+                        url = st.text_input('Inserisci l\'URL della pagina:')
+
+                        # Bottone per attivare la ricerca
+                        if st.button('Mostra Query'):
+                            # Utilizza lo session_state per memorizzare l'URL
+                            st.session_state['url'] = url
                         
-                        # Widget per l'input dell'URL
-                        url = st.text_input('Inserisci l\'URL della pagina:', value=st.session_state['url'])
+                            # Filtra il dataframe per l'URL inserito
+                            def get_queries_for_url(url, dataframe):
+                                filtered_df = dataframe[dataframe['Page'] == url]
+                                if not filtered_df.empty:
+                                    return filtered_df['Query']
+                                else:
+                                    return pd.Series([])  # Restituisce una serie vuota se non ci sono corrispondenze
                         
-                        # Aggiorna lo session_state con l'URL inserito
-                        st.session_state['url'] = url
+                            # Se l'utente ha inserito un URL, mostra le query corrispondenti
+                            if url:
+                                queries = get_queries_for_url(url, df)
+                                if not queries.empty:
+                                    st.write('Query per l\'URL selezionato:')
+                                    st.write(queries)
+                                else:
+                                    st.warning('Nessuna query trovata per l\'URL fornito.')
+                            else:
+                                st.warning('Per favore, inserisci un URL.')
                         
-                        # Filtra il dataframe per l'URL inserito
-                        def get_queries_for_url(url, dataframe):
-                            return dataframe[dataframe['Page'] == url]['Query']
-                        
-                        # Se l'utente ha inserito un URL, mostra le query corrispondenti
-                        if url:
-                            queries = get_queries_for_url(url, df)
-                            st.write('Query per l\'URL selezionato:')
-                            st.write(queries)
+                        # Se l'URL è già stato inserito, mostra le query (questo parte dopo un ricaricamento)
+                        elif 'url' in st.session_state and st.session_state['url']:
+                            queries = get_queries_for_url(st.session_state['url'], df)
+                            if not queries.empty:
+                                st.write('Query per l\'URL selezionato:')
+                                st.write(queries)
+                            else:
+                                st.warning('Nessuna query trovata per l\'URL fornito.')
                         
 
