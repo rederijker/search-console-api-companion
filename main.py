@@ -440,7 +440,7 @@ if CLIENT_ID and CLIENT_SECRET:
 			
                             
                             # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-                            fig = px.scatter(df_query_performance, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                            fig = px.scatter(df_query_performance, x='CTR', y='Position', size='Clicks', hover_data=['Query'], sizemin=4)
                             
                             fig.update_yaxes(autorange="reversed")
                             fig.update_yaxes(range=[min_position, max_position])
