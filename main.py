@@ -620,7 +620,7 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                      st.session_state.text_input = st.text_input('Inserisci l\'URL della pagina:')
+                        st.session_state.text_input = st.text_input('Inserisci l\'URL della pagina:')
                         if st.button('⬇Get Queries'):              
                             if st.session_state.text_input:
                                 st.write("Ciao")
