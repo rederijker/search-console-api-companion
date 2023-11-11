@@ -619,12 +619,20 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                        text_input = st.text_input('Inserisci l\'URL della pagina:')
-                        if st.session_state.text_input is not None:
-                            if text_input == "0":
-                                st.text("ciao")
-                            else:
-                                st.text("ei")
+                        if 'text_input' not in st.session_state or st.session_state['text_input'] is None:
+                            st.session_state['text_input'] = ''
+                        
+                        # Crea un input di testo e utilizza il valore dello stato della sessione come valore predefinito
+                        text_input = st.text_input('Inserisci l\'URL della pagina:', value=st.session_state['text_input'])
+                        
+                        # Aggiorna lo stato della sessione ogni volta che l'input cambia
+                        st.session_state['text_input'] = text_input
+                        
+                        # Controlla il valore dell'input e mostra un messaggio corrispondente
+                        if text_input == "0":
+                            st.text("ciao")
+                        else:
+                            st.text("ei")
             		
 
     
