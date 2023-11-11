@@ -414,8 +414,6 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'CTR': 'mean',
                                 'Position': 'mean'
                                 }
-
-
                             #Raggruppiamo df per query per il bubble chart
 			
                             df_query_performance = df.groupby('Query').agg(query_funcs).reset_index()
@@ -436,6 +434,11 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Calcola i valori medi di CTR e Posizione solo per le query selezionate
                             average_ctr = df['CTR'].mean()
                             average_position = df['Position'].mean()
+
+                            average_ctr_bubble= df_query_performance['CTR'].mean()
+                            average_position_bubble = df_query_performance['Position'].mean()
+                            
+			
                             
                             # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
                             fig = px.scatter(df_query_performance, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
@@ -446,8 +449,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
                             
                             # Aggiungi linee di riferimento per la media di CTR e posizione
-                            fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                            fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
+                            fig.add_shape(type='line', x0=aaverage_ctr_bubble=, x1=average_ctr_bubble=, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
+                            fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position_bubble, y1=average_position_bubble, line=dict(color='green', dash='dash'))
                             
                             # Mostra il grafico interattivo
                             st.subheader("Bubble Charts")
