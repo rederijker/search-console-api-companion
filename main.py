@@ -442,9 +442,10 @@ if CLIENT_ID and CLIENT_SECRET:
                             fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                             
                             # Mostra il grafico interattivo
-                            st.subheader("Queries Bubble Charts")
+                            
                             col1, col2 = st.columns(2)
-                            with col1:                                
+                            with col1:
+                                st.write("🫧 QUERIES BUBBLE CHART")
                                 st.plotly_chart(fig, use_container_width=True)
                             with col2:
                                 # Ordina il DataFrame per la colonna 'Clicks' in ordine decrescente
@@ -452,7 +453,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 
                                 # Resetta l'indice sul DataFrame ordinato, non su quello originale
                                 df_query_reset = df_query_reset.reset_index(drop=True)
-                                
+                                st.write("🏆 TOP QUERIES BY TRAFFIC")
                                 # Ora passa il DataFrame ordinato e con l'indice resettato a Streamlit per la visualizzazione
                                 st.dataframe(df_query_reset, use_container_width=True)                     
 
