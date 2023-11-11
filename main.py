@@ -36,8 +36,8 @@ if 'dimension_filters' not in st.session_state:
 
 #variabili content optimizer
 
-
-
+if 'text_input' not in st.session_state:
+    st.session_state['text_input'] = ""
 
 
 # Definizione dello scope OAuth per l'autorizzazione
@@ -621,20 +621,14 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     with tab3:
                        
-                        def get_text_input(label, key):
-                            return st.session_state[key]
-                        
-                        # Inizializzare il valore di 'text_input' nello stato della sessione se non è già presente.
-                        if 'text_input' not in st.session_state:
-                            st.session_state['text_input'] = ""
-                        
-                        # Creare un input di testo che utilizza la funzione definita sopra per mantenere il valore.
-                        text_input = st.text_input('Inserisci l\'URL della pagina:', on_change=get_text_input, key='text_input')
+                        # Creare un input di testo che automaticamente aggiorna 'st.session_state.text_input'.
+                        text_input = st.text_input('Inserisci l\'URL della pagina:', value=st.session_state['text_input'], key='text_input')
                         
                         # Creare un pulsante che, quando premuto, stampa "Ciao" se 'text_input' non è vuoto.
                         if st.button('⬇Get Queries', key="get_queries_button"):
                             if text_input:
                                 st.write("Ciao")
+
     
 
                         
