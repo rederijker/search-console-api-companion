@@ -410,7 +410,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'Position': 'mean'
                                 }
                             #Raggruppiamo df per query per il bubble chart
-			
+
                             df_query_performance = df.groupby('Query').agg(query_funcs).reset_index()
                        
                             
@@ -447,8 +447,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col1:                                
                                 st.plotly_chart(fig, use_container_width=True)
                             with col2:
-                                df_reset_query = df_query_performance.reset_index(drop=True)
-                                st.dataframe(df_reset_query, use_container_width=True).reset_index(drop=True)                        
+                                df_query_reset = df_query_performance.sort_values('Clicks', ascending=False)
+                                df_query_reset = df_query_performance.reset_index(drop=True)
+                                st.dataframe(df_query_reset , use_container_width=True).reset_index(drop=True)                        
 
                             
                                 
