@@ -447,9 +447,14 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col1:                                
                                 st.plotly_chart(fig, use_container_width=True)
                             with col2:
+                                # Ordina il DataFrame per la colonna 'Clicks' in ordine decrescente
                                 df_query_reset = df_query_performance.sort_values('Clicks', ascending=False)
-                                df_query_reset = df_query_performance.reset_index(drop=True)
-                                st.dataframe(df_query_reset , use_container_width=True)                       
+                                
+                                # Resetta l'indice sul DataFrame ordinato, non su quello originale
+                                df_query_reset = df_query_reset.reset_index(drop=True)
+                                
+                                # Ora passa il DataFrame ordinato e con l'indice resettato a Streamlit per la visualizzazione
+                                st.dataframe(df_query_reset, use_container_width=True)                     
 
                             
                                 
