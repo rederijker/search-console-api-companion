@@ -114,7 +114,7 @@ if CLIENT_ID and CLIENT_SECRET:
         
         tab1, tab2 = st.tabs(["URL INSPECTION", "SEARCH ANALYTICS"])
 
-        with tab1:
+        with tab2:
             # Inserisci l'URL da ispezionare
             url_to_inspect = st.text_input("Insert URL to inspect:")
 
@@ -128,7 +128,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
                     st.write(f'Risultato dell\'ispezione: {response}')
 
-        with tab2:
+        with tab1:
             # Ottieni dati dalla Search Console
             col1, col2, col3 = st.columns(3)
             with col1:
