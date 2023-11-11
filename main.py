@@ -414,16 +414,20 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'CTR': 'mean',
                                 'Position': 'mean'
                                 }
-                            #Raggruppiamo df
+
+
+                            #Raggruppiamo df per query per il bubble chart
 			
                             df_query_performance = df.groupby('Query').agg(query_funcs).reset_index()
                             
                             st.write(df_query_performance)
+                            
+				
                         
                             
                         
                             
-                            # Calcola i valori minimi e massimi per il grafico
+                            # Calcola i valori minimi e massimi per il le tabelle
                             min_ctr = df['CTR'].min()
                             max_ctr = df['CTR'].max()
                             min_position = df['Position'].min()
@@ -434,7 +438,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_position = df['Position'].mean()
                             
                             # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-                            fig = px.scatter(df, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                            fig = px.scatter(df_query_performance, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
                             
                             fig.update_yaxes(autorange="reversed")
                             fig.update_yaxes(range=[min_position, max_position])
