@@ -449,7 +449,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col2:
                                 df_query_reset = df_query_performance.sort_values('Clicks', ascending=False)
                                 df_query_reset = df_query_performance.reset_index(drop=True)
-                                st.dataframe(df_query_reset , use_container_width=True).reset_index(drop=True)                        
+                                st.dataframe(df_query_reset , use_container_width=True)                       
 
                             
                                 
