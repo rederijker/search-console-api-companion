@@ -453,11 +453,12 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Mostra il grafico interattivo
                            
                             col1, col2 = st.columns(2)
+				
                             with col1:
                                 st.subheader("Queries Bubble Charts")
                                 st.plotly_chart(fig, use_container_width=True)
                             with col2:
-                                st.write(df_query_performance)                         
+                                st.dataframe(df_query_performance, use_container_width=True)                         
 
                             
                                 
