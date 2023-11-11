@@ -621,9 +621,8 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                        with st.form(key='query_form'):
-                            input_url = st.text_input('Inserisci l\'URL della pagina:', value=st.session_state.page_url, key='input_url')
-                            search_button = st.form_submit_button('Cerca Query')
+                        input_url = st.text_input('Inserisci l\'URL della pagina:', value=st.session_state.page_url, key='input_url')
+                        search_button = st.button('Cerca Query')
                         
                         # Definisci la funzione di callback per il pulsante 'Cerca Query'
                         def form_callback():
@@ -641,5 +640,5 @@ if CLIENT_ID and CLIENT_SECRET:
                             if not filtered_df.empty:
                                 st.write('Query per l\'URL selezionato:')
                                 st.dataframe(filtered_df['Query'])
-                                            
 
+                        
