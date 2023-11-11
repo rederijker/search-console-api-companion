@@ -621,15 +621,15 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                    if 'text_input' not in st.session_state:
+                        if 'text_input' not in st.session_state:
                         st.session_state.text_input = ""
                     
-                    st.session_state.text_input = st.text_input('Inserisci l\'URL della pagina:', st.session_state.text_input)
-                    button_clicked = st.button('⬇Get Queries', key="get_queries_button")
-                        
-                    if button_clicked:
-                        if st.session_state.text_input:
-                            st.write("Ciao")
-
+                        st.session_state.text_input = st.text_input('Inserisci l\'URL della pagina:', st.session_state.text_input)
+                        button_clicked = st.button('⬇Get Queries', key="get_queries_button")
+                            
+                        if button_clicked:
+                            if st.session_state.text_input:
+                                st.write("Ciao")
+    
 
                         
