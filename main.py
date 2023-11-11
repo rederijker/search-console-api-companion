@@ -447,7 +447,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
                             
                             # Mostra il grafico interattivo
-                           	st.subheader("Queries Bubble Charts")
+                            st.subheader("Queries Bubble Charts")
                             col1, col2 = st.columns(2)
                             with col1:                                
                                 st.plotly_chart(fig, use_container_width=True)
