@@ -408,22 +408,18 @@ if CLIENT_ID and CLIENT_SECRET:
                     tab1, tab2 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE"])
                     with tab1:
                         if all(dim in selected_dimensions for dim in ['Query']):
-                            
-			
-
-                            # BUBBLECHARTS                                           
-                        # Estrai le colonne rilevanti dal DataFrame    
-                        # Calcola la media per la posizione media e il CTR
-                             query_funcs = {
+                            query_funcs = {
                                 'Impressions': 'sum',
                                 'Clicks': 'sum',
                                 'CTR': 'mean',
                                 'Position': 'mean'
-                            }
+                                }
                             #Raggruppiamo df
 			
                             df_query_performance = df.groupby('Query').agg(query_funcs).reset_index()
+                            
                             st.write(df_query_performance)
+                        
                             
                         
                             
