@@ -267,11 +267,6 @@ if CLIENT_ID and CLIENT_SECRET:
                                 # Altrimenti, incrementa il valore di startRow per la prossima richiesta
                                 start_row += 25000
                                 
-
-
-
-                                
-
                     # Alla fine del processo, mostra un messaggio di completamento
                     
                     df = pd.DataFrame(data_list)
@@ -452,7 +447,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             with col1:                                
                                 st.plotly_chart(fig, use_container_width=True)
                             with col2:
-                                st.dataframe(df_query_performance, use_container_width=True)                         
+                                df_reset_query = df_query_performance.reset_index(drop=True)
+                                st.dataframe(df_reset_query, use_container_width=True).reset_index(drop=True)                        
 
                             
                                 
