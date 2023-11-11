@@ -621,24 +621,9 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                        input_url = st.text_input('Inserisci l\'URL della pagina:', value=st.session_state.page_url, key='input_url')
-                        search_button = st.button('Cerca Query')
-                        
-                        # Definisci la funzione di callback per il pulsante 'Cerca Query'
-                        def form_callback():
-                            st.session_state.page_url = input_url
-                            filtered_df = df[df['Page'] == input_url]
-                            if not filtered_df.empty:
-                                st.write('Query per l\'URL selezionato:')
-                                st.dataframe(filtered_df['Query'])
-                            else:
-                                st.warning('Nessuna query trovata per questo URL.')
-                        
-                        # Se c'è già un URL nel session_state (dopo il ricaricamento), mostralo
-                        if st.session_state.page_url:
-                            filtered_df = df[df['Page'] == st.session_state.page_url]
-                            if not filtered_df.empty:
-                                st.write('Query per l\'URL selezionato:')
-                                st.dataframe(filtered_df['Query'])
+                        st.text_input('Inserisci l\'URL della pagina:')
+                        if st.button('⬇Get Queries'):              
+                            if st.session_state.text_input is not None:
+                            st.write("Ciao")
 
                         
