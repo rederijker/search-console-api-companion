@@ -36,8 +36,7 @@ if 'dimension_filters' not in st.session_state:
 
 #variabili content optimizer
 
-if 'selected_page' not in st.session_state:
-    st.session_state['selected_page'] = None
+
 
 
 
@@ -622,15 +621,23 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     with tab3:
                         # Funzione per ottenere le query in base alla selezione dell'utente
-                        unique_pages = df['Page'].unique().tolist()
-
-                        st.session_state['selected_page_temp'] = st.selectbox(
-                        'Scegli una pagina:',
-                        [''] + unique_pages,  # Utilizza la lista delle pagine uniche
-                        index=0 if st.session_state['selected_page'] is None else unique_pages.index(st.session_state['selected_page']),
-                        key='selected_page_temp',  # Utilizza il parametro 'key' per identificare univocamente il widget
-                        on_change=update_page_selection
-                        )
-                        st.write(selected_page_temp)
+                        if 'url' not in st.session_state:
+                            st.session_state['url'] = ''
+                        
+                        # Widget per l'input dell'URL
+                        url = st.text_input('Inserisci l\'URL della pagina:', value=st.session_state['url'])
+                        
+                        # Aggiorna lo session_state con l'URL inserito
+                        st.session_state['url'] = url
+                        
+                        # Filtra il dataframe per l'URL inserito
+                        def get_queries_for_url(url, dataframe):
+                            return dataframe[dataframe['Page'] == url]['Query']
+                        
+                        # Se l'utente ha inserito un URL, mostra le query corrispondenti
+                        if url:
+                            queries = get_queries_for_url(url, df)
+                            st.write('Query per l\'URL selezionato:')
+                            st.write(queries)
                         
 
