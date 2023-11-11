@@ -620,10 +620,11 @@ if CLIENT_ID and CLIENT_SECRET:
                         
                     with tab3:
                         text_input = st.text_input('Inserisci l\'URL della pagina:')
-                        if text_input == "0":
-                            st.text("ciao")
-                        else:
-                            st.text("ei")
+                        if st.session_state.text_input is not None:
+                            if text_input == "0":
+                                st.text("ciao")
+                            else:
+                                st.text("ei")
             		
 
     
