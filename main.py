@@ -35,8 +35,7 @@ if 'dimension_filters' not in st.session_state:
     st.session_state.dimension_filters = {}
 
 #variabili content optimizer
-if 'page_url' not in st.session_state:
-    st.session_state.page_url = ''
+
 
 
 
@@ -621,9 +620,9 @@ if CLIENT_ID and CLIENT_SECRET:
 		
                         
                     with tab3:
-                        st.text_input('Inserisci l\'URL della pagina:')
+                      st.session_state.text_input = st.text_input('Inserisci l\'URL della pagina:')
                         if st.button('⬇Get Queries'):              
-                            if st.session_state.text_input is not None:
+                            if st.session_state.text_input:
                                 st.write("Ciao")
 
                         
