@@ -710,20 +710,22 @@ if CLIENT_ID and CLIENT_SECRET:
                             # Assumiamo che le keyword siano nella prima colonna
                             if 'Query' not in df.columns:
                                 df.columns = ['Query'] + df.columns.tolist()[1:]
+                                
                             
                             if st.button("Raggruppa Parole Chiave"):
-                                # Raggruppa le parole chiave, passando la lista di stop words, la grandezza minima e la lunghezza delle tuple come argomenti
-                                grouped_keywords_df = group_keywords(df, stop_words, min_group_size, ngram_size)
-                                
-                                # Calcola il totale dei click per ciascun gruppo
-                                click_totals = calculate_click_totals(df, grouped_keywords_df)
-                                
-                                # Ordina i gruppi in base ai click totali in ordine decrescente
-                                sorted_groups = sorted(click_totals.items(), key=lambda x: x[1], reverse=True)
-                                
-                                # Espandi ogni gruppo per mostrare le keyword e i click
-                                for group, total_clicks in sorted_groups:
-                                    with st.expander(f"Gruppo: {group} - Click Totali: {total_clicks}"):
-                                        keywords_list = grouped_keywords_df[grouped_keywords_df['Group'] == group]['Keywords'].tolist()
-                                        keyword_clicks_df = df[df['Query'].isin(keywords_list)][['Query', 'Clicks']]
-                                        st.write(keyword_clicks_df)
+                                if st.session_state.selected_site is not None:
+                                    # Raggruppa le parole chiave, passando la lista di stop words, la grandezza minima e la lunghezza delle tuple come argomenti
+                                    grouped_keywords_df = group_keywords(df, stop_words, min_group_size, ngram_size)
+                                    
+                                    # Calcola il totale dei click per ciascun gruppo
+                                    click_totals = calculate_click_totals(df, grouped_keywords_df)
+                                    
+                                    # Ordina i gruppi in base ai click totali in ordine decrescente
+                                    sorted_groups = sorted(click_totals.items(), key=lambda x: x[1], reverse=True)
+                                    
+                                    # Espandi ogni gruppo per mostrare le keyword e i click
+                                    for group, total_clicks in sorted_groups:
+                                        with st.expander(f"Gruppo: {group} - Click Totali: {total_clicks}"):
+                                            keywords_list = grouped_keywords_df[grouped_keywords_df['Group'] == group]['Keywords'].tolist()
+                                            keyword_clicks_df = df[df['Query'].isin(keywords_list)][['Query', 'Clicks']]
+                                            st.write(keyword_clicks_df)
