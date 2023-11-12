@@ -682,7 +682,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         st.title("Keyword Grouper App")
                         
                         # Widget di caricamento file
-                        uploaded_file = st.file_uploader("Carica il tuo file CSV con le parole chiave", type="csv")
+                        uploaded_file = df_query_performance
                         
                         # Lista di stop words
                         stop_words = [
@@ -704,13 +704,13 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Controllo per la lunghezza delle tuple
                         ngram_size = st.slider("Lunghezza della Tupla", 1, 5, 2)
                         
-                        if uploaded_file is not None:
+                        if df_query_performance is not None:
                             # Leggi il file CSV
-                            df = pd.read_csv(uploaded_file)
+                            df = df_query_performance
                             
                             # Assumiamo che le keyword siano nella prima colonna
-                            if 'Keyword' not in df.columns:
-                                df.columns = ['Keyword'] + df.columns.tolist()[1:]
+                            if 'Query' not in df.columns:
+                                df.columns = ['Query'] + df.columns.tolist()[1:]
                             
                             if st.button("Raggruppa Parole Chiave"):
                                 # Raggruppa le parole chiave, passando la lista di stop words, la grandezza minima e la lunghezza delle tuple come argomenti
@@ -726,5 +726,5 @@ if CLIENT_ID and CLIENT_SECRET:
                                 for group, total_clicks in sorted_groups:
                                     with st.expander(f"Gruppo: {group} - Click Totali: {total_clicks}"):
                                         keywords_list = grouped_keywords_df[grouped_keywords_df['Group'] == group]['Keywords'].tolist()
-                                        keyword_clicks_df = df[df['Keyword'].isin(keywords_list)][['Keyword', 'Clicks']]
+                                        keyword_clicks_df = df[df['Query'].isin(keywords_list)][['Query', 'Clicks']]
                                         st.write(keyword_clicks_df)
