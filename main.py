@@ -24,7 +24,6 @@ st.set_page_config(
     layout="wide"
 )
 
-
 # Inizializza le variabili di sessione per la gestione dei dati utente
 if 'credentials' not in st.session_state:
     st.session_state.credentials = None
