@@ -125,7 +125,7 @@ if CLIENT_ID and CLIENT_SECRET:
             url_to_inspect = st.text_input("Insert URL to inspect:")
 
             # URL INSPECTION
-            if st.button('URL INSPECTION'):
+            if st.button('🕵️‍♂️ URL INSPECTION'):
                 with st.spinner("Inspecting URL..."):    
                     if st.session_state.selected_site is not None:
                         request_body = {
