@@ -75,7 +75,10 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
 
 # Pagina iniziale
 st.title('🔍Search Console API Companion')
-st.text("by Cristiano Caggiula")
+   st.caption(
+        "Made in 🎈 Streamlit, by [Cristiano Caggiula](https://www.linkedin.com/in/cristiano-caggiula/)."
+    )
+
 st.write(
     "Welcome to **Search Console API Companion**! Explore and analyze Google Search Console data with ease. Authenticate effortlessly, choose your website, and access features like URL inspection and search analytics. Customize your searches and enjoy unlimited rows of data, without the need for programming skills. Unleash the full potential of your website's visibility with this user-friendly tool, perfect for webmasters, SEO experts, and digital marketers."
 )
