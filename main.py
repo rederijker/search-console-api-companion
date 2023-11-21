@@ -133,7 +133,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             'siteUrl': st.session_state.selected_site
                         }
                         response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-                        st.write("### Risultato dell'ispezione:")
+                        
                     
                     inspection_result = response.get('inspectionResult', {})
                     index_status_result = inspection_result.get('indexStatusResult', {})
