@@ -75,7 +75,7 @@ def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
 
 # Pagina iniziale
 st.title('🔍Search Console API Companion')
-   st.caption(
+   st.write(
         "Made in 🎈 Streamlit, by [Cristiano Caggiula](https://www.linkedin.com/in/cristiano-caggiula/)."
     )
 
