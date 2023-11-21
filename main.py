@@ -139,19 +139,19 @@ if CLIENT_ID and CLIENT_SECRET:
                     mobile_usability_result = inspection_result.get('mobileUsabilityResult', {})
                     rich_results_result = inspection_result.get('richResultsResult', {})
             
-                    st.write("Result:")
+                    st.write("###Result")
                     st.write(inspection_result.get('inspectionResultLink', 'N/A'))
                     
-                    st.write("Index state:")
+                    st.write("🤖INDEX STATE")
                     st.write(f"Verdict: {index_status_result.get('verdict', 'N/A')}")
                     st.write(f"Coverage State: {index_status_result.get('coverageState', 'N/A')}")
                     st.write(f"Robots.txt State: {index_status_result.get('robotsTxtState', 'N/A')}")
                     # Add more fields as needed
                     
-                    st.write("Mobile usabilty:")
+                    st.write("📱MOBILE USABILTY")
                     st.write(f"Verdict: {mobile_usability_result.get('verdict', 'N/A')}")
                     
-                    st.write("Enahenced results:")
+                    st.write("⭐RICH RESULTS")
                     st.write(f"Verdict: {rich_results_result.get('verdict', 'N/A')}")
                     # Add more fields as needed
 
