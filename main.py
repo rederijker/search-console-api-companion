@@ -124,35 +124,38 @@ if CLIENT_ID and CLIENT_SECRET:
             # Inserisci l'URL da ispezionare
             url_to_inspect = st.text_input("Insert URL to inspect:")
 
-            # Esegui l'ispezione dell'URL
-            if st.button('Ispeziona URL'):
-                if st.session_state.selected_site is not None:
-                    request_body = {
-                        'inspectionUrl': url_to_inspect,
-                        'siteUrl': st.session_state.selected_site
-                    }
-                    response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
-                    st.write("### Risultato dell'ispezione:")
+            # URL INSPECTION
+            if st.button('URL INSPECTION'):
+                with st.spinner("Inspecting URL..."):    
+                    if st.session_state.selected_site is not None:
+                        request_body = {
+                            'inspectionUrl': url_to_inspect,
+                            'siteUrl': st.session_state.selected_site
+                        }
+                        response = webmasters_service.urlInspection().index().inspect(body=request_body).execute()
+                        st.write("### Risultato dell'ispezione:")
                     
                     inspection_result = response.get('inspectionResult', {})
                     index_status_result = inspection_result.get('indexStatusResult', {})
                     mobile_usability_result = inspection_result.get('mobileUsabilityResult', {})
                     rich_results_result = inspection_result.get('richResultsResult', {})
             
-                    st.write("###Result")
-                    st.write(inspection_result.get('inspectionResultLink', 'N/A'))
+                    st.write("### Result")
+                    col1, col2, col3 =st.columns(3)
+                    with col1:
+                        st.write("🤖INDEX STATE")
+                        st.write(f"Verdict: {index_status_result.get('verdict', 'N/A')}")
+                        st.write(f"Coverage State: {index_status_result.get('coverageState', 'N/A')}")
+                        st.write(f"Robots.txt State: {index_status_result.get('robotsTxtState', 'N/A')}")
+                    with col2:
+                        st.write("📱MOBILE USABILTY")
+                        st.write(f"Verdict: {mobile_usability_result.get('verdict', 'N/A')}")
+                    with col3:
+                        st.write("⭐RICH RESULTS")
+                        st.write(f"Verdict: {rich_results_result.get('verdict', 'N/A')}")
                     
-                    st.write("🤖INDEX STATE")
-                    st.write(f"Verdict: {index_status_result.get('verdict', 'N/A')}")
-                    st.write(f"Coverage State: {index_status_result.get('coverageState', 'N/A')}")
-                    st.write(f"Robots.txt State: {index_status_result.get('robotsTxtState', 'N/A')}")
-                    # Add more fields as needed
-                    
-                    st.write("📱MOBILE USABILTY")
-                    st.write(f"Verdict: {mobile_usability_result.get('verdict', 'N/A')}")
-                    
-                    st.write("⭐RICH RESULTS")
-                    st.write(f"Verdict: {rich_results_result.get('verdict', 'N/A')}")
+			
+                    st.write(inspection_result.get('inspectionResultLink', 'N/A'))                 
                     # Add more fields as needed
                     with st.expander("Complete response"):
                         st.write(f'Response: {response}')
