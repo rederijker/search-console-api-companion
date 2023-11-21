@@ -154,6 +154,8 @@ if CLIENT_ID and CLIENT_SECRET:
                     st.write("⭐RICH RESULTS")
                     st.write(f"Verdict: {rich_results_result.get('verdict', 'N/A')}")
                     # Add more fields as needed
+                    with st.expander("Complete response"):
+                        st.write(f'Response: {response}')
 
         with tab1:
             # Ottieni dati dalla Search Console
