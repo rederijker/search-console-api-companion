@@ -483,7 +483,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 # Ordina il DataFrame per la colonna 'Clicks' in ordine decrescente
                                 df_query_reset = df_query_performance.sort_values('Clicks', ascending=False)
                                 df_query_reset_mean = df_query_reset['Clicks'].mean()
-                                df_query_reset=df_aggregated_popular_page[(df_query_reset['Clicks'] >= df_query_reset_mean)]   
+                                df_query_reset=df_query_reset[(df_query_reset['Clicks'] >= df_query_reset_mean)]   
                                 
                                 # Resetta l'indice sul DataFrame ordinato, non su quello originale
                                 df_query_reset = df_query_reset.reset_index(drop=True)
