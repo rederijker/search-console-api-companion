@@ -500,13 +500,16 @@ if CLIENT_ID and CLIENT_SECRET:
                             lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
                             lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
                             upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
+                            def unique_pages(series):
+                                return ', '.join(series.unique())
                             
                             try:
                                 agg_funcs2 = {
                                 'Impressions': 'sum',
                                 'Clicks': 'sum',
                                 'CTR': 'mean',
-                                'Position': 'mean'
+                                'Position': 'mean',
+                                'Page':unique_pages,
                             }
                             #Raggruppiamo df
 			
