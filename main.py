@@ -509,7 +509,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                 'Clicks': 'sum',
                                 'CTR': 'mean',
                                 'Position': 'mean',
-                                'Page':unique_pages,
+                                #'Page':unique_pages,
                             }
                             #Raggruppiamo df
 			
