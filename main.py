@@ -496,7 +496,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_position = df['Position'].mean()
                             average_ctr = df['CTR'].mean()
                             #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
-                            upper_high_ctr = df_query_performance[(df_query_performance['Position'] <= average_position) & (df_query_performance['CTR'] > average_ctr)]
+                            upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
                             lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
                             lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
                             upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
@@ -513,7 +513,8 @@ if CLIENT_ID and CLIENT_SECRET:
     
                                 with st.expander("Top position and high CTR Queries"):           
                                     st.write("For these queries, there's not much you need to do; you're already doing a great job.")
-                                    st.write(df_upper_high_ctr)
+									prova = df_upper_high_ctr.groupby('Query').reset_index()
+                                    st.write(prova)
                                 with st.expander("Low position and high CTR Queries"):
                                     st.write("""
                                     Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
