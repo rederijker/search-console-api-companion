@@ -513,7 +513,7 @@ if CLIENT_ID and CLIENT_SECRET:
     
                                 with st.expander("Top position and high CTR Queries"):           
                                     st.write("For these queries, there's not much you need to do; you're already doing a great job.")
-									prova = df_upper_high_ctr.groupby('Query').reset_index()
+				    prova = df_upper_high_ctr.groupby('Query').reset_index()
                                     st.write(prova)
                                 with st.expander("Low position and high CTR Queries"):
                                     st.write("""
