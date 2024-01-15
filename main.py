@@ -502,7 +502,16 @@ if CLIENT_ID and CLIENT_SECRET:
                             upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
                             
                             try:
+                                agg_funcs2 = {
+                                'Impressions': 'sum',
+                                'Clicks': 'sum',
+                                'CTR': 'mean',
+                                'Position': 'mean'
+                            }
+                            #Raggruppiamo df
+			
                                 df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                df_upper_high_ctr = df_upper_high_ctr .groupby('Query').agg(agg_funcs2).reset_index()
                                 #Per ciascun quadrante, creare un DataFrame separato
                                 df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                                 df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
