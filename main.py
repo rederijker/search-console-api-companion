@@ -513,8 +513,7 @@ if CLIENT_ID and CLIENT_SECRET:
     
                                 with st.expander("Top position and high CTR Queries"):           
                                     st.write("For these queries, there's not much you need to do; you're already doing a great job.")
-				                    prova = df_upper_high_ctr.groupby('Query').reset_index()
-                                    st.write(prova)
+                                    st.write(df_upper_high_ctr)
                                 with st.expander("Low position and high CTR Queries"):
                                     st.write("""
                                     Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
