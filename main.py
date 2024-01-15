@@ -496,7 +496,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             average_position = df['Position'].mean()
                             average_ctr = df['CTR'].mean()
                             #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
-                            upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
+                            upper_high_ctr = df_query_performance[(df_query_performance['Position'] <= average_position) & (df_query_performance['CTR'] > average_ctr)]
                             lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
                             lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
                             upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
