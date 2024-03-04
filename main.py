@@ -514,7 +514,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             #Raggruppiamo df
 			
                                 #df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                                df_upper_high_ctr = df_upper_high_ctr.groupby('Query').agg(agg_funcs2).reset_index()
+                                df_upper_high_ctr = upper_high_ctr.groupby('Query').agg(agg_funcs2).reset_index()
                                 #Per ciascun quadrante, creare un DataFrame separato
                                 df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                                 df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
