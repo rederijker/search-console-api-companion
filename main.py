@@ -513,8 +513,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             }
                             #Raggruppiamo df
 			
-                                #df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                                grouped_data_upper = df_upper_high_ctr.groupby('Query').agg({'Page': 'first', 'Impressions': 'sum', 'Clicks': 'sum', 'CTR': 'mean', 'Position': 'mean'}).reset_index()
+                                df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                #grouped_data_upper = df_upper_high_ctr.groupby('Query').agg({'Page': 'first', 'Impressions': 'sum', 'Clicks': 'sum', 'CTR': 'mean', 'Position': 'mean'}).reset_index()
 
                                 #df_upper_high_ctr = df_upper_high_ctr.groupby('Query').agg(agg_funcs2).reset_index()
                                 #Per ciascun quadrante, creare un DataFrame separato
