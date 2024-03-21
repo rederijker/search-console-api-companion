@@ -304,7 +304,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     df = pd.DataFrame(data_list)
 					# Funzione per convertire un DataFrame in CSV+
 					# Funzione per convertire un DataFrame in CSV
-					def convert_df_to_csv(df):
+		   def convert_df_to_csv(df):
 					    return df.to_csv(index=False).encode('utf-8')
 					
 					csv = convert_df_to_csv(df)
