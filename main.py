@@ -305,7 +305,10 @@ if CLIENT_ID and CLIENT_SECRET:
                     def convert_df_to_csv(df):
                             return df.to_csv(index=False).encode('utf-8')
                     csv = convert_df_to_csv(df)
-                    st.download_button(data=csv, label="Download data CSV")
+                    st.download_button(
+			    label="Download data CSV", data=csv, file_name='nome_file.csv', mime='text/csv',
+				      
+				      )
 		   
 			
 				
