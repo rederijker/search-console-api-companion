@@ -513,9 +513,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             }
                             #Raggruppiamo df
 			
-                                #df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-				grouped_data_upper = df_upper_high_ctr.groupby('Query').agg({'Page': 'first', 'Impressions': 'sum', 'Clicks': 'sum', 'CTR': 'mean', 'Position': 'mean'}).reset_index()
-
+                                df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
                                 #df_upper_high_ctr = df_upper_high_ctr.groupby('Query').agg(agg_funcs2).reset_index()
                                 #Per ciascun quadrante, creare un DataFrame separato
                                 df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
@@ -527,7 +525,7 @@ if CLIENT_ID and CLIENT_SECRET:
     
                                 with st.expander("Top position and high CTR Queries"):           
                                     st.write("For these queries, there's not much you need to do; you're already doing a great job.")
-                                    st.write(grouped_data_upper)
+                                    st.write(df_upper_high_ctr)
                                 with st.expander("Low position and high CTR Queries"):
                                     st.write("""
                                     Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
