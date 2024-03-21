@@ -302,6 +302,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     # Alla fine del processo, mostra un messaggio di completamento
                     
                     df = pd.DataFrame(data_list)
+					# Funzione per convertire un DataFrame in CSV+
 					# Funzione per convertire un DataFrame in CSV
 					def convert_df_to_csv(df):
 					    return df.to_csv(index=False).encode('utf-8')
@@ -310,11 +311,12 @@ if CLIENT_ID and CLIENT_SECRET:
 					
 					# Crea un bottone di download per il DataFrame convertito in CSV
 					st.download_button(
-					     label="Download CSV",
+					     label="Scarica i dati come CSV",
 					     data=csv,
 					     file_name='nome_file.csv',
 					     mime='text/csv',
 					 )
+
                     
                     average_position = df['Position'].mean()
                     formatted_average_m= "{:.2f}".format(average_position)
