@@ -695,4 +695,62 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     with tab3:
                         # Funzione per determinare i gruppi di parole chiave basati sulla frequenza dei termini
-                        st.write("")
+                        st.write("")   st.header("Page Optimization")
+
+                        if 'Page' in df.columns and 'Query' in df.columns:
+                            st.write("Select a page to analyze the keywords and their presence in the HTML content.")
+                            selected_page = st.selectbox("Select Page:", df['Page'].unique())
+
+                            if selected_page:
+                                # Filter the DataFrame to get the keywords for the selected page
+                                page_data = df[df['Page'] == selected_page]
+                                keywords = page_data['Query'].tolist()
+                                
+                                st.write(f"Keywords for the selected page ({selected_page}):")
+                                st.write(keywords)
+
+                                # Fetch the HTML content of the selected page
+                                try:
+                                    response = requests.get(selected_page)
+                                    if response.status_code == 200:
+                                        html_content = response.content
+                                        soup = BeautifulSoup(html_content, 'html.parser')
+
+                                        # Extract SEO elements
+                                        meta_title = soup.find('title').text if soup.find('title') else ''
+                                        meta_description = soup.find('meta', attrs={'name': 'description'})
+                                        meta_description = meta_description['content'] if meta_description else ''
+                                        headings = ', '.join([tag.text for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])])
+                                        body_content = ' '.join([p.text for p in soup.find_all('p')])
+
+                                        # Display the extracted content (optional for debugging)
+                                        with st.expander("Extracted Meta Elements"):
+                                            st.write(f"Meta Title: {meta_title}")
+                                            st.write(f"Meta Description: {meta_description}")
+                                            st.write(f"Headings (H1-H6): {headings}")
+
+                                        # Check keywords presence
+                                        keyword_analysis = []
+                                        for keyword in keywords:
+                                            in_meta_title = keyword in meta_title
+                                            in_meta_description = keyword in meta_description
+                                            in_headings = keyword in headings
+                                            in_body_content = keyword in body_content
+
+                                            keyword_analysis.append({
+                                                'Keyword': keyword,
+                                                'In Meta Title': in_meta_title,
+                                                'In Meta Description': in_meta_description,
+                                                'In Headings (H1-H6)': in_headings,
+                                                'In Body Content': in_body_content
+                                            })
+
+                                        keyword_df = pd.DataFrame(keyword_analysis)
+                                        st.write("Keyword Analysis:")
+                                        st.dataframe(keyword_df)
+                                    else:
+                                        st.error(f"Failed to fetch the page content. Status code: {response.status_code}")
+                                except requests.exceptions.RequestException as e:
+                                    st.error(f"Error fetching the page content: {e}")
+                        else:
+                            st.error("Data frame does not contain required columns 'Page' or 'Query'")
