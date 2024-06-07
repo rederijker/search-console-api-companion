@@ -17,8 +17,6 @@ import altair as alt
 from collections import Counter
 import itertools
 import re
-import requests
-from bs4 import BeautifulSoup
 
 st.set_page_config(
     page_title="Search Console API Companion",
@@ -700,17 +698,17 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
 
                     with tab3:
-                        
                         st.header("Page Optimization")
 
                         required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
-                        
+
                         if 'Page' in df.columns and 'Query' in df.columns and all(column in df.columns for column in required_columns):
                             st.write("Select a page to analyze the keywords and their presence in the HTML content.")
+
                             selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page')
 
-                            if st.session_state.select_page:
-                                st.session_state.selected_page = st.session_state.select_page
+                            if selected_page and selected_page != st.session_state.selected_page:
+                                st.session_state.selected_page = selected_page
 
                             if st.session_state.selected_page:
                                 # Filter the DataFrame to get the keywords and other metrics for the selected page
@@ -730,8 +728,8 @@ if CLIENT_ID and CLIENT_SECRET:
                                         meta_title = soup.find('title').text if soup.find('title') else ''
                                         meta_description = soup.find('meta', attrs={'name': 'description'})
                                         meta_description = meta_description['content'] if meta_description else ''
-                                        headings = ' '.join([tag.get_text(separator=" ") for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])])
-                                        body_content = ' '.join([p.get_text(separator=" ") for p in soup.find_all('p')])
+                                        headings = ' '.join([tag.get_text(separator=" ") for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])])  # Spazio aggiuntivo tra i tag
+                                        body_content = ' '.join([p.get_text(separator=" ") for p in soup.find_all(['p', 'div', 'span', 'li'])])  # Include additional tags
 
                                         # Display the extracted content (optional for debugging)
                                         with st.expander("Extracted Meta Elements"):
@@ -739,11 +737,11 @@ if CLIENT_ID and CLIENT_SECRET:
                                             st.write(f"Meta Description: {meta_description}")
                                             st.write(f"Headings (H1-H6): {headings}")
 
-                                        # Metodo di pulizia del testo
+                                        # Method to clean text
                                         def clean_text(text):
                                             return re.sub(r'\s+', ' ', text).strip().lower()
 
-                                        # Pulizia del testo degli elementi SEO
+                                        # Cleaning the text of SEO elements
                                         meta_title_clean = clean_text(meta_title)
                                         meta_description_clean = clean_text(meta_description)
                                         headings_clean = clean_text(headings)
