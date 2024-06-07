@@ -17,7 +17,7 @@ import altair as alt
 from collections import Counter
 import itertools
 import re
-import request
+import requests
 from bs4 import BeautifulSoup
 st.set_page_config(
     page_title="Search Console API Companion",
