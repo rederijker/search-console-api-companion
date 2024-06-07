@@ -737,7 +737,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                                 st.write(f"Meta Title: {meta_title}")
                                                 st.write(f"Meta Description: {meta_description}")
                                                 st.write(f"Headings (H1-H6): {headings}")
-																								st.write(f"Body text: {body_content}")
+						st.write(f"Body text: {body_content}")
 
                                             # Method to clean text
                                             def clean_text(text):
