@@ -17,7 +17,8 @@ import altair as alt
 from collections import Counter
 import itertools
 import re
-
+import request
+from bs4 import BeautifulSoup
 st.set_page_config(
     page_title="Search Console API Companion",
     page_icon="🔍",
@@ -711,66 +712,66 @@ if CLIENT_ID and CLIENT_SECRET:
                                 st.session_state.selected_page = selected_page
 
                                 if st.session_state.selected_page:
-                                # Filter the DataFrame to get the keywords and other metrics for the selected page
-                                page_data = df[df['Page'] == st.session_state.selected_page][['Query', 'Clicks', 'Impressions', 'CTR', 'Position']]
+                                    # Filter the DataFrame to get the keywords and other metrics for the selected page
+                                    page_data = df[df['Page'] == st.session_state.selected_page][['Query', 'Clicks', 'Impressions', 'CTR', 'Position']]
 
-                                st.write(f"Keywords and metrics for the selected page ({st.session_state.selected_page}):")
-                                st.dataframe(page_data)
+                                    st.write(f"Keywords and metrics for the selected page ({st.session_state.selected_page}):")
+                                    st.dataframe(page_data)
 
-                                # Fetch the HTML content of the selected page
-                                try:
-                                    response = requests.get(st.session_state.selected_page)
-                                    if response.status_code == 200:
-                                        html_content = response.content
-                                        soup = BeautifulSoup(html_content, 'html.parser')
+                                    # Fetch the HTML content of the selected page
+                                    try:
+                                        response = requests.get(st.session_state.selected_page)
+                                        if response.status_code == 200:
+                                            html_content = response.content
+                                            soup = BeautifulSoup(html_content, 'html.parser')
 
-                                        # Extract SEO elements
-                                        meta_title = soup.find('title').text if soup.find('title') else ''
-                                        meta_description = soup.find('meta', attrs={'name': 'description'})
-                                        meta_description = meta_description['content'] if meta_description else ''
-                                        headings = ' '.join([tag.get_text(separator=" ") for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])])  # Spazio aggiuntivo tra i tag
-                                        body_content = ' '.join([p.get_text(separator=" ") for p in soup.find_all(['p', 'div', 'span', 'li'])])  # Include additional tags
+                                            # Extract SEO elements
+                                            meta_title = soup.find('title').text if soup.find('title') else ''
+                                            meta_description = soup.find('meta', attrs={'name': 'description'})
+                                            meta_description = meta_description['content'] if meta_description else ''
+                                            headings = ' '.join([tag.get_text(separator=" ") for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])])  # Spazio aggiuntivo tra i tag
+                                            body_content = ' '.join([p.get_text(separator=" ") for p in soup.find_all(['p', 'div', 'span', 'li'])])  # Include additional tags
 
-                                        # Display the extracted content (optional for debugging)
-                                        with st.expander("Extracted Meta Elements"):
-                                            st.write(f"Meta Title: {meta_title}")
-                                            st.write(f"Meta Description: {meta_description}")
-                                            st.write(f"Headings (H1-H6): {headings}")
+                                            # Display the extracted content (optional for debugging)
+                                            with st.expander("Extracted Meta Elements"):
+                                                st.write(f"Meta Title: {meta_title}")
+                                                st.write(f"Meta Description: {meta_description}")
+                                                st.write(f"Headings (H1-H6): {headings}")
 
-                                        # Method to clean text
-                                        def clean_text(text):
-                                            return re.sub(r'\s+', ' ', text).strip().lower()
+                                            # Method to clean text
+                                            def clean_text(text):
+                                                return re.sub(r'\s+', ' ', text).strip().lower()
 
-                                        # Cleaning the text of SEO elements
-                                        meta_title_clean = clean_text(meta_title)
-                                        meta_description_clean = clean_text(meta_description)
-                                        headings_clean = clean_text(headings)
-                                        body_content_clean = clean_text(body_content)
+                                            # Cleaning the text of SEO elements
+                                            meta_title_clean = clean_text(meta_title)
+                                            meta_description_clean = clean_text(meta_description)
+                                            headings_clean = clean_text(headings)
+                                            body_content_clean = clean_text(body_content)
 
-                                        # Check keywords presence
-                                        keyword_analysis = []
-                                        for keyword in page_data['Query']:
-                                            keyword_clean = clean_text(keyword)
+                                            # Check keywords presence
+                                            keyword_analysis = []
+                                            for keyword in page_data['Query']:
+                                                keyword_clean = clean_text(keyword)
 
-                                            in_meta_title = keyword_clean in meta_title_clean
-                                            in_meta_description = keyword_clean in meta_description_clean
-                                            in_headings = keyword_clean in headings_clean
-                                            in_body_content = keyword_clean in body_content_clean
+                                                in_meta_title = keyword_clean in meta_title_clean
+                                                in_meta_description = keyword_clean in meta_description_clean
+                                                in_headings = keyword_clean in headings_clean
+                                                in_body_content = keyword_clean in body_content_clean
 
-                                            keyword_analysis.append({
-                                                'Keyword': keyword,
-                                                'In Meta Title': in_meta_title,
-                                                'In Meta Description': in_meta_description,
-                                                'In Headings (H1-H6)': in_headings,
-                                                'In Body Content': in_body_content
-                                            })
+                                                keyword_analysis.append({
+                                                    'Keyword': keyword,
+                                                    'In Meta Title': in_meta_title,
+                                                    'In Meta Description': in_meta_description,
+                                                    'In Headings (H1-H6)': in_headings,
+                                                    'In Body Content': in_body_content
+                                                })
 
-                                        keyword_df = pd.DataFrame(keyword_analysis)
-                                        st.write("Keyword Analysis:")
-                                        st.dataframe(keyword_df)
-                                    else:
-                                        st.error(f"Failed to fetch the page content. Status code: {response.status_code}")
-                                except requests.exceptions.RequestException as e:
-                                    st.error(f"Error fetching the page content: {e}")
-                        else:
-                            st.error("Data frame does not contain required columns 'Page', 'Query', 'Clicks', 'Impressions', 'CTR' or 'Position'")
+                                            keyword_df = pd.DataFrame(keyword_analysis)
+                                            st.write("Keyword Analysis:")
+                                            st.dataframe(keyword_df)
+                                        else:
+                                            st.error(f"Failed to fetch the page content. Status code: {response.status_code}")
+                                    except requests.exceptions.RequestException as e:
+                                        st.error(f"Error fetching the page content: {e}")
+                            else:
+                                st.error("Data frame does not contain required columns 'Page', 'Query', 'Clicks', 'Impressions', 'CTR' or 'Position'")
