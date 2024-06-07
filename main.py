@@ -342,101 +342,105 @@ if CLIENT_ID and CLIENT_SECRET:
 
                     with col2:
                         #TRAFFIC REPORT GRAF SETUP
-                        df_graf = df.groupby('Date').agg({
-                            'Clicks': 'sum',
-                            'Impressions': 'sum',
-                            'CTR': 'mean',
-                            'Position': 'mean'
-                        }).reset_index()                        
-                          
-                                
-    
-                        def traffic_report(df_graf):
-                            # Formattazione della colonna 'CTR' del DataFrame
-                            df_graf['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
-                            #df['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}".replace('.', ','))
-                            #df_graf['CTR'] = (df_graf['CTR'] * 100).apply('{:.2f}'.format).str.replace('.', ',')
-    
-    
-                            df_graf['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
-                        
-                            # Opzioni tradotte di ECharts
-                            options = {
-                                "xAxis": {
-                                    "type": "category",
-                                    "data": df_graf['Date'].tolist(),
-                                    "axisLabel": {
-                                        "formatter": "{value}"
-                                    }
-                                },
-                                "yAxis": {"type": "value", "name": ""},
-                                "grid": {
-                                    "right": 20,
-                                    "left": 65,
-                                    "top": 45,
-                                    "bottom": 50,
-                                },
-                                "legend": {
-                                    "show": True,
-                                    "top": "top",
-                                    "align": "auto",
-                                    "selected": {  
-                                        "Clicks": True,         # La serie "Clicks" è selezionata
-                                        "Impressions": True,    # La serie "Impressions" è selezionata
-                                        "CTR": False,           # La serie "CTR" non è selezionata
-                                        "Position": False       # La serie "Position" non è selezionata
-                                    }
-                                },
-                                "tooltip": {"trigger": "axis", },
-                                "series": [
-                                    {
-                                        "type": "line",
-                                        "name": "Clicks",
-                                        "data": df_graf['Clicks'].tolist(),
-                                        "smooth": True,
-                                        "lineStyle": {"width": 1, "color": "#D5A021"},
-                                        "showSymbol": True,  # Rimuovi i marcatori dei dati per questa serie
-                                    },
-                                    {
-                                        "type": "line",
-                                        "name": "Impressions",
-                                        "data": df_graf['Impressions'].tolist(),
-                                        "smooth": True,
-                                        "lineStyle": {"width": 1, "color": "#F06449"},
-                                        "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
-                                    },
-                                    {
-                                        "type": "line",
-                                        "name": "CTR",
-                                        "data": df_graf['CTR'].tolist(),
-                                        "smooth": True,
-                                        "lineStyle": {"width": 1, "color": "#91C499"},
-                                        "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
-                                    },
-                                    {
-                                        "type": "line",
-                                        "name": "Position",
-                                        "data": df_graf['Position'].tolist(),
-                                        "smooth": True,
-                                        "lineStyle": {"width": 1, "color": "#5BC3EB"},
-                                        "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
-                                        "yAxisIndex": 1,  # Indica che questa serie utilizzerà il secondo asse Y
+                        if 'Date' in df.columns:
+                            df_graf = df.groupby('Date').agg({
+                                'Clicks': 'sum',
+                                'Impressions': 'sum',
+                                'CTR': 'mean',
+                                'Position': 'mean'
+                            }).reset_index()                        
+                            
+                                    
+        
+                            def traffic_report(df_graf):
+                                # Formattazione della colonna 'CTR' del DataFrame
+                                df_graf['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
+                                #df['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}".replace('.', ','))
+                                #df_graf['CTR'] = (df_graf['CTR'] * 100).apply('{:.2f}'.format).str.replace('.', ',')
+        
+        
+                                df_graf['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
+                            
+                                # Opzioni tradotte di ECharts
+                                options = {
+                                    "xAxis": {
+                                        "type": "category",
+                                        "data": df_graf['Date'].tolist(),
                                         "axisLabel": {
-                                            "show": "Position"  # Nascondi le etichette dell'asse Y per questa serie
+                                            "formatter": "{value}"
                                         }
                                     },
-                                ],
-                        
-                                "yAxis": [
-                                    {"type": "value", "name": ""},
-                                    {"type": "value", "inverse": True, "show": False},  # Secondo asse Y con opzione "inverse"
-                                ],
-                                "backgroundColor": "#0E1117",
-                                "color": ["#D5A021", "#F06449", "#91C499", "#5BC3EB"],
-                            }
-                        
-                            st_echarts(option=options, theme='chalk', height=500, width='100%')                    
-                        traffic_report(df_graf)
+                                    "yAxis": {"type": "value", "name": ""},
+                                    "grid": {
+                                        "right": 20,
+                                        "left": 65,
+                                        "top": 45,
+                                        "bottom": 50,
+                                    },
+                                    "legend": {
+                                        "show": True,
+                                        "top": "top",
+                                        "align": "auto",
+                                        "selected": {  
+                                            "Clicks": True,         # La serie "Clicks" è selezionata
+                                            "Impressions": True,    # La serie "Impressions" è selezionata
+                                            "CTR": False,           # La serie "CTR" non è selezionata
+                                            "Position": False       # La serie "Position" non è selezionata
+                                        }
+                                    },
+                                    "tooltip": {"trigger": "axis", },
+                                    "series": [
+                                        {
+                                            "type": "line",
+                                            "name": "Clicks",
+                                            "data": df_graf['Clicks'].tolist(),
+                                            "smooth": True,
+                                            "lineStyle": {"width": 1, "color": "#D5A021"},
+                                            "showSymbol": True,  # Rimuovi i marcatori dei dati per questa serie
+                                        },
+                                        {
+                                            "type": "line",
+                                            "name": "Impressions",
+                                            "data": df_graf['Impressions'].tolist(),
+                                            "smooth": True,
+                                            "lineStyle": {"width": 1, "color": "#F06449"},
+                                            "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
+                                        },
+                                        {
+                                            "type": "line",
+                                            "name": "CTR",
+                                            "data": df_graf['CTR'].tolist(),
+                                            "smooth": True,
+                                            "lineStyle": {"width": 1, "color": "#91C499"},
+                                            "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
+                                        },
+                                        {
+                                            "type": "line",
+                                            "name": "Position",
+                                            "data": df_graf['Position'].tolist(),
+                                            "smooth": True,
+                                            "lineStyle": {"width": 1, "color": "#5BC3EB"},
+                                            "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
+                                            "yAxisIndex": 1,  # Indica che questa serie utilizzerà il secondo asse Y
+                                            "axisLabel": {
+                                                "show": "Position"  # Nascondi le etichette dell'asse Y per questa serie
+                                            }
+                                        },
+                                    ],
+                            
+                                    "yAxis": [
+                                        {"type": "value", "name": ""},
+                                        {"type": "value", "inverse": True, "show": False},  # Secondo asse Y con opzione "inverse"
+                                    ],
+                                    "backgroundColor": "#0E1117",
+                                    "color": ["#D5A021", "#F06449", "#91C499", "#5BC3EB"],
+                                }
+                            
+                                st_echarts(option=options, theme='chalk', height=500, width='100%')                    
+                            traffic_report(df_graf)
+                        else:
+                            st.write("### Andamento del traffico")
+                            st.warning("Niente grafico andamento senza date.")
             
                     st.subheader("ANALYSIS")
             
