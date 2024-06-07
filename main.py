@@ -708,7 +708,7 @@ if CLIENT_ID and CLIENT_SECRET:
 
                             selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page')
 
-                            if selected_page and selected_page != st.session_state.selected_page:
+                            if selected_page and selected_page is not None::
                                 st.session_state.selected_page = selected_page
 
                                 if st.session_state.selected_page:
