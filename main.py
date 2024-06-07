@@ -696,7 +696,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     with tab3:
                         # Funzione per determinare i gruppi di parole chiave basati sulla frequenza dei termini
                         st.write("")   
-			st.header("Page Optimization")
+						st.header("Page Optimization")
 
                         if 'Page' in df.columns and 'Query' in df.columns:
                             st.write("Select a page to analyze the keywords and their presence in the HTML content.")
