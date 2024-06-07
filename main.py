@@ -18,10 +18,6 @@ from collections import Counter
 import itertools
 import re
 
-import requests
-from bs4 import BeautifulSoup
-import re
-
 st.set_page_config(
     page_title="Search Console API Companion",
     page_icon="🔍",
@@ -714,7 +710,7 @@ if CLIENT_ID and CLIENT_SECRET:
                             if selected_page and selected_page != st.session_state.selected_page:
                                 st.session_state.selected_page = selected_page
 
-                            if st.session_state.selected_page:
+                                if st.session_state.selected_page:
                                 # Filter the DataFrame to get the keywords and other metrics for the selected page
                                 page_data = df[df['Page'] == st.session_state.selected_page][['Query', 'Clicks', 'Impressions', 'CTR', 'Position']]
 
