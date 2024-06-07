@@ -12,3 +12,4 @@ streamlit-raw-echarts
 streamlit-echarts
 pycharts
 altair
+bs4
