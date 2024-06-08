@@ -54,6 +54,47 @@ if 'page_data' not in st.session_state:
 if 'keyword_analysis' not in st.session_state:
     st.session_state.keyword_analysis = None
 
+
+# Definizione dello scope OAuth per l'autorizzazione
+OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
+
+# URI di reindirizzamento per l'autenticazione OAuth
+REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
+
+# Funzione per autorizzare l'app e ottenere le credenziali
+def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
+    # Flusso di autorizzazione OAuth
+    flow = OAuth2WebServerFlow(client_id=client_id, client_secret=client_secret, scope=oauth_scope, redirect_uri=redirect_uri)
+
+    # Verifica se le credenziali sono già memorizzate nella cache
+    if st.session_state.credentials is None:
+        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione all'utente
+        authorize_url = flow.step1_get_authorize_url()
+        st.write(f"➡️ Go to [this link]({authorize_url}) and autorize app")
+
+        auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
+
+        if auth_code:
+            try:
+                # Scambia l'Authorization Code per le credenziali
+                credentials = flow.step2_exchange(auth_code)
+
+                # Memorizza le credenziali nella sessione
+                st.session_state.credentials = credentials
+            except Exception as e:
+                st.write(f"Errore durante l'autorizzazione: {e}")
+
+    return st.session_state.credentials
+
+# Pagina iniziale
+st.title('🔍Search Console API Companion')
+st.write(
+        "Made in 🎈 Streamlit by [Cristiano Caggiula](https://www.linkedin.com/in/cristiano-caggiula/)"
+        )
+
+st.write(
+    "Welcome to **Search Console API Companion**! Explore and analyze Google Search Console data with ease. Authenticate effortlessly, choose your website, and access features like URL inspection and search analytics. Customize your searches and enjoy unlimited rows of data, without the need for programming skills. Unleash the full potential of your website's visibility with this user-friendly tool, perfect for webmasters, SEO experts, and digital marketers."
+)
 required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
 df = pd.DataFrame({
@@ -156,47 +197,6 @@ if 'Page' in df.columns and 'Query' in df.columns and all(column in df.columns f
                 st.write(f"Body text: {st.session_state.page_data['body_content']}")
 else:
     st.error("Data frame does not contain required columns 'Page', 'Query', 'Clicks', 'Impressions', 'CTR' or 'Position'")
-
-# Definizione dello scope OAuth per l'autorizzazione
-OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
-
-# URI di reindirizzamento per l'autenticazione OAuth
-REDIRECT_URI = 'urn:ietf:wg:oauth:2.0:oob'
-
-# Funzione per autorizzare l'app e ottenere le credenziali
-def authorize_app(client_id, client_secret, oauth_scope, redirect_uri):
-    # Flusso di autorizzazione OAuth
-    flow = OAuth2WebServerFlow(client_id=client_id, client_secret=client_secret, scope=oauth_scope, redirect_uri=redirect_uri)
-
-    # Verifica se le credenziali sono già memorizzate nella cache
-    if st.session_state.credentials is None:
-        # Se non ci sono credenziali memorizzate, richiedi l'autorizzazione all'utente
-        authorize_url = flow.step1_get_authorize_url()
-        st.write(f"➡️ Go to [this link]({authorize_url}) and autorize app")
-
-        auth_code = st.text_input('Inserisci il tuo Authorization Code qui:')
-
-        if auth_code:
-            try:
-                # Scambia l'Authorization Code per le credenziali
-                credentials = flow.step2_exchange(auth_code)
-
-                # Memorizza le credenziali nella sessione
-                st.session_state.credentials = credentials
-            except Exception as e:
-                st.write(f"Errore durante l'autorizzazione: {e}")
-
-    return st.session_state.credentials
-
-# Pagina iniziale
-st.title('🔍Search Console API Companion')
-st.write(
-        "Made in 🎈 Streamlit by [Cristiano Caggiula](https://www.linkedin.com/in/cristiano-caggiula/)"
-        )
-
-st.write(
-    "Welcome to **Search Console API Companion**! Explore and analyze Google Search Console data with ease. Authenticate effortlessly, choose your website, and access features like URL inspection and search analytics. Customize your searches and enjoy unlimited rows of data, without the need for programming skills. Unleash the full potential of your website's visibility with this user-friendly tool, perfect for webmasters, SEO experts, and digital marketers."
-)
 
 
 # Inserimento delle credenziali Google Cloud Project
