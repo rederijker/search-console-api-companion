@@ -39,6 +39,10 @@ if 'dimension_filters' not in st.session_state:
     st.session_state.dimension_filters = {}
 
 #variabili content optimizer
+if 'text_input' not in st.session_state:
+    st.session_state.text_input = None
+
+# Initialize session state for selected page and other data
 if 'selected_page' not in st.session_state:
     st.session_state.selected_page = None
 
@@ -47,7 +51,6 @@ if 'page_data' not in st.session_state:
 
 if 'keyword_analysis' not in st.session_state:
     st.session_state.keyword_analysis = None
-
 
 
 # Definizione dello scope OAuth per l'autorizzazione
@@ -707,7 +710,8 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Required columns for the DataFrame
                         required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
-                
+                        # Assuming df is already defined with real data
+                        # df = pd.DataFrame({...})
 
                         def fetch_page_data(page_url):
                             try:
@@ -771,9 +775,13 @@ if CLIENT_ID and CLIENT_SECRET:
                             selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page')
 
                             if selected_page:
-                                st.session_state.selected_page = selected_page
+                                # Only update the session state if the selected page is different
+                                if st.session_state.selected_page != selected_page:
+                                    st.session_state.selected_page = selected_page
+                                    st.session_state.page_data = None  # Reset page data when a new page is selected
+                                    st.session_state.keyword_analysis = None  # Reset keyword analysis when a new page is selected
 
-                                if not st.session_state.page_data:
+                                if st.session_state.page_data is None:
                                     st.session_state.page_data = fetch_page_data(selected_page)
 
                                 if st.session_state.page_data:
@@ -781,7 +789,7 @@ if CLIENT_ID and CLIENT_SECRET:
                                     st.write(f"Keywords and metrics for the selected page ({selected_page}):")
                                     st.dataframe(page_data)
 
-                                    if not st.session_state.keyword_analysis:
+                                    if st.session_state.keyword_analysis is None:
                                         st.session_state.keyword_analysis = analyze_keywords(st.session_state.page_data, page_data['Query'])
 
                                     keyword_df = pd.DataFrame(st.session_state.keyword_analysis)
