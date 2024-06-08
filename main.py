@@ -53,6 +53,8 @@ if 'page_data' not in st.session_state:
 if 'keyword_analysis' not in st.session_state:
     st.session_state.keyword_analysis = None
 
+required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
+
 
 
 
@@ -711,7 +713,7 @@ if CLIENT_ID and CLIENT_SECRET:
 			
 
                         st.header("Page Optimization")
-			required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
+			
 
                         # Assuming df is already defined with real data
                         # df = pd.DataFrame({...})
