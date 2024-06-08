@@ -707,15 +707,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         # Required columns for the DataFrame
                         required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
-                        # Sample DataFrame (replace this with your actual data)
-                        df = pd.DataFrame({
-                            'Page': ['http://example.com/page1', 'http://example.com/page2'],
-                            'Query': ['keyword1', 'keyword2'],
-                            'Clicks': [10, 15],
-                            'Impressions': [100, 150],
-                            'CTR': [0.1, 0.1],
-                            'Position': [1, 2]
-                        })
+                
 
                         def fetch_page_data(page_url):
                             try:
