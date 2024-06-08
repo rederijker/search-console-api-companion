@@ -56,6 +56,106 @@ if 'keyword_analysis' not in st.session_state:
 
 required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
+df = pd.DataFrame({
+    'Page': ['https://www.tuttotesla.it/tesla-model-s/', 'https://www.tuttotesla.it/tesla-model-3/'],
+    'Query': ['tesla model 2', 'tesla model 3'],
+    'Clicks': [10, 20],
+    'Impressions': [100, 200],
+    'CTR': [0.1, 0.2],
+    'Position': [1, 2]
+})
+
+def fetch_page_data(page_url):
+    try:
+        response = requests.get(page_url)
+        if response.status_code == 200:
+            html_content = response.content
+            soup = BeautifulSoup(html_content, 'html.parser')
+
+            # Extract SEO elements
+            meta_title = soup.find('title').text if soup.find('title') else ''
+            meta_description = soup.find('meta', attrs={'name': 'description'})
+            meta_description = meta_description['content'] if meta_description else ''
+            headings = ' '.join([tag.get_text(separator=" ") for tag in soup.find_all(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'])])
+            body_content = ' '.join([p.get_text(separator=" ") for p in soup.find_all(['p', 'div', 'span', 'li'])])
+
+            return {
+                'meta_title': meta_title,
+                'meta_description': meta_description,
+                'headings': headings,
+                'body_content': body_content
+            }
+        else:
+            st.error(f"Failed to fetch the page content. Status code: {response.status_code}")
+    except requests.exceptions.RequestException as e:
+        st.error(f"Error fetching the page content: {e}")
+    return None
+
+def analyze_keywords(page_data, keywords):
+    def clean_text(text):
+        return re.sub(r'\s+', ' ', text).strip().lower()
+
+    # Clean the text of SEO elements
+    meta_title_clean = clean_text(page_data['meta_title'])
+    meta_description_clean = clean_text(page_data['meta_description'])
+    headings_clean = clean_text(page_data['headings'])
+    body_content_clean = clean_text(page_data['body_content'])
+
+    # Check keywords presence
+    keyword_analysis = []
+    for keyword in keywords:
+        keyword_clean = clean_text(keyword)
+
+        in_meta_title = keyword_clean in meta_title_clean
+        in_meta_description = keyword_clean in meta_description_clean
+        in_headings = keyword_clean in headings_clean
+        in_body_content = keyword_clean in body_content_clean
+
+        keyword_analysis.append({
+            'Keyword': keyword,
+            'In Meta Title': in_meta_title,
+            'In Meta Description': in_meta_description,
+            'In Headings (H1-H6)': in_headings,
+            'In Body Content': in_body_content
+        })
+
+    return keyword_analysis
+
+if 'Page' in df.columns and 'Query' in df.columns and all(column in df.columns for column in required_columns):
+    st.write("Select a page to analyze the keywords and their presence in the HTML content.")
+
+    def on_page_change():
+        # Reset page data and keyword analysis when a new page is selected
+        st.session_state.page_data = None
+        st.session_state.keyword_analysis = None
+
+    selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page', on_change=on_page_change)
+
+    if selected_page:
+        st.session_state.selected_page = selected_page
+
+        if st.session_state.page_data is None:
+            st.session_state.page_data = fetch_page_data(selected_page)
+
+        if st.session_state.page_data:
+            page_data = df[df['Page'] == selected_page][['Query', 'Clicks', 'Impressions', 'CTR', 'Position']]
+            st.write(f"Keywords and metrics for the selected page ({selected_page}):")
+            st.dataframe(page_data)
+
+            if st.session_state.keyword_analysis is None:
+                st.session_state.keyword_analysis = analyze_keywords(st.session_state.page_data, page_data['Query'])
+
+            keyword_df = pd.DataFrame(st.session_state.keyword_analysis)
+            st.write("Keyword Analysis:")
+            st.dataframe(keyword_df)
+
+            with st.expander("Extracted Meta Elements"):
+                st.write(f"Meta Title: {st.session_state.page_data['meta_title']}")
+                st.write(f"Meta Description: {st.session_state.page_data['meta_description']}")
+                st.write(f"Headings (H1-H6): {st.session_state.page_data['headings']}")
+                st.write(f"Body text: {st.session_state.page_data['body_content']}")
+else:
+    st.error("Data frame does not contain required columns 'Page', 'Query', 'Clicks', 'Impressions', 'CTR' or 'Position'")
 
 # Definizione dello scope OAuth per l'autorizzazione
 OAUTH_SCOPE = 'https://www.googleapis.com/auth/webmasters.readonly'
