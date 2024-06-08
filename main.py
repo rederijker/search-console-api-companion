@@ -53,7 +53,6 @@ if 'page_data' not in st.session_state:
 if 'keyword_analysis' not in st.session_state:
     st.session_state.keyword_analysis = None
 
-required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
 
 
