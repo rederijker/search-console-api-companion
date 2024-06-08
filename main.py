@@ -42,7 +42,8 @@ if 'dimension_filters' not in st.session_state:
 if 'text_input' not in st.session_state:
     st.session_state.text_input = None
 
-# Initializing session state for selected page
+# Required columns for the DataFrame
+
 # Initialize session state
 if 'selected_page' not in st.session_state:
     st.session_state.selected_page = None
@@ -52,9 +53,6 @@ if 'page_data' not in st.session_state:
 
 if 'keyword_analysis' not in st.session_state:
     st.session_state.keyword_analysis = None
-
-required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
-
 
 
 
@@ -710,14 +708,11 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
 
                     with tab3:
-			
-
+                        
                         st.header("Page Optimization")
-			
 
-                        # Assuming df is already defined with real data
-                        # df = pd.DataFrame({...})
-
+                        # Placeholder DataFrame for demonstration
+                 
                         def fetch_page_data(page_url):
                             try:
                                 response = requests.get(page_url)
@@ -777,35 +772,29 @@ if CLIENT_ID and CLIENT_SECRET:
                         if 'Page' in df.columns and 'Query' in df.columns and all(column in df.columns for column in required_columns):
                             st.write("Select a page to analyze the keywords and their presence in the HTML content.")
 
-                            def on_page_change():
-                                # Reset page data and keyword analysis when a new page is selected
-                                st.session_state.page_data = None
+                            selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page')
+
+                            if selected_page and selected_page != st.session_state.selected_page:
+                                st.session_state.selected_page = selected_page
+                                st.session_state.page_data = fetch_page_data(selected_page)
                                 st.session_state.keyword_analysis = None
 
-                            selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page', on_change=on_page_change)
+                            if st.session_state.page_data:
+                                page_data = df[df['Page'] == st.session_state.selected_page][['Query', 'Clicks', 'Impressions', 'CTR', 'Position']]
+                                st.write(f"Keywords and metrics for the selected page ({st.session_state.selected_page}):")
+                                st.dataframe(page_data)
 
-                            if selected_page:
-                                st.session_state.selected_page = selected_page
+                                if st.session_state.keyword_analysis is None:
+                                    st.session_state.keyword_analysis = analyze_keywords(st.session_state.page_data, page_data['Query'])
 
-                                if st.session_state.page_data is None:
-                                    st.session_state.page_data = fetch_page_data(selected_page)
+                                keyword_df = pd.DataFrame(st.session_state.keyword_analysis)
+                                st.write("Keyword Analysis:")
+                                st.dataframe(keyword_df)
 
-                                if st.session_state.page_data:
-                                    page_data = df[df['Page'] == selected_page][['Query', 'Clicks', 'Impressions', 'CTR', 'Position']]
-                                    st.write(f"Keywords and metrics for the selected page ({selected_page}):")
-                                    st.dataframe(page_data)
-
-                                    if st.session_state.keyword_analysis is None:
-                                        st.session_state.keyword_analysis = analyze_keywords(st.session_state.page_data, page_data['Query'])
-
-                                    keyword_df = pd.DataFrame(st.session_state.keyword_analysis)
-                                    st.write("Keyword Analysis:")
-                                    st.dataframe(keyword_df)
-
-                                    with st.expander("Extracted Meta Elements"):
-                                        st.write(f"Meta Title: {st.session_state.page_data['meta_title']}")
-                                        st.write(f"Meta Description: {st.session_state.page_data['meta_description']}")
-                                        st.write(f"Headings (H1-H6): {st.session_state.page_data['headings']}")
-                                        st.write(f"Body text: {st.session_state.page_data['body_content']}")
+                                with st.expander("Extracted Meta Elements"):
+                                    st.write(f"Meta Title: {st.session_state.page_data['meta_title']}")
+                                    st.write(f"Meta Description: {st.session_state.page_data['meta_description']}")
+                                    st.write(f"Headings (H1-H6): {st.session_state.page_data['headings']}")
+                                    st.write(f"Body text: {st.session_state.page_data['body_content']}")
                         else:
                             st.error("Data frame does not contain required columns 'Page', 'Query', 'Clicks', 'Impressions', 'CTR' or 'Position'")
