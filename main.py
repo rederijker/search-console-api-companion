@@ -708,9 +708,10 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
 
                     with tab3:
-			required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
+			
 
                         st.header("Page Optimization")
+			required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
                         # Assuming df is already defined with real data
                         # df = pd.DataFrame({...})
