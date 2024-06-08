@@ -39,6 +39,12 @@ if 'dimension_filters' not in st.session_state:
     st.session_state.dimension_filters = {}
 
 #variabili content optimizer
+if 'text_input' not in st.session_state:
+    st.session_state.text_input = None
+
+# Initializing session state for selected page
+
+# Initialize session state for selected page and other data
 if 'selected_page' not in st.session_state:
     st.session_state.selected_page = None
 
@@ -47,6 +53,7 @@ if 'page_data' not in st.session_state:
 
 if 'keyword_analysis' not in st.session_state:
     st.session_state.keyword_analysis = None
+
 
 
 # Definizione dello scope OAuth per l'autorizzazione
@@ -701,10 +708,8 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
 
                     with tab3:
-                        st.header("Page Optimization")
-
-                        # Required columns for the DataFrame
-                        required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
+                       st.header("Page Optimization")
+                       required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
                         # Assuming df is already defined with real data
                         # df = pd.DataFrame({...})
