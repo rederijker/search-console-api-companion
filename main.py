@@ -42,7 +42,8 @@ if 'dimension_filters' not in st.session_state:
 if 'text_input' not in st.session_state:
     st.session_state.text_input = None
 
-# Initialize session state for selected page and other data
+# Initializing session state for selected page
+# Initialize session state
 if 'selected_page' not in st.session_state:
     st.session_state.selected_page = None
 
@@ -707,10 +708,9 @@ if CLIENT_ID and CLIENT_SECRET:
                             st.warning(e)
 
                     with tab3:
-                        st.header("Page Optimization")
+			required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
 
-                        # Required columns for the DataFrame
-                        required_columns = ['Page', 'Query', 'Clicks', 'Impressions', 'CTR', 'Position']
+                        st.header("Page Optimization")
 
                         # Assuming df is already defined with real data
                         # df = pd.DataFrame({...})
@@ -774,14 +774,15 @@ if CLIENT_ID and CLIENT_SECRET:
                         if 'Page' in df.columns and 'Query' in df.columns and all(column in df.columns for column in required_columns):
                             st.write("Select a page to analyze the keywords and their presence in the HTML content.")
 
-                            selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page')
+                            def on_page_change():
+                                # Reset page data and keyword analysis when a new page is selected
+                                st.session_state.page_data = None
+                                st.session_state.keyword_analysis = None
+
+                            selected_page = st.selectbox("Select Page:", df['Page'].unique(), key='select_page', on_change=on_page_change)
 
                             if selected_page:
-                                # Only update the session state if the selected page is different
-                                if st.session_state.selected_page != selected_page:
-                                    st.session_state.selected_page = selected_page
-                                    st.session_state.page_data = None  # Reset page data when a new page is selected
-                                    st.session_state.keyword_analysis = None  # Reset keyword analysis when a new page is selected
+                                st.session_state.selected_page = selected_page
 
                                 if st.session_state.page_data is None:
                                     st.session_state.page_data = fetch_page_data(selected_page)
