@@ -356,357 +356,300 @@ if CLIENT_ID and CLIENT_SECRET:
                         st.dataframe(df, width=2000)
 
                     with col2:
-                        #TRAFFIC REPORT GRAF SETUP
-                        if 'Date' in df.columns:
+                        if 'df_graf' not in st.session_state:
+                            st.session_state.df_graf = None
+                        if 'graf_options' not in st.session_state:
+                            st.session_state.graf_options = None
+
+                        def process_data(df):
                             df_graf = df.groupby('Date').agg({
                                 'Clicks': 'sum',
                                 'Impressions': 'sum',
                                 'CTR': 'mean',
                                 'Position': 'mean'
-                            }).reset_index()                        
-                            
-                                    
-        
-                            def traffic_report(df_graf):
-                                # Formattazione della colonna 'CTR' del DataFrame
-                                df_graf['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
-                                #df['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}".replace('.', ','))
-                                #df_graf['CTR'] = (df_graf['CTR'] * 100).apply('{:.2f}'.format).str.replace('.', ',')
-        
-        
-                                df_graf['Position'] = df['Position'].apply(lambda pos: round(pos, 2))
-                            
-                                # Opzioni tradotte di ECharts
-                                options = {
-                                    "xAxis": {
-                                        "type": "category",
-                                        "data": df_graf['Date'].tolist(),
+                            }).reset_index()
+                            return df_graf
+
+                        def generate_chart_options(df_graf):
+                            df_graf['CTR'] = df_graf['CTR'].apply(lambda ctr: f"{ctr * 100:.2f}")
+                            df_graf['Position'] = df_graf['Position'].apply(lambda pos: round(pos, 2))
+
+                            options = {
+                                "xAxis": {
+                                    "type": "category",
+                                    "data": df_graf['Date'].tolist(),
+                                    "axisLabel": {
+                                        "formatter": "{value}"
+                                    }
+                                },
+                                "yAxis": {"type": "value", "name": ""},
+                                "grid": {
+                                    "right": 20,
+                                    "left": 65,
+                                    "top": 45,
+                                    "bottom": 50,
+                                },
+                                "legend": {
+                                    "show": True,
+                                    "top": "top",
+                                    "align": "auto",
+                                    "selected": {  
+                                        "Clicks": True,         # La serie "Clicks" è selezionata
+                                        "Impressions": True,    # La serie "Impressions" è selezionata
+                                        "CTR": False,           # La serie "CTR" non è selezionata
+                                        "Position": False       # La serie "Position" non è selezionata
+                                    }
+                                },
+                                "tooltip": {"trigger": "axis"},
+                                "series": [
+                                    {
+                                        "type": "line",
+                                        "name": "Clicks",
+                                        "data": df_graf['Clicks'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 1, "color": "#D5A021"},
+                                        "showSymbol": True,
+                                    },
+                                    {
+                                        "type": "line",
+                                        "name": "Impressions",
+                                        "data": df_graf['Impressions'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 1, "color": "#F06449"},
+                                        "showSymbol": False,
+                                    },
+                                    {
+                                        "type": "line",
+                                        "name": "CTR",
+                                        "data": df_graf['CTR'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 1, "color": "#91C499"},
+                                        "showSymbol": False,
+                                    },
+                                    {
+                                        "type": "line",
+                                        "name": "Position",
+                                        "data": df_graf['Position'].tolist(),
+                                        "smooth": True,
+                                        "lineStyle": {"width": 1, "color": "#5BC3EB"},
+                                        "showSymbol": False,
+                                        "yAxisIndex": 1,
                                         "axisLabel": {
-                                            "formatter": "{value}"
+                                            "show": "Position"
                                         }
                                     },
-                                    "yAxis": {"type": "value", "name": ""},
-                                    "grid": {
-                                        "right": 20,
-                                        "left": 65,
-                                        "top": 45,
-                                        "bottom": 50,
-                                    },
-                                    "legend": {
-                                        "show": True,
-                                        "top": "top",
-                                        "align": "auto",
-                                        "selected": {  
-                                            "Clicks": True,         # La serie "Clicks" è selezionata
-                                            "Impressions": True,    # La serie "Impressions" è selezionata
-                                            "CTR": False,           # La serie "CTR" non è selezionata
-                                            "Position": False       # La serie "Position" non è selezionata
-                                        }
-                                    },
-                                    "tooltip": {"trigger": "axis", },
-                                    "series": [
-                                        {
-                                            "type": "line",
-                                            "name": "Clicks",
-                                            "data": df_graf['Clicks'].tolist(),
-                                            "smooth": True,
-                                            "lineStyle": {"width": 1, "color": "#D5A021"},
-                                            "showSymbol": True,  # Rimuovi i marcatori dei dati per questa serie
-                                        },
-                                        {
-                                            "type": "line",
-                                            "name": "Impressions",
-                                            "data": df_graf['Impressions'].tolist(),
-                                            "smooth": True,
-                                            "lineStyle": {"width": 1, "color": "#F06449"},
-                                            "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
-                                        },
-                                        {
-                                            "type": "line",
-                                            "name": "CTR",
-                                            "data": df_graf['CTR'].tolist(),
-                                            "smooth": True,
-                                            "lineStyle": {"width": 1, "color": "#91C499"},
-                                            "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
-                                        },
-                                        {
-                                            "type": "line",
-                                            "name": "Position",
-                                            "data": df_graf['Position'].tolist(),
-                                            "smooth": True,
-                                            "lineStyle": {"width": 1, "color": "#5BC3EB"},
-                                            "showSymbol": False,  # Rimuovi i marcatori dei dati per questa serie
-                                            "yAxisIndex": 1,  # Indica che questa serie utilizzerà il secondo asse Y
-                                            "axisLabel": {
-                                                "show": "Position"  # Nascondi le etichette dell'asse Y per questa serie
-                                            }
-                                        },
-                                    ],
-                            
-                                    "yAxis": [
-                                        {"type": "value", "name": ""},
-                                        {"type": "value", "inverse": True, "show": False},  # Secondo asse Y con opzione "inverse"
-                                    ],
-                                    "backgroundColor": "#0E1117",
-                                    "color": ["#D5A021", "#F06449", "#91C499", "#5BC3EB"],
-                                }
-                            
-                                st_echarts(option=options, theme='chalk', height=500, width='100%')                    
-                            traffic_report(df_graf)
+                                ],
+                                "yAxis": [
+                                    {"type": "value", "name": ""},
+                                    {"type": "value", "inverse": True, "show": False},
+                                ],
+                                "backgroundColor": "#0E1117",
+                                "color": ["#D5A021", "#F06449", "#91C499", "#5BC3EB"],
+                            }
+                            return options
+
+                        # Caricamento e processamento del DataFrame
+                        if st.session_state.df_graf is None:
+                            if 'Date' in df.columns:
+                                st.session_state.df_graf = process_data(df)
+                                st.session_state.graf_options = generate_chart_options(st.session_state.df_graf)
+                            else:
+                                st.write("### Andamento del traffico")
+                                st.warning("Niente grafico andamento senza date.")
                         else:
                             st.write("### Andamento del traffico")
-                            st.warning("Niente grafico andamento senza date.")
-            
-                    st.subheader("ANALYSIS")
-            
-                
+                            st_echarts(option=st.session_state.graf_options, theme='chalk', height=500, width='100%')
 
-                    
-                    tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CLUSTERING"])
-                    with tab1:
-                        if all(dim in selected_dimensions for dim in ['Query']):
-                            query_funcs = {
-                                'Impressions': 'sum',
-                                'Clicks': 'sum',
-                                'CTR': 'mean',
-                                'Position': 'mean'
+                        # Sezione ANALYSIS
+                        st.subheader("ANALYSIS")
+
+                        tab1, tab2, tab3 = st.tabs(["QUERY PERFORMANCE", "PAGE PERFORMANCE", "CLUSTERING"])
+                        with tab1:
+                            if all(dim in selected_dimensions for dim in ['Query']):
+                                query_funcs = {
+                                    'Impressions': 'sum',
+                                    'Clicks': 'sum',
+                                    'CTR': 'mean',
+                                    'Position': 'mean'
                                 }
-                            #Raggruppiamo df per query per il bubble chart
-
-                            df_query_performance = df.groupby('Query').agg(query_funcs).reset_index()
-                       
-                            
-                            # Calcola i valori minimi e massimi per il il grafico
-                            min_ctr = df['CTR'].min()
-                            max_ctr = df['CTR'].max()
-                            min_position = df['Position'].min()
-                            max_position = df['Position'].max()
-                            
-                            # Calcola i valori medi di CTR e Posizione solo per le query selezionate
-                            average_ctr = df['CTR'].mean()
-                            average_position = df['Position'].mean()
-
-                            average_ctr_bubble= df_query_performance['CTR'].mean()
-                            average_position_bubble = df_query_performance['Position'].mean()
-                            
-			
-                            
-                            # Crea il grafico a bolle con Plotly utilizzando il DataFrame filtrato
-                            fig = px.scatter(df_query_performance, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
-                            
-                            fig.update_yaxes(autorange="reversed")
-                            fig.update_yaxes(range=[min_position, max_position])
-                            fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
-                            fig.update_xaxes(autorange=True)  # Autoscaling per l'asse X
-                            fig.update_traces(marker=dict(sizemin=4))
-                            # Aggiungi linee di riferimento per la media di CTR e posizione
-                            fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
-                            fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
-                            
-                            # Mostra il grafico interattivo
-                            
-                            col1, col2 = st.columns(2)
-                            with col1:
-                                st.write("🫧 QUERIES BUBBLE CHART")
-                                st.plotly_chart(fig, use_container_width=True)
-                            with col2:
-                                # Ordina il DataFrame per la colonna 'Clicks' in ordine decrescente
-                                df_query_reset = df_query_performance.sort_values('Clicks', ascending=False)
-                                df_query_reset_mean = df_query_reset['Clicks'].mean()
-                                df_query_reset=df_query_reset[(df_query_reset['Clicks'] >= df_query_reset_mean)]   
+                                df_query_performance = df.groupby('Query').agg(query_funcs).reset_index()
                                 
-                                # Resetta l'indice sul DataFrame ordinato, non su quello originale
-                                df_query_reset = df_query_reset.reset_index(drop=True)
-                                st.write("🏆 TOP QUERIES BY TRAFFIC")
-                                # Ora passa il DataFrame ordinato e con l'indice resettato a Streamlit per la visualizzazione
-                                st.dataframe(df_query_reset, use_container_width=True)                     
-
-                            
+                                min_ctr = df['CTR'].min()
+                                max_ctr = df['CTR'].max()
+                                min_position = df['Position'].min()
+                                max_position = df['Position'].max()
                                 
-                            average_position = df['Position'].mean()
-                            average_ctr = df['CTR'].mean()
-                            #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
-                            upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
-                            lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
-                            lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
-                            upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
-                            def unique_pages(series):
-                                return ', '.join(series.unique())
-                            
+                                average_ctr = df['CTR'].mean()
+                                average_position = df['Position'].mean()
+                                
+                                average_ctr_bubble = df_query_performance['CTR'].mean()
+                                average_position_bubble = df_query_performance['Position'].mean()
+                                
+                                fig = px.scatter(df_query_performance, x='CTR', y='Position', size='Clicks', hover_data=['Query'])
+                                
+                                fig.update_yaxes(autorange="reversed")
+                                fig.update_yaxes(range=[min_position, max_position])
+                                fig.update_xaxes(range=[min_ctr * 100, max_ctr * 100])
+                                fig.update_xaxes(autorange=True)
+                                fig.update_traces(marker=dict(sizemin=4))
+                                
+                                fig.add_shape(type='line', x0=average_ctr, x1=average_ctr, y0=min_position, y1=max_position, line=dict(color='green', dash='dash'))
+                                fig.add_shape(type='line', x0=min_ctr, x1=max_ctr, y0=average_position, y1=average_position, line=dict(color='green', dash='dash'))
+                                
+                                col1, col2 = st.columns(2)
+                                with col1:
+                                    st.write("🫧 QUERIES BUBBLE CHART")
+                                    st.plotly_chart(fig, use_container_width=True)
+                                with col2:
+                                    df_query_reset = df_query_performance.sort_values('Clicks', ascending=False)
+                                    df_query_reset_mean = df_query_reset['Clicks'].mean()
+                                    df_query_reset = df_query_reset[(df_query_reset['Clicks'] >= df_query_reset_mean)]   
+                                    df_query_reset = df_query_reset.reset_index(drop=True)
+                                    st.write("🏆 TOP QUERIES BY TRAFFIC")
+                                    st.dataframe(df_query_reset, use_container_width=True)
+                                
+                                upper_high_ctr = df[(df['Position'] <= average_position) & (df['CTR'] > average_ctr)]
+                                lower_high_ctr = df[(df['Position'] > average_position) & (df['CTR'] > average_ctr)]
+                                lower_low_ctr = df[(df['Position'] > average_position) & (df['CTR'] <= average_ctr)]
+                                upper_low_ctr = df[(df['Position'] <= average_position) & (df['CTR'] <= average_ctr)]
+                                
+                                def unique_pages(series):
+                                    return ', '.join(series.unique())
+                                
+                                try:
+                                    agg_funcs2 = {
+                                        'Impressions': 'sum',
+                                        'Clicks': 'sum',
+                                        'CTR': 'mean',
+                                        'Position': 'mean',
+                                        'Page': unique_pages
+                                    }
+                                    
+                                    df_upper_high_ctr = upper_high_ctr.groupby('Query').agg(agg_funcs2).reset_index()
+                                    df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                    df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                    df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
+                                    
+                                    with st.expander("Top position and high CTR Queries"):           
+                                        st.write("For these queries, there's not much you need to do; you're already doing a great job.")
+                                        st.write(df_upper_high_ctr)
+                                    with st.expander("Low position and high CTR Queries"):
+                                        st.write("""
+                                        Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
+                                        -If you don't have a dedicated page, think about creating one to consolidate all the information on your website related to this subject.
+                                        -If you already have a page, contemplate adding more content to better address the needs of users searching for this query.
+                                        """)
+                                        st.write(df_lower_high_ctr)
+                                    with st.expander("Low position and low CTR Queries"):
+                                        st.write("""
+                                        When looking at queries with low CTR (both with low and top position), it's especially interesting to look at the bubble sizes to understand which queries have a low CTR but are still driving significant traffic. While the queries in this quadrant might seem unworthy of your effort, they can be divided into two main groups:
+                                        **Related queries**: If the query in question is important to you, it's a good start to have it appearing in Search already. Prioritize these queries over queries that are not appearing in Search results at all, as they'll be easier to optimize.
+                                        **Unrelated queries**: If your site doesn't cover content related to this query, maybe it's a good opportunity to fine tune your content or focus on queries that will bring relevant traffic.
+                                        """)
+                                        st.write(df_lower_low_ctr)
+                                    with st.expander("Top position and low CTR Queries"):
+                                        st.write("""
+                                        These queries might have a low click-through rate (CTR) for various reasons. Check the largest bubbles to find signs of the following:
+                                        Your competitors may be using structured data markup and appearing with rich results, attracting users to click on their results instead of yours. Consider optimizing for the most common visual elements in Google Search.
+                                        You may have optimized, or be "accidentally" ranking for a query that users are not interested in relation to your site. This might not be an issue for you, in which case you can ignore those queries. If you prefer people not to find you through those queries (for example, they contain offensive words), try to fine-tune your content to remove mentions that could be seen as synonyms or related queries to the one bringing traffic.
+                                        People may have already found the information they needed, for example, your company's opening hours, address, or phone number. Check the queries that were used and the URLs that contained the information. If one of your website goals is to drive people to your stores, this is working as intended; if you believe that people should visit your website for extra information, you could try to optimize your titles and descriptions to make that clear. See the next section for more details.
+                                        """)
+                                        st.write(df_upper_low_ctr)
+                                except KeyError as e:
+                                    st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
+                            else:
+                                st.write("Nessun dato da mostrare")
+
+                        with tab2:
                             try:
-                                agg_funcs2 = {
-                                'Impressions': 'sum',
-                                'Clicks': 'sum',
-                                'CTR': 'mean',
-                                'Position': 'mean',
-                                'Page':unique_pages
-                            }
-                            #Raggruppiamo df
-			
-                                #df_upper_high_ctr = upper_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                                df_upper_high_ctr = upper_high_ctr.groupby('Query').agg(agg_funcs2).reset_index()
-                                #Per ciascun quadrante, creare un DataFrame separato
-                                df_lower_high_ctr = lower_high_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                                df_lower_low_ctr = lower_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                                df_upper_low_ctr = upper_low_ctr[['Query', 'Page', 'Impressions', 'Clicks', 'CTR', 'Position']]
-                                #mostrare df
-                         
-    
-    
-                                with st.expander("Top position and high CTR Queries"):           
-                                    st.write("For these queries, there's not much you need to do; you're already doing a great job.")
-                                    st.write(df_upper_high_ctr)
-                                with st.expander("Low position and high CTR Queries"):
-                                    st.write("""
-                                    Those queries appear to be highly relevant to users. They achieve a high click-through rate (CTR) even when they rank lower than the average query on your website. If the average position of these queries improves, it could significantly impact your website's performance. It's advisable to focus on enhancing the SEO for these queries. For instance, consider a prominent query in quadrant 2 for a gardening website, such as "how to build a wooden shed." Check if you already have a dedicated page for this topic and proceed in two ways:
-        
-                                    -If you don't have a dedicated page, think about creating one to consolidate all the information on your website related to this subject.
-        
-                                    -If you already have a page, contemplate adding more content to better address the needs of users searching for this query.
-                                    """)
-                                    st.write(df_lower_high_ctr)
-                                with st.expander("Low position and low CTR Queries"):
-                                    st.write("""
-                                    When looking at queries with low CTR (both with low and top position), it's especially interesting to look at the bubble sizes to understand which queries have a low CTR but are still driving significant traffic. While the queries in this quadrant might seem unworthy of your effort, they can be divided into two main groups:
-                                    
-                                    **Related queries**: If the query in question is important to you, it's a good start to have it appearing in Search already. Prioritize these queries over queries that are not appearing in Search results at all, as they'll be easier to optimize.
-                                    
-                                    **Unrelated queries**: If your site doesn't cover content related to this query, maybe it's a good opportunity to fine tune your content or focus on queries that will bring relevant traffic.
-                                    """)
-                                    st.write(df_lower_low_ctr)
-                                with st.expander("Top position and low CTR Queries"):
-                                    st.write("""
-                                    These queries might have a low click-through rate (CTR) for various reasons. Check the largest bubbles to find signs of the following:
-        
-                                    Your competitors may be using structured data markup and appearing with rich results, attracting users to click on their results instead of yours. Consider optimizing for the most common visual elements in Google Search.
-        
-                                    You may have optimized, or be "accidentally" ranking for a query that users are not interested in relation to your site. This might not be an issue for you, in which case you can ignore those queries. If you prefer people not to find you through those queries (for example, they contain offensive words), try to fine-tune your content to remove mentions that could be seen as synonyms or related queries to the one bringing traffic.
-        
-                                    People may have already found the information they needed, for example, your company's opening hours, address, or phone number. Check the queries that were used and the URLs that contained the information. If one of your website goals is to drive people to your stores, this is working as intended; if you believe that people should visit your website for extra information, you could try to optimize your titles and descriptions to make that clear. See the next section for more details.
-                                    """)
-                                    st.write(df_upper_low_ctr)
+                                agg_funcs = {
+                                    'Impressions': 'sum',
+                                    'Clicks': 'sum',
+                                    'CTR': 'mean',
+                                    'Position': 'mean'
+                                }
+                                df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()
+                                
+                                df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
+                                df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
+                                df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
+                                df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
+                                average_position_popular = df_aggregated_popular_page['Position'].mean()
+                                df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})                         
+                                average_clic_df_popular = df_aggregated_popular_page['Clicks'].mean()
+                                average_impression_df_pupular = df_aggregated_popular_page['Impressions'].mean()
+                                
+                                popular_pages = df_aggregated_popular_page[
+                                    (df_aggregated_popular_page['Average CTR'] > formatted_ctr_m) &
+                                    (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) &
+                                    (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular) &
+                                    (df_aggregated_popular_page['Average Position'] < 10)
+                                ]
+                                popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
+                                less_pages = df_aggregated_popular_page[
+                                    (df_aggregated_popular_page['Average CTR'] < formatted_ctr_m) &
+                                    (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) &
+                                    (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular) &
+                                    (df_aggregated_popular_page['Average Position'] < 10)
+                                ]
+                                opp_pages = df_aggregated_popular_page[
+                                    (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) &
+                                    (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular) &
+                                    (df_aggregated_popular_page['Average Position'] > 10) &
+                                    (df_aggregated_popular_page['Average Position'] <= 20)
+                                ]
+                                worst_pages = df_aggregated_popular_page[
+                                    (df_aggregated_popular_page['Clicks'] < average_clic_df_popular) &
+                                    (df_aggregated_popular_page['Impressions'] < average_impression_df_pupular) &
+                                    (df_aggregated_popular_page['Average CTR'] < formatted_ctr_m) &
+                                    (df_aggregated_popular_page['Average Position'] > average_position_popular)
+                                ]
+
+                                col1, col2, col3, col4, col5 = st.columns(5)
+                                
+                                format_average_clicks_popular = "{:.2f}".format(average_clic_df_popular)
+                                format_average_impression_popular = "{:.2f}".format(average_impression_df_pupular)
+                                format_average_position_popular = "{:.2f}".format(average_position_popular)
+
+                                with col1:
+                                    st.subheader("📄 Pages Performance")
+                                with col2:
+                                    st.metric("Pages Average Clicks", value=format_average_clicks_popular)
+                                with col3:
+                                    st.metric("Pages Average Impressions", value=format_average_impression_popular)
+                                with col4:
+                                    st.metric("Pages Average CTR", value=formatted_ctr_m)
+                                with col5:
+                                    st.metric("Pages Average Position", value=format_average_position_popular)
+                                    st.text("")
+
+                                with st.expander("🟢 Best Pages"):
+                                    st.write("Pages with an elevated Click-Through Rate (CTR), a significant volume of Clicks, and a substantial number of Impressions (exceeding the average), with Average position within the top 10 search engine result positions.")
+                                    st.write(popular_pages)
+                                with st.expander("🟡 Less Effective Pages"):
+                                    st.write("Page with High Clicks, High Impressions and Average position within the top 10 search engine result positions, but low CTR")
+                                    st.write(less_pages)
+                                with st.expander("🔵 Pages with ranking opportunities"):
+                                    st.write("Page with High Clicks, High Impressions but average position beetwen 10-20 in SERP")
+                                    st.write(opp_pages)
+                                with st.expander("🔴 Pages that require attention"):
+                                    st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
+                                    st.write(worst_pages)
+                                
+                                worst_pages_count = worst_pages.shape[0]
+                                opp_pages_count = opp_pages.shape[0]
+                                less_pages_count = less_pages.shape[0]
+                                popular_pages_count = popular_pages.shape[0]
+                                
+                                chart_data = {
+                                    "Set": ["🟢Best Pages", "🟡Less Effective Pages", "🔵Ranking opportunities", "🔴Require attention"],
+                                    "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
+                                }                           
+
+                                st.bar_chart(chart_data, x="Set", y="N°Pages")
+                                
                             except KeyError as e:
-                                st.warning("To obtain insights on both queries and pages, consider adding 'Page' to the dimensions in your analysis.")
-                        else:
-                            st.write("Nessun dato da mostrare")
-
-                    with tab2:                          
-                       
-                        #suddividere i dati in quattro DataFrame in base ai quadranti specificati e fornire all'utente la lista delle query in ciascun quadrante
-                      
-                        try:
-                            #questa funzione serve a raggruppare il df per pagina, scegliendo come calcolare ogni singola colonna
-                            agg_funcs = {
-                                'Impressions': 'sum',
-                                'Clicks': 'sum',
-                                'CTR': 'mean',
-                                'Position': 'mean'
-                            }
-                            #Raggruppiamo df
-			
-                            df_aggregated_popular_page = df.groupby('Page').agg(agg_funcs).reset_index()	
-                            
-			
-
-                            #Calcoliamo il CTR dividendo click per impression
-                            df_aggregated_popular_page['CTR'] = (df_aggregated_popular_page['Clicks'] / df_aggregated_popular_page['Impressions'])
-                            # calcoliamo ctr medio e presentiamo il CTR come %
-
-                            df_aggregated_popular_page['CTR'] = df_aggregated_popular_page['CTR'].map('{:.2%}'.format)
-                            #Cambiano nome alle colonne
-                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'CTR': 'Average CTR'})
-                            #Formatta la posizione media
-                            df_aggregated_popular_page['Position'] = df_aggregated_popular_page['Position'].round(2)
-                            average_position_popular = df_aggregated_popular_page['Position'].mean()
-                            #cambia nome alla colonna
-                            df_aggregated_popular_page = df_aggregated_popular_page.rename(columns={'Position': 'Average Position'})                         
-                            # Calcola la media dei clic solo tra le pagine distinte
-                            average_clic_df_popular = df_aggregated_popular_page['Clicks'].mean()
-                            
-                            average_impression_df_pupular = df_aggregated_popular_page['Impressions'].mean()
-                            # Calcola impression solo tra le pagine distinte                            
-                            # Filtra le pagine con clic maggiori o uguali alla media
-                            popular_pages = df_aggregated_popular_page[
-                                (df_aggregated_popular_page['Average CTR'] > formatted_ctr_m) &
-                                (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) &
-                                (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular) &
-                                (df_aggregated_popular_page['Average Position'] < 10)
-                            ]                            #ordiniamo per clicks
-                            popular_pages = popular_pages.sort_values(by='Clicks', ascending=False)
-                            less_pages = df_aggregated_popular_page[
-                                (df_aggregated_popular_page['Average CTR'] < formatted_ctr_m) &
-                                (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) &
-                                (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular) &
-                                (df_aggregated_popular_page['Average Position'] < 10)
-                            ]
-                            opp_pages= df_aggregated_popular_page[
-                                (df_aggregated_popular_page['Clicks'] > average_clic_df_popular) &
-                                (df_aggregated_popular_page['Impressions'] > average_impression_df_pupular) &
-                                (df_aggregated_popular_page['Average Position'] > 10 )  &
-                                (df_aggregated_popular_page['Average Position'] <= 20 )
-                                
-                            ]
-                            worst_pages=df_aggregated_popular_page[
-                                (df_aggregated_popular_page['Clicks'] < average_clic_df_popular) &
-                                (df_aggregated_popular_page['Impressions'] < average_impression_df_pupular) &
-                                (df_aggregated_popular_page['Average CTR'] < formatted_ctr_m)  &
-                                (df_aggregated_popular_page['Average Position'] > average_position_popular)
-                             ]
-
-                            col1, col2, col3, col4, col5 = st.columns(5)
-                            
-                            format_average_clicks_popular = "{:.2f}".format(average_clic_df_popular)
-                            format_average_impression_popular = "{:.2f}".format(average_impression_df_pupular)
-                            format_average_position_popular = "{:.2f}".format(average_position_popular)
-
-                            with col1:
-                                st.subheader("📄 Pages Performance")
-                            with col2:
-                                st.metric("Pages Average Clicks", value=format_average_clicks_popular)
-                            with col3:
-                                st.metric("Pages Average Impressions", value=format_average_impression_popular)
-                            with col4:
-                                st.metric("Pages Average CTR", value=formatted_ctr_m)
-                            with col5:
-                                st.metric("Pages Average Position", value=format_average_position_popular)
-                                st.text("")
-
-
-
-                            with st.expander("🟢 Best Pages"):
-                                st.write("Pages with an elevated Click-Through Rate (CTR), a significant volume of Clicks, and a substantial number of Impressions (exceeding the average), with Average position within the top 10 search engine result positions.")
-                                st.write(popular_pages)
-                            with st.expander("🟡 Less Effective Pages"):
-                                st.write("Page with High Clicks, High Impressions and Average position within the top 10 search engine result positions, but low CTR")
-                                st.write(less_pages)
-                            with st.expander("🔵 Pages with ranking opportunities"):
-                                st.write("Page with High Clicks, High Impressions but average position beetwen 10-20 in SERP")
-                                st.write(opp_pages)
-                            with st.expander("🔴 Pages that require attention"):
-                                st.write("Page low CLicks, Low Impression, Low CTR and Low Position in comparison to the average")
-                                st.write(worst_pages)
-                            
-				    
-                            
-                            # Calcola il numero di righe nei quattro insiemi di dati
-                            worst_pages_count = worst_pages.shape[0]
-                            opp_pages_count = opp_pages.shape[0]
-                            less_pages_count = less_pages.shape[0]
-                            popular_pages_count = popular_pages.shape[0]
-                            
-                            # Crea un dizionario per i dati da visualizzare nel grafico a barre
-                            chart_data = {
-                                "Set": ["🟢Best Pages", "🟡Less Effective Pages", "🔵Ranking opportunities", "🔴Require attention"],
-                                "N°Pages": [popular_pages_count, less_pages_count, opp_pages_count, worst_pages_count]
-                            }                           
-
-                            # Crea il grafico a barre utilizzando st.bar_chart
-                            st.bar_chart(chart_data, x="Set", y="N°Pages")
-
-                                
-                            
-                        except KeyError as e:
-                            st.warning(e)
+                                st.warning(e)
 
                     with tab3:
                         
