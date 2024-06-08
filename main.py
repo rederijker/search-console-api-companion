@@ -43,7 +43,10 @@ if 'text_input' not in st.session_state:
     st.session_state.text_input = None
 
 # Required columns for the DataFrame
-
+if 'df_graf' not in st.session_state:
+   st.session_state.df_graf = None
+if 'graf_options' not in st.session_state:
+   st.session_state.graf_options = None
 # Initialize session state
 if 'selected_page' not in st.session_state:
     st.session_state.selected_page = None
@@ -356,10 +359,7 @@ if CLIENT_ID and CLIENT_SECRET:
                         st.dataframe(df, width=2000)
 
                     with col2:
-                        if 'df_graf' not in st.session_state:
-                            st.session_state.df_graf = None
-                        if 'graf_options' not in st.session_state:
-                            st.session_state.graf_options = None
+                       
 
                         def process_data(df):
                             df_graf = df.groupby('Date').agg({
