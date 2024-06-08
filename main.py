@@ -39,17 +39,14 @@ if 'dimension_filters' not in st.session_state:
     st.session_state.dimension_filters = {}
 
 #variabili content optimizer
-if 'text_input' not in st.session_state:
-    st.session_state.text_input = None
-
-# Initializing session state for selected page
 if 'selected_page' not in st.session_state:
     st.session_state.selected_page = None
 
+if 'page_data' not in st.session_state:
+    st.session_state.page_data = None
 
 if 'keyword_analysis' not in st.session_state:
     st.session_state.keyword_analysis = None
-
 
 
 
