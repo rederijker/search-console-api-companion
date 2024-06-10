@@ -31,6 +31,8 @@ if 'credentials' not in st.session_state:
 
 if 'selected_site' not in st.session_state:
     st.session_state.selected_site = None
+if 'df' not in st.session_state:
+    st.session_state.df = None
 
 if 'available_sites' not in st.session_state:
     st.session_state.available_sites = []
@@ -317,6 +319,7 @@ if CLIENT_ID and CLIENT_SECRET:
                     # Alla fine del processo, mostra un messaggio di completamento
                     
                     df = pd.DataFrame(data_list)
+                    st.session_state.df = df
                     def convert_df_to_csv(df):
                             return df.to_csv(index=False).encode('utf-8')
                     csv = convert_df_to_csv(df)
